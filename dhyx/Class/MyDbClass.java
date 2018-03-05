@@ -184,6 +184,7 @@ public class MyDbClass{
     }   // END : private boolean clickEdit_CheckDB()
 
 
+    //创建普通的表格Model
     public DefaultTableModel getTableModel(String sql) {
         int i;
         DefaultTableModel defaultTableModel = null;
@@ -203,7 +204,6 @@ public class MyDbClass{
                 }
                 vector.addElement(vectorRow);
             }
-
             defaultTableModel = new DefaultTableModel(vector, vectorHead);
             rs.close();
         } catch (Exception e) {
@@ -211,11 +211,12 @@ public class MyDbClass{
                     + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
         }
-
         // DefaultTableModel若为null，则会抛异常“IllegalArgumentExceptionn: Cannot set a null TableModel”。
         return defaultTableModel;
     }   // END:  public DefaultTableModel getTableModel(String sql)
 
+
+    //创建带有复选框的表格Model
     public DefaultTableModel getTableModelWithCheckbox(String sql) {
         int i, j;
         DefaultTableModel dm = null;
@@ -223,6 +224,7 @@ public class MyDbClass{
         Vector<Vector> vector = new Vector<>();
         Vector<Object> vectorHead = new Vector<>();
         try {
+            // 1 构造表头
             rs = stmt.executeQuery(sql);
             int count = rs.getMetaData().getColumnCount();
             vectorHead.add("全选");
@@ -230,6 +232,7 @@ public class MyDbClass{
                 vectorHead.add(rs.getMetaData().getColumnName(j));
             }
 
+            // 2 构造数据
             while (rs.next()) {
                 Vector<Object> vectorRow = new Vector<>();
                 vectorRow.add(Boolean.FALSE);
@@ -247,6 +250,70 @@ public class MyDbClass{
         }
         return dm;
     }   // END:  public DefaultTableModel getTableModel(String sql)
+
+
+    //针对TestData表格的getTableModel方法
+    public DefaultTableModel getTableModelForTestData(String...testID) {
+
+        DefaultTableModel defaultTableModel = null;
+        ResultSet rs;
+        Vector<Vector> vector = new Vector<>();
+        Vector<String> vectorHead = new Vector<>();
+        String sql;
+        StringBuffer str = new StringBuffer();
+
+        // 1 构造表头
+        // 1.1 构造SQL的WHERE testID IN 参数
+        for (String aTestID : testID) {
+            str = str.append(aTestID).append(",");
+        }
+        str.deleteCharAt(str.length() - 1);
+
+        // 1.2 获取这些testID对应的所有X
+        sql = "SELECT DISTINCT x FROM test_original WHERE testID in (" + str + ") AND isDeleted = 'N' ORDER BY x ";
+        try {
+            vectorHead.add("测试ID");
+            rs = stmt.executeQuery(sql);
+//改成IF
+            while (rs.next()) {
+                vectorHead.add(rs.getString("x"));
+            }
+            rs.close();
+
+            //循环2   同一个testID的不同Y数据
+            try {
+
+                for (String aTestID : testID) {
+                    sql = "SELECT DISTINCT x,y FROM test_original WHERE testID = " + aTestID + " AND isDeleted = 'N' ORDER BY x";
+
+                    //必须新建Vector，不能clear()，否则会影响已添加到vector的数据
+                    Vector<Object> vectorRow = new Vector<>();
+                    vectorRow.add(aTestID);
+                    rs = stmt.executeQuery(sql);
+
+                    while (rs.next()) {
+                        vectorRow.add(String.valueOf(rs.getInt("y")));
+                    }
+                    vector.addElement(vectorRow);
+                    rs.close();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "创建表格内容失败，请截图后联系开发人员。\n"
+                        + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "创建表头失败，请截图后联系开发人员。\n"
+                    + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+            logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
+        }
+
+        // 2 构造内容
+        //循环1  不同testID
+
+        defaultTableModel = new DefaultTableModel(vector, vectorHead);
+        return defaultTableModel;
+    }
 
 
 }   // END: public class MyDbClass
