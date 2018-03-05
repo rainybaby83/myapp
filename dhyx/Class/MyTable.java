@@ -29,6 +29,7 @@ public class MyTable extends JTable{
         this.setSelectionBackground(Const.GREEN_ACTIVE);
         this.setRowHeight(25);
         this.setAutoCreateColumnsFromModel(false);
+        this.setAutoCreateRowSorter(true);
         this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         //设置居中

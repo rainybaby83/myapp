@@ -382,8 +382,6 @@ public class PanelProject extends JPanel {
 
         defaultTableModel = MainApp.myDB.getTableModel(sql);
         tblProject.setModel(defaultTableModel);
-        //排序model要同时改变，不然会报错
-        tblProject.setRowSorter(new TableRowSorter<>(defaultTableModel));
         //如果有数据，则选中第1行
         if (tblProject.getRowCount() > 0) {
             tblProject.setRowSelectionInterval(0, 0);

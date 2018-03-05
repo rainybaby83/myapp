@@ -1,8 +1,8 @@
 package dhyx.Class;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.ibatis.jdbc.RuntimeSqlException;
-import org.apache.ibatis.jdbc.ScriptRunner;
+import ibatis.RuntimeSqlException;
+import ibatis.ScriptRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Vector;
 
 
@@ -255,44 +256,64 @@ public class MyDbClass{
     //针对TestData表格的getTableModel方法
     public DefaultTableModel getTableModelForTestData(String...testID) {
 
-        DefaultTableModel defaultTableModel = null;
+        DefaultTableModel defaultTableModel ;
         ResultSet rs;
         Vector<Vector> vector = new Vector<>();
-        Vector<String> vectorHead = new Vector<>();
+        Vector<String> vectorHeader = new Vector<>();
         String sql;
         StringBuffer str = new StringBuffer();
+        int x,y;
+        ArrayList<Integer> header = new ArrayList<>();
 
         // 1 构造表头
-        // 1.1 构造SQL的WHERE testID IN 参数
+        vectorHeader.add("测试ID");
+
+        // 1.1 构造SQL的参数WHERE testID IN xxx
         for (String aTestID : testID) {
             str = str.append(aTestID).append(",");
         }
         str.deleteCharAt(str.length() - 1);
 
-        // 1.2 获取这些testID对应的所有X
+
+        // 1.2 获取这些testID对应的所有X，并构造到vectorHeader中
         sql = "SELECT DISTINCT x FROM test_original WHERE testID in (" + str + ") AND isDeleted = 'N' ORDER BY x ";
+
+
         try {
-            vectorHead.add("测试ID");
             rs = stmt.executeQuery(sql);
-//改成IF
             while (rs.next()) {
-                vectorHead.add(rs.getString("x"));
+                x = rs.getInt("x");
+                header.add(x);
+                vectorHeader.add(String.valueOf(x));
             }
             rs.close();
 
             //循环2   同一个testID的不同Y数据
             try {
-
+                x=0;
+                //按照多选的testID个数，进行for循环
                 for (String aTestID : testID) {
                     sql = "SELECT DISTINCT x,y FROM test_original WHERE testID = " + aTestID + " AND isDeleted = 'N' ORDER BY x";
 
-                    //必须新建Vector，不能clear()，否则会影响已添加到vector的数据
+                    //必须新建Vector，不能用clear()方法，否则会影响已添加到vector的数据
                     Vector<Object> vectorRow = new Vector<>();
                     vectorRow.add(aTestID);
                     rs = stmt.executeQuery(sql);
 
-                    while (rs.next()) {
-                        vectorRow.add(String.valueOf(rs.getInt("y")));
+                    if (rs.next())  { x = rs.getInt("x"); }
+
+                    for (int aHeader : header) {
+                        if (aHeader < x || aHeader > x) {
+                            //如果某条testID数据的X小于header，则填充为0
+                            vectorRow.add(0);
+                        } else if (aHeader == x) {
+                            //如果X等于header，则把Y添加到vectorRow
+                            y = rs.getInt("y");
+                            vectorRow.add(y);
+
+                            //如果没有下一条数据，则X不再变动；否则next()之后取一次X
+                            if (rs.next())  { x = rs.getInt("x"); }
+                        }
                     }
                     vector.addElement(vectorRow);
                     rs.close();
@@ -311,7 +332,7 @@ public class MyDbClass{
         // 2 构造内容
         //循环1  不同testID
 
-        defaultTableModel = new DefaultTableModel(vector, vectorHead);
+        defaultTableModel = new DefaultTableModel(vector, vectorHeader);
         return defaultTableModel;
     }
 

@@ -216,7 +216,7 @@ public class PanelTest extends JPanel {
         tblExperiment.setWidth(70, 65, 90, 85 - 2);
         tblCurve.setWidth(60,60);
         tblTest.setWidth(30, 55, 70, 70, 70, 70, 70, 70, 70, 70);
-        tblTestData.setWidth(100);
+        tblTestData.setAutoCreateColumnsFromModel(true);
 
         // 2.4 设置滚动面板
         tblExperiment.jScrollPane.setBounds(tblExperiment.getBounds());
@@ -266,7 +266,7 @@ public class PanelTest extends JPanel {
                 int columnIndex = tblTest.getTableHeader().columnAtPoint(e.getPoint());
                 if (columnIndex == 0) {
                     selectAll(tblTest);
-//                    updateTestData("表头全选调用");
+                    updateTestData("表头全选调用");
                 }
             }
         });
@@ -297,8 +297,6 @@ public class PanelTest extends JPanel {
 
         dmExperiment = MainApp.myDB.getTableModel(sql);
         tblExperiment.setModel(dmExperiment);
-        //排序model要同时改变，不然会报错
-        tblExperiment.setRowSorter(new TableRowSorter<>(dmExperiment));
 
         if (tblExperiment.getRowCount() > 0) {
             tblExperiment.setRowSelectionInterval(0, 0);
@@ -346,7 +344,6 @@ public class PanelTest extends JPanel {
 
             dmCurve = MainApp.myDB.getTableModel(sql);
             tblCurve.setModel(dmCurve);
-            tblCurve.setRowSorter(new TableRowSorter<>(dmCurve));
             if (tblCurve.getRowCount() > 0) {
                 tblCurve.setRowSelectionInterval(0, 0);
             }
@@ -368,11 +365,9 @@ public class PanelTest extends JPanel {
         String sql = sqlSelectTest + "WHERE `曲线ID` = '" + curveID + "' ORDER BY `测试ID`";
         dmTest = MainApp.myDB.getTableModelWithCheckbox(sql);
         tblTest.setModel(dmTest);
-        tblTest.setRowSorter(new TableRowSorter<>(dmTest));
-
         //如果测试列表有数据，则全选
         selectAll(tblTest);
-//        updateTestData("曲线列表点击调用");
+        updateTestData("曲线列表点击调用");
     }
 
 
@@ -395,7 +390,7 @@ public class PanelTest extends JPanel {
     //更新原始测试数据表格的功能
     private void updateTestData(String msg) {
 
-        JOptionPane.showMessageDialog(null,msg);
+//        JOptionPane.showMessageDialog(null,msg);
         /*
         // 取得tblTest选中行的索引
         // 取得tblTest选中行的testID
@@ -411,7 +406,7 @@ public class PanelTest extends JPanel {
             String[] testID = new String[nowRow.length];
 
             // 取得tblTest选中行的testID
-            int index  =((DefaultTableModel) tblTest.getModel()).findColumn("测试ID");
+            int index = ((DefaultTableModel) tblTest.getModel()).findColumn("测试ID");
             for (int i = 0; i < nowRow.length; i++) {
                 testID[i] = tblTest.getValueAt(nowRow[i], index).toString();
                 str = str.append(testID[i]).append(",");
@@ -422,9 +417,9 @@ public class PanelTest extends JPanel {
             dmTestData = (DefaultTableModel) tblTestData.getModel();
             dmTestData = MainApp.myDB.getTableModelForTestData(testID);
             tblTestData.setModel(dmTestData);
-            tblTestData.setRowSorter(new TableRowSorter<>(dmTestData));
-            JOptionPane.showMessageDialog(null,tblTestData.getColumnCount());
-
+        } else {
+            dmTestData = MainApp.myDB.getTableModelForTestData("0");
+            tblTestData.setModel(dmTestData);
         }
 
     }

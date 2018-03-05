@@ -224,9 +224,6 @@ public class PanelExperiment extends JPanel {
 
         tblProject.setModel(dmProject);
         tblExperiment.setModel(dmExperiment);
-        //排序model要同时改变，不然会报错
-        tblProject.setRowSorter(new TableRowSorter<>(dmProject));
-        tblExperiment.setRowSorter(new TableRowSorter<>(dmExperiment));
 //        //如果有数据，则选中第1行
 //        if (tblExperiment.getRowCount() > 0) {
 //            tblExperiment.setRowSelectionInterval(0, 0);
@@ -345,7 +342,6 @@ public class PanelExperiment extends JPanel {
         }
         dmExperiment = MainApp.myDB.getTableModel(sql);
         tblExperiment.setModel(dmExperiment);
-        tblExperiment.setRowSorter(new TableRowSorter<>(dmExperiment));
 
         if (tblExperiment.getRowCount() > 0) {
             tblExperiment.setRowSelectionInterval(0, 0);
