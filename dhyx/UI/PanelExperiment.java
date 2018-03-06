@@ -334,8 +334,9 @@ public class PanelExperiment extends JPanel {
         String sql;
         if (nowRow != -1) {
             //项目ID，projectID
-            projectID = tblProject.getValueAt(nowRow, 0).toString();
-            projectName = tblProject.getValueAt(nowRow, 3).toString();
+            DefaultTableModel currentDM = (DefaultTableModel) tblProject.getModel();
+            projectID = tblProject.getValueAt(nowRow, currentDM.findColumn("项目ID")).toString();
+            projectName = tblProject.getValueAt(nowRow, currentDM.findColumn("项目名称")).toString();
             sql = sqlSelectExp + "WHERE `项目ID` = '" + projectID + "' AND `实验ID` IS NOT NULL";
         } else {
             sql = sqlSelectExp + "WHERE 0=1";
@@ -353,8 +354,9 @@ public class PanelExperiment extends JPanel {
     private void tblExperimentSelectRow() {
         if (tblExperiment.getRowCount() > 0) {
             int nowRow = tblExperiment.getSelectedRow();
-            experimentID = tblExperiment.getValueAt(nowRow, 0).toString();
-            experimentName = tblExperiment.getValueAt(nowRow, 3).toString();
+            DefaultTableModel currentDM = (DefaultTableModel) tblExperiment.getModel();
+            experimentID = tblExperiment.getValueAt(nowRow, currentDM.findColumn("实验ID")).toString();
+            experimentName = tblExperiment.getValueAt(nowRow, currentDM.findColumn("实验名称")).toString();
             btnDel.setEnabled(true);
         } else {
             btnDel.setEnabled(false);

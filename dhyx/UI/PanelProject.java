@@ -566,58 +566,59 @@ public class PanelProject extends JPanel {
         resetSubPanel(true, false);
         int nowRow = tblProject.getSelectedRow();
         if (nowRow != -1) {
+            DefaultTableModel currentDM = (DefaultTableModel) tblProject.getModel();
             btnEdit.setEnabled(true);
             btnSave.setEnabled(false);
             btnDel.setEnabled(true);
             String peakName, tcExpession;
 
             //项目ID，projectID
-            projectID = tblProject.getValueAt(nowRow, 0).toString();
+            projectID = tblProject.getValueAt(nowRow, currentDM.findColumn("项目ID")).toString();
             text[0].setText(projectID);
 
             // 项目名称projectName
-            projectName = tblProject.getValueAt(nowRow, 3).toString();
+            projectName = tblProject.getValueAt(nowRow, currentDM.findColumn("项目名称")).toString();
             text[1].setText(projectName);
 
             //取峰算法 peakName
-            peakName = tblProject.getValueAt(nowRow, 5).toString();
+            peakName = tblProject.getValueAt(nowRow, currentDM.findColumn("取峰算法")).toString();
             lstPeak.setSelectedIndexFromValue(peakName);
             text[2].setText(peakName);
 
             //TC公式 tcExpession
-            tcExpession = tblProject.getValueAt(nowRow, 6).toString();
+            tcExpession = tblProject.getValueAt(nowRow, currentDM.findColumn("TC公式")).toString();
             lstTC.setSelectedIndexFromValue(tcExpession);
             text[3].setText(tcExpession);
 
             // 准备时长 prepareDuration
-            text[4].setText(tblProject.getValueAt(nowRow, 4).toString());
+            text[4].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("准备时长")).toString());
 
             //浓度单位 subUnit
-            text[5].setText(tblProject.getValueAt(nowRow, 7).toString());
+            text[5].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("浓度单位")).toString());
 
             //最小值 subMin
-            text[6].setText(tblProject.getValueAt(nowRow, 8).toString());
+            text[6].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("最小值")).toString());
 
             //最大值 subMax
-            text[7].setText(tblProject.getValueAt(nowRow, 9).toString());
+            text[7].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("最大值")).toString());
 
             //X1左边界
-            text[8].setText(tblProject.getValueAt(nowRow, 10).toString());
+            text[8].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X1左边界")).toString());
 
             //X1右边界
-            text[9].setText(tblProject.getValueAt(nowRow, 11).toString());
+            text[9].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X1右边界")).toString());
 
             //X1取数N
-            text[10].setText(tblProject.getValueAt(nowRow, 12).toString());
+            text[10].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X1取数N")).toString());
 
             //X2左边界
-            text[11].setText(tblProject.getValueAt(nowRow, 13).toString());
+            text[11].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X2左边界")).toString());
 
             //X2右边界
-            text[12].setText(tblProject.getValueAt(nowRow, 14).toString());
+            text[12].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X2右边界")).toString());
 
             //X2取数N
-            text[13].setText(tblProject.getValueAt(nowRow, 15).toString());
+            text[13].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X2取数N")).toString());
         } else {
             //未选中，清空并禁用
             btnEdit.setEnabled(false);
@@ -821,202 +822,9 @@ public class PanelProject extends JPanel {
         } catch (Exception e) {
             MainApp.myDB.dbRollback();
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
-            JOptionPane.showMessageDialog(null, "创建失败，数据库未作任何修改。请查看日志。");
+            JOptionPane.showMessageDialog(null, "更新失败，数据库未作任何修改。请查看日志。");
             return false;
         } // END : try
     }   // END : private void updateForClickSave()
 
-
-}   // END :public class PanelProject extends JPandel
-
-
-
-
-//以下为废弃代码
-//    //根据项目ID，获取X1、X2的明细
-//    private void setProjectEntry_old(String projectID) {
-//        ResultSet rs;
-//        int rowCount;
-//        String selectProjectID = "select * from project_entry where isDeleted = 'N' and projectID =? ";
-//        try {
-//            PreparedStatement pstmt = MainApp.myDB.conn.prepareStatement(selectProjectID);
-//            pstmt.setString(1, projectID);
-//            rs = pstmt.executeQuery();
-//
-//            //移到最后一行，获取记录的数量
-//            rs.last();
-//            rowCount = rs.getRow();
-//            entryIDX1 = "";
-//            entryIDX2 = "";
-//            if (rowCount == 1 || rowCount == 2 ) {
-//                do {
-//                    String xName, leftPos, rightPos, N;
-//                    xName = rs.getString("xName");
-//                    leftPos = rs.getString("leftPos");
-//                    rightPos = rs.getString("rightPos");
-//                    N = rs.getString("N");
-//
-//                    if ("X1".equals(xName)) {
-//                        text[8].setText(leftPos);
-//                        text[9].setText(rightPos);
-//                        text[10].setText(N);
-//                        entryIDX1 = rs.getString("entryID");
-//                    } else if ("X2".equals(xName)) {
-//                        text[11].setText(leftPos);
-//                        text[12].setText(rightPos);
-//                        text[13].setText(N);
-//                        entryIDX2 = rs.getString("entryID");
-//                    }
-//
-//                } while (rs.previous());
-//            } else if (rowCount > 2) {
-//                JOptionPane.showMessageDialog(this, "该项目的X1、X2数据超过2条，请尽快找开发人员修复数据库。");
-//            }
-//            pstmt.close();
-//        } catch (SQLException e) {
-//            logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
-//        }
-//    }   // END : private void setProjectEntry(String projectID)
-
-
-
-//    //点击编辑再点保存，更新数据库
-//    private boolean clickSave_Update() {
-//
-//        String updateProject = "UPDATE project SET modifyDate = ? , projectName= ? , prepareDuration = ? ,  " +
-//                "peakTypeID = ? , tcTypeID = ? , subUnit = ? , subMin = ? , subMax = ? WHERE projectID =? AND isDeleted = 'N';";
-//        String updateEntry = "UPDATE project_entry SET modifyDate = ? , leftPos = ? , rightPos  = ?, N = ?  " +
-//                "WHERE projectID = ? AND xName = ? AND isDeleted = 'N'";
-//        String[] paraProject = {modifyDate, projectName, prepareDuration, peakTypeID, tcTypeID, subUnit, subMin, subMax, projectID};
-//        String[] paraEntryX1 = {modifyDate, String.valueOf(x1Left), String.valueOf(x1Right), String.valueOf(x1N), projectID, "X1"};
-//        String[] paraEntryX2 = {modifyDate, String.valueOf(x2Left), String.valueOf(x2Right), String.valueOf(x2N), projectID, "X2"};
-//
-//
-//        try {
-//            //更新前，先禁用自动提交
-//            MainApp.myDB.conn.setAutoCommit(false);
-//
-//            //更新project表
-//            PreparedStatement pstmt = MainApp.myDB.conn.prepareStatement(updateProject);
-//            for (int i = 0; i < paraProject.length; i++) {
-//                pstmt.setString(i + 1, paraProject[i]);
-//            }
-//            pstmt.executeUpdate();
-////
-////            //更新project_entry表
-////            pstmt = MainApp.myDB.conn.prepareStatement(updateEntry);
-////
-////            //更新X1
-////            if(StringUtils.isNotEmpty(entryIDX1)){
-////                // entryID不为空，说明有数据，可以更新
-////                for (int i = 0; i < paraEntryX1.length; i++) {
-////                    pstmt.setString(i + 1, paraEntryX1[i]);
-////                }
-////                pstmt.executeUpdate();
-////            }  else {
-////                /* 处理异常：
-////                   entryID为空，说明数据异常，需要插入，不能update。
-////                   正常情况下entryID不会为空
-////                 */
-////                String insertEntry = "INSERT INTO `project_entry`(isDeleted , createDate , modifyDate , " +
-////                        "projectID , xName , leftPos , rightPos , N ) VALUES ('N', ?,?,?,'X1',?,?,?)";
-////                String[] para = {createDate, modifyDate, projectID, String.valueOf(x1Left), String.valueOf(x1Right), String.valueOf(x1N)};
-////                PreparedStatement subPstmt = MainApp.myDB.conn.prepareStatement(insertEntry);
-////                for (int i = 0; i < para.length; i++) {
-////                    subPstmt.setString(i + 1, para[i]);
-////                }
-////                subPstmt.executeUpdate();
-////                subPstmt.close();
-////            }
-////
-////
-////            //更新X2
-////            if(StringUtils.isNotEmpty(entryIDX2)) {
-////                // entryID不为空，说明有数据，可以更新
-////                for (int i = 0; i < paraEntryX2.length; i++) {
-////                    pstmt.setString(i + 1, paraEntryX2[i]);
-////                }
-////                pstmt.executeUpdate();
-////                pstmt.close();
-////            } else {
-////                /* 处理异常：
-////                   entryID为空，说明数据异常，需要插入，不能update。
-////                   正常情况下entryID不会为空
-////                 */
-////                String insertEntry = "INSERT INTO `project_entry`(isDeleted , createDate , modifyDate , " +
-////                        "projectID , xName , leftPos , rightPos , N ) VALUES ('N', ?,?,?,'X2',?,?,?)";
-////                String[] para = {createDate, modifyDate, projectID, String.valueOf(x2Left), String.valueOf(x2Right), String.valueOf(x2N)};
-////                PreparedStatement subPstmt = MainApp.myDB.conn.prepareStatement(insertEntry);
-////                for (int i = 0; i < para.length; i++) {
-////                    subPstmt.setString(i + 1, para[i]);
-////                }
-////                subPstmt.executeUpdate();
-////                subPstmt.close();
-////            }
-//            // 更新完毕
-//            MainApp.myDB.conn.commit();
-//            JOptionPane.showMessageDialog(null, "更新成功!");
-//            return true;
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "SQL语法错误，未能更新\n" + e.getMessage());
-//            MainApp.myDB.dbRollback(e);
-//            return false;
-//        } catch (Exception e) {
-//            return false;
-//        } // END : try
-//    }   // END : private void clickSave_Update()
-
-    //点击新建再点保存，插入数据库
-//    private boolean clickSave_Insert() {
-//
-//        String insertProject = "INSERT INTO `project`(isDeleted , createDate ," +
-//                " modifyDate , projectName , prepareDuration , peakTypeID , tcTypeID , subUnit ," +
-//                " subMin , subMax) VALUES ( 'N', ?,?,?,?,?,?,?,?,?);";
-//
-//        //try insert
-//        try {
-//            MainApp.myDB.conn.setAutoCommit(false);
-//            ResultSet rs;
-//            PreparedStatement pstmt = MainApp.myDB.conn.prepareStatement(insertProject, PreparedStatement.RETURN_GENERATED_KEYS);
-//            String[] para = {createDate, modifyDate, projectName, prepareDuration, peakTypeID, tcTypeID, subUnit, subMin, subMax};
-//            for (int i = 0; i < para.length; i++) {
-//                pstmt.setString(i + 1, para[i]);
-//            }
-//            pstmt.executeUpdate();
-//            rs = pstmt.getGeneratedKeys();
-//            rs.next();
-//            String newProjectID = rs.getString(1);
-//
-//            //拿到插入之后的ID，准备project_entry的数据
-//            String[] insertEntry = new String[2];
-//            insertEntry[0] = "INSERT INTO `project_entry`(isDeleted , createDate , modifyDate , " +
-//                    "projectID , xName , leftPos , rightPos , N ) VALUES ('N', ?,?,?,'X1',?,?,?)";
-//            insertEntry[1] = "INSERT INTO `project_entry`(isDeleted , createDate , modifyDate , " +
-//                    "projectID , xName , leftPos , rightPos , N ) VALUES ('N', ?,?,?,'X2',?,?,?)";
-//
-//            String[] paraEntry1 = {createDate, modifyDate, newProjectID, String.valueOf(x1Left), String.valueOf(x1Right), String.valueOf(x1N)};
-//            String[] paraEntry2 = {createDate, modifyDate, newProjectID, String.valueOf(x2Left), String.valueOf(x2Right), String.valueOf(x2N)};
-//
-//            //insert X1
-//            pstmt = MainApp.myDB.conn.prepareStatement(insertEntry[0]);
-//            for (int i = 0; i < paraEntry1.length; i++) {
-//                pstmt.setString(i + 1, paraEntry1[i]);
-//            }
-//            pstmt.executeUpdate();
-//
-//            //insert X2
-//            pstmt = MainApp.myDB.conn.prepareStatement(insertEntry[1]);
-//            for (int i = 0; i < paraEntry2.length; i++) {
-//                pstmt.setString(i + 1, paraEntry2[i]);
-//            }
-//            pstmt.executeUpdate();
-//
-//            pstmt.close();
-//            MainApp.myDB.conn.commit();
-//            return true;
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(null,"创建失败，数据库未作任何修改。请查看日志。");
-//            MainApp.myDB.dbRollback(e);
-//            return false;
-//        }   // END : try catch
-//    }   // END : private void clickSave_Insert()
+}   // END class

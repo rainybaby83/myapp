@@ -17,13 +17,13 @@ import java.util.Vector;
 
 
 
-public class MyDbClass{
+public class MyDatabase {
     public Connection conn;
     public Statement stmt;
     private String dbName = "cad";
     private Logger logger = LogManager.getLogger();
 
-    public MyDbClass() {
+    public MyDatabase() {
         dbCheck();
     }
 
@@ -337,7 +337,7 @@ public class MyDbClass{
     }
 
 
-}   // END: public class MyDbClass
+}   // END: public class MyDatabase
 
 
 

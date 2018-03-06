@@ -1,28 +1,33 @@
 package dhyx.UI;
 
+import com.mindfusion.charting.*;
 import com.mindfusion.charting.swing.LineChart;
 import dhyx.Class.Const;
 import dhyx.Class.MyIconButton;
 import dhyx.Class.MyTable;
 import dhyx.MainApp;
+import javafx.collections.FXCollections;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.jnlp.DownloadService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PanelTest extends JPanel {
     private Logger logger = LogManager.getLogger();
-    private ArrayList<Object> array;
     private LineChart lineChart;
     private PanelQuery panelQuery;
     private JLabel lblExperiment, lblCurve, lblTest, lblTestData;
@@ -30,9 +35,8 @@ public class PanelTest extends JPanel {
     private MyTable tblExperiment, tblCurve, tblTest, tblTestData;
     private DefaultTableModel dmExperiment, dmCurve, dmTest, dmTestData;
     private String sqlSelectExp = "SELECT DISTINCT 项目名称,实验ID,实验名称,实验创建日期  FROM view_pro_exp ";
-    private String sqlSelectCurve = "SELECT DISTINCT 曲线序号, 曲线ID FROM view_exp_curve_test ";
+    private String sqlSelectCurve = "SELECT DISTINCT 曲线序号,曲线ID FROM view_project_exp_curve ";
     private String sqlSelectTest = "SELECT DISTINCT 浓度序号,X1,X2,TC值,实验ID,曲线ID,曲线分录ID,测试ID,测试时间  FROM view_exp_curve_test ";
-    private String sqlSelectTestData = "SELECT DISTINCT testID AS 测试ID,x,y FROM test_original";
     private String ExperimentID,curveID;
 
     public PanelTest() {
@@ -55,6 +59,7 @@ public class PanelTest extends JPanel {
         this.setBounds(Const.LEFT_MARGIN, Const.TITLE_HEIGHT, Const.PANEL_WIDHT, Const.PANEL_HEIGHT);
     }   // END :  private void initSelf()
 
+
     //初始化查询面板
     private void initQueryPanel() {
         panelQuery = new PanelQuery();
@@ -64,11 +69,11 @@ public class PanelTest extends JPanel {
         panelQuery.txtQuery.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-            //按回车键执行相应操作;
-            if(e.getKeyChar()==KeyEvent.VK_ENTER )
-            {
-                btnQueryClicked();
-            }
+                //按回车键执行相应操作;
+                if(e.getKeyChar()==KeyEvent.VK_ENTER )
+                {
+                    btnQueryClicked();
+                }
             }
         });
 
@@ -152,7 +157,7 @@ public class PanelTest extends JPanel {
         lblCurve.setBounds(btnQuery.getX(), standardY, 120, 25);
 
         lblTest = new JLabel("测试记录");
-        lblTest.setBounds(btnDel.getX(), standardY, 360, 25);
+        lblTest.setBounds(lblCurve.getX()+lblCurve.getWidth()+30, standardY, 360, 25);
 
         lblTestData = new JLabel("原始数据");
         lblTestData.setBounds(0, 325, 325, 25);
@@ -267,6 +272,7 @@ public class PanelTest extends JPanel {
                 if (columnIndex == 0) {
                     selectAll(tblTest);
                     updateTestData("表头全选调用");
+                    updateChart();
                 }
             }
         });
@@ -274,18 +280,15 @@ public class PanelTest extends JPanel {
     }   // END : private void initTableAddListener()
 
 
-    private void initLineChart() {
-        lineChart = new LineChart();
-        lineChart.setBounds(tblTest.getX(), tblTestData.getY(), 640, 275);
-        lineChart.setBackground(Color.white);
-        this.add(lineChart);
-    }
-
 
     private void initOther() {
 
     }
 
+
+    /**
+     * 单击查询按钮时执行的代码
+     */
     private void btnQueryClicked() {
         btnQuery.setEnabled(false);
         //处理SQL，避免注入。例如   C%' or 1=1 or 项目ID like '%C
@@ -300,19 +303,9 @@ public class PanelTest extends JPanel {
 
         if (tblExperiment.getRowCount() > 0) {
             tblExperiment.setRowSelectionInterval(0, 0);
-            //查到数据后，调用表格点击事件，刷新右侧数据
-            tblExperimentClicked("查询按钮调用");
-        } else {
-            // 查不到实验数据时，清空曲线列表、测试列表
-            dmCurve = MainApp.myDB.getTableModel(sqlSelectCurve + " WHERE 0=1");
-            tblCurve.setModel(dmCurve);
-            dmTest = MainApp.myDB.getTableModel(sqlSelectTest + " WHERE 0=1");
-            tblTest.setModel(dmTest);
-            dmTestData = MainApp.myDB.getTableModelForTestData("0");
-            tblTestData.setModel(dmTestData);
-//            updateTestData("查询按钮查不到数据时调用");
         }
-
+        //调用表格点击事件，刷新右侧数据
+        tblExperimentClicked("查询按钮调用");
         //后续处理
         panelQuery.txtQuery.requestFocus();
         btnQuery.setEnabled(true);
@@ -337,39 +330,52 @@ public class PanelTest extends JPanel {
     // 点击某行实验数据，右侧展示对应的曲线列表数据。如果没有曲线数据，则清空
     private void tblExperimentClicked(String msg) {
         btnDel.setEnabled(false);
-        int nowRow = tblExperiment.getSelectedRow();
-        if (nowRow != -1) {
-            ExperimentID = tblExperiment.getValueAt(nowRow, 1).toString();
-            String sql = sqlSelectCurve + "WHERE `实验ID` = '" + ExperimentID + "' ORDER BY `曲线ID`";
+        if (tblExperiment.getRowCount() > 0) {
+            int nowRow = tblExperiment.getSelectedRow();
+            if (nowRow != -1) {
+                ExperimentID = tblExperiment.getValueAt(nowRow, 1).toString();
+                String sql = sqlSelectCurve + "WHERE `实验ID` = '" + ExperimentID + "' ORDER BY `曲线ID`";
 
-            dmCurve = MainApp.myDB.getTableModel(sql);
-            tblCurve.setModel(dmCurve);
-            if (tblCurve.getRowCount() > 0) {
-                tblCurve.setRowSelectionInterval(0, 0);
+                dmCurve = MainApp.myDB.getTableModel(sql);
+                tblCurve.setModel(dmCurve);
+                if (tblCurve.getRowCount() > 0) {
+                    tblCurve.setRowSelectionInterval(0, 0);
+                }
             }
-            tblCurveClicked("单击实验表格，方法内调用");
+        } else {
+            // 查不到实验数据时，清空曲线列表
+            dmCurve = MainApp.myDB.getTableModel(sqlSelectCurve + " WHERE 0=1");
+            tblCurve.setModel(dmCurve);
         }
+        tblCurveClicked("单击实验表格，方法内调用");
     }   // END : private void tblExperimentClicked()
 
 
     // 点击曲线某行数据，则在右侧测试数据列表展示对应数据
     private void tblCurveClicked(String msg) {
         btnDel.setEnabled(false);
-        int nowRow = tblCurve.getSelectedRow();
-        if (nowRow != -1) {
-            curveID = tblCurve.getValueAt(nowRow, 1).toString();
+        if (tblExperiment.getRowCount() > 0) {
+            int nowRow = tblCurve.getSelectedRow();
+            if (nowRow != -1) {
+                int index = ((DefaultTableModel)tblCurve.getModel()).findColumn("曲线ID");
+                curveID = tblCurve.getValueAt(nowRow, index).toString();
+            } else {
+                // 单击实验列表时，调用本方法，如果此时曲线列表没有数据（即getSelectedRow（）=-1），则另curveID=-1，使测试表格被清空
+                curveID = String.valueOf(-1);
+            }
+            String sql = sqlSelectTest + "WHERE `曲线ID` = '" + curveID + "' ORDER BY `测试ID`";
+            dmTest = MainApp.myDB.getTableModelWithCheckbox(sql);
+            tblTest.setModel(dmTest);
         } else {
-            // 单击实验列表时，调用本方法，如果此时曲线列表没有数据（即getSelectedRow（）=-1），则另curveID=-1，使测试表格被清空
-            curveID = String.valueOf(-1);
+            // 查不到实验数据时，测试列表
+            dmTest = MainApp.myDB.getTableModel(sqlSelectTest + " WHERE 0=1");
+            tblTest.setModel(dmTest);
         }
-        String sql = sqlSelectTest + "WHERE `曲线ID` = '" + curveID + "' ORDER BY `测试ID`";
-        dmTest = MainApp.myDB.getTableModelWithCheckbox(sql);
-        tblTest.setModel(dmTest);
-        //如果测试列表有数据，则全选
+        //全选测试列表。如果没有数据，不影响
         selectAll(tblTest);
         updateTestData("曲线列表点击调用");
+        updateChart();
     }
-
 
 
     // JTable多选时，复选框打钩的功能
@@ -384,20 +390,32 @@ public class PanelTest extends JPanel {
             }
         }
         updateTestData("tblTestClicked事件内调用");
+        updateChart();
+    }
+
+
+    //表格全选，并打钩
+    private  void selectAll(MyTable myTable) {
+        int rowCount = myTable.getRowCount();
+        if (rowCount > 0) {
+            myTable.setRowSelectionInterval(0, rowCount - 1);
+            for (int i = 0; i < myTable.getRowCount(); i++) {
+                myTable.setValueAt(true, i, 0);
+            }
+            btnDel.setEnabled(true);
+        } else {
+            btnDel.setEnabled(false);
+        }
     }
 
 
     //更新原始测试数据表格的功能
     private void updateTestData(String msg) {
 
-//        JOptionPane.showMessageDialog(null,msg);
-        /*
         // 取得tblTest选中行的索引
         // 取得tblTest选中行的testID
         // 更新sql
         // 更新dm
-         */
-
         if (tblTest.getRowCount() > 0) {
             StringBuffer str = new StringBuffer();
 
@@ -425,16 +443,67 @@ public class PanelTest extends JPanel {
     }
 
 
-    //表格全选，并打钩
-    private  void selectAll(MyTable myTable) {
-        int rowCount = myTable.getRowCount();
-        if (rowCount > 0) {
-            myTable.setRowSelectionInterval(0, rowCount - 1);
-            for (int i = 0; i < myTable.getRowCount(); i++) {
-                myTable.setValueAt(true, i, 0);
-            }
-        }
 
+    //初始化图标
+    private void initLineChart() {
+        lineChart = new LineChart();
+        lineChart.setBounds(tblCurve.getX(), tblTestData.getY(), 640, 275);
+        lineChart.setBackground(Color.white);
+        lineChart.setShowLegend(false);
+        lineChart.setShowScatter(false);
+        this.add(lineChart);
+    }
+
+
+    private void updateChart() {
+        int rowCount = tblTestData.getRowCount();
+        int columnCount = tblTestData.getColumnCount();
+
+        if (rowCount > 0) {
+            Plot2D linePlot = new Plot2D();
+            // define axis ranges
+            Axis yAxis = new Axis();
+            yAxis.setMinValue(0.0);
+            yAxis.setMaxValue(300.0);
+            yAxis.setInterval(10);
+
+            Axis xAxis = new Axis();
+            xAxis.setMinValue(0.0);
+            xAxis.setMaxValue(300.0);
+            xAxis.setInterval(50);
+
+            linePlot.setXAxis(xAxis);
+            linePlot.setYAxis(yAxis);
+
+
+            Series2D[] series = new Series2D[rowCount];
+            List<Double> xList = new ArrayList<>();
+            List<Double> yList = new ArrayList<>();
+            List<String> xAixsList = new ArrayList<>();
+            List<Series> lineSeriesList = new LinkedList<>();
+
+            for (int i = 0; i < rowCount; i++) {
+                xList.clear();
+                yList.clear();
+                for (int j = 1; j < columnCount; j++) {
+                    xAixsList.add(tblTestData.getColumnName(j));
+                    xList.add(NumberUtils.toDouble(tblTestData.getColumnName(j)));
+                    yList.add(NumberUtils.toDouble(tblTestData.getValueAt(i, j).toString()));
+                }
+                series[i] = new Series2D(xList,yList,xAixsList);
+                lineSeriesList.add(series[i]);
+            }
+
+            javafx.collections.ObservableList<Series> ols1 = FXCollections.observableList(lineSeriesList);
+            LineRenderer lineRenderer = new LineRenderer(ols1);
+            linePlot.getSeriesRenderers().add(lineRenderer);
+            linePlot.setGridLineColor(Color.red);
+            lineChart.getPlotPanel().getChildren().add(linePlot);
+
+
+        } else {
+            lineChart.removeAll();
+        }
 
     }
 }

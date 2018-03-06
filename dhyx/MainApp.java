@@ -2,7 +2,7 @@ package dhyx;
 
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import dhyx.Class.Const;
-import dhyx.Class.MyDbClass;
+import dhyx.Class.MyDatabase;
 import dhyx.UI.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +18,7 @@ public class MainApp extends JFrame{
     private PanelMenu panelMenu = new PanelMenu();
     private JPanel panelMain = new JPanel();
     private JLabel lblTitle = new JLabel();
-    public static MyDbClass myDB;
+    public static MyDatabase myDB;
 
     private MainApp() {
         super();
@@ -157,7 +157,7 @@ public class MainApp extends JFrame{
             logger.trace("启动程序");
             try {
                 MainApp window = new MainApp();
-                myDB = new MyDbClass();
+                myDB = new MyDatabase();
                 window.setVisible(true);
                 logger.trace("启动完毕");
                 window.setVisible(true);

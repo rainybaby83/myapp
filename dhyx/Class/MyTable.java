@@ -46,7 +46,6 @@ public class MyTable extends JTable{
     public void setWidth(int... width){
         int length = Math.min(this.getColumnCount(), width.length);
         for (int i = 0; i < length; i++) {
-//            this.getColumnModel().getColumn(i).setWidth(width[i]);
             this.getColumnModel().getColumn(i).setPreferredWidth(width[i]);
             this.getColumnModel().getColumn(i).setMinWidth(width[i]);
         }
