@@ -300,30 +300,23 @@ public class MyDatabase {
                     vectorRow.add(aTestID);
                     rs = stmt.executeQuery(sql);
 
-                    if (rs.next())  {
-                        x = rs.getInt("x");
-                        for (int aHeader : header) {
-                            if (aHeader < x || aHeader > x ) {
-                                //如果某条testID数据的X小于header，则填充为0
+                    if (rs.next())  { x = rs.getInt("x"); }
 
-                                vectorRow.add(0);
-                            } else if (aHeader == x) {
-                                //如果X等于header，则把Y添加到vectorRow
-                                y = rs.getInt("y");
-                                vectorRow.add(y);
+                    for (int aHeader : header) {
+                        if (aHeader < x || aHeader > x) {
+                            //如果某条testID数据的X小于header，则填充为0
+                            vectorRow.add(0);
+                        } else if (aHeader == x) {
+                            //如果X等于header，则把Y添加到vectorRow
+                            y = rs.getInt("y");
+                            vectorRow.add(y);
 
-                                //如果没有下一条数据，则X不再变动；否则next()之后取一次X
-                                if (rs.next()) {
-                                    x = rs.getInt("x");
-                                }
-                            }
+                            //如果没有下一条数据，则X不再变动；否则next()之后取一次X
+                            if (rs.next())  { x = rs.getInt("x"); }
                         }
-                        vector.addElement(vectorRow);
                     }
+                    vector.addElement(vectorRow);
                     rs.close();
-
-
-
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "创建表格内容失败，请截图后联系开发人员。\n"

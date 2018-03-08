@@ -1,21 +1,19 @@
 package dhyx.UI;
 
-
-import bitagentur.chart.JChartLibLineChart;
-import bitagentur.data.JChartLibDataSet;
-import bitagentur.renderer.JChartLibLinechartRenderer;
-import bitagentur.renderer.JChartLibPanel;
+import com.mindfusion.charting.*;
+import com.mindfusion.charting.swing.LineChart;
 import dhyx.Class.Const;
 import dhyx.Class.MyIconButton;
 import dhyx.Class.MyTable;
 import dhyx.MainApp;
+import javafx.collections.FXCollections;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
+import javax.jnlp.DownloadService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -23,9 +21,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PanelTest extends JPanel {
     private Logger logger = LogManager.getLogger();
+    private LineChart lineChart;
     private PanelQuery panelQuery;
     private JLabel lblExperiment, lblCurve, lblTest, lblTestData;
     private MyIconButton btnQuery, btnDel, btnExcel, btnTest;
@@ -36,11 +39,6 @@ public class PanelTest extends JPanel {
     private String sqlSelectTest = "SELECT DISTINCT 浓度序号,X1,X2,TC值,实验ID,曲线ID,曲线分录ID,测试ID,测试时间  FROM view_exp_curve_test ";
     private String ExperimentID,curveID;
 
-    private JChartLibPanel chartPanel = new JChartLibPanel();
-    private JChartLibLineChart lineChart;
-    private JChartLibDataSet chartDataSet;
-    private JChartLibLinechartRenderer renderer;
-
     public PanelTest() {
         initSelf();
         initQueryPanel();
@@ -49,7 +47,9 @@ public class PanelTest extends JPanel {
         initTable();
         initLineChart();
         initOther();
+
         btnQueryClicked();
+
     }
 
     //初始化面板基本属性
@@ -168,27 +168,6 @@ public class PanelTest extends JPanel {
         this.add(lblTestData);
     }   // END : private void initLabel()
 
-
-    //初始化图表
-    private void initLineChart() {
-
-        chartDataSet = new JChartLibDataSet();
-        chartDataSet.addDataSerie("",null);
-
-        lineChart =  new JChartLibLineChart("","","", chartDataSet);
-
-        renderer = (JChartLibLinechartRenderer) lineChart.getRender();
-
-        renderer.addXAxisText("0");
-        renderer.addXAxisText("100");
-        renderer.addXAxisText("200");
-
-        chartPanel.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.pink));
-        chartPanel.setBounds(tblCurve.getX(), tblTestData.getY(), 640, 275);
-        chartPanel.setChart(lineChart);
-
-        this.add(chartPanel);
-    }
 
     //初始化4个表格
     private void initTable() {
@@ -410,7 +389,7 @@ public class PanelTest extends JPanel {
                 tblTest.setValueAt(false, i, 0);
             }
         }
-        updateTestData("测试列表单击调用");
+        updateTestData("tblTestClicked事件内调用");
         updateChart();
     }
 
@@ -464,32 +443,67 @@ public class PanelTest extends JPanel {
     }
 
 
+
+    //初始化图标
+    private void initLineChart() {
+        lineChart = new LineChart();
+        lineChart.setBounds(tblCurve.getX(), tblTestData.getY(), 640, 275);
+        lineChart.setBackground(Color.white);
+        lineChart.setShowLegend(false);
+        lineChart.setShowScatter(false);
+        this.add(lineChart);
+    }
+
+
     private void updateChart() {
         int rowCount = tblTestData.getRowCount();
         int columnCount = tblTestData.getColumnCount();
-        lineChart.getDataSeries().clear();
-        chartDataSet.getSeries().clear();
 
         if (rowCount > 0) {
-            int[] xList = new int[columnCount];
-            int[] yList = new int[columnCount];
-            String serieName;
+            Plot2D linePlot = new Plot2D();
+            // define axis ranges
+            Axis yAxis = new Axis();
+            yAxis.setMinValue(0.0);
+            yAxis.setMaxValue(300.0);
+            yAxis.setInterval(10);
+
+            Axis xAxis = new Axis();
+            xAxis.setMinValue(0.0);
+            xAxis.setMaxValue(300.0);
+            xAxis.setInterval(50);
+
+            linePlot.setXAxis(xAxis);
+            linePlot.setYAxis(yAxis);
+
+
+            Series2D[] series = new Series2D[rowCount];
+            List<Double> xList = new ArrayList<>();
+            List<Double> yList = new ArrayList<>();
+            List<String> xAixsList = new ArrayList<>();
+            List<Series> lineSeriesList = new LinkedList<>();
+
             for (int i = 0; i < rowCount; i++) {
+                xList.clear();
+                yList.clear();
                 for (int j = 1; j < columnCount; j++) {
-                    xList[j - 1] = NumberUtils.toInt(tblTestData.getColumnName(j));
-                    yList[j - 1] = NumberUtils.toInt(tblTestData.getValueAt(i, j).toString());
+                    xAixsList.add(tblTestData.getColumnName(j));
+                    xList.add(NumberUtils.toDouble(tblTestData.getColumnName(j)));
+                    yList.add(NumberUtils.toDouble(tblTestData.getValueAt(i, j).toString()));
                 }
-                serieName = tblTestData.getValueAt(i, 0).toString();
-                chartDataSet.addDataSerie(serieName, yList);
+                series[i] = new Series2D(xList,yList,xAixsList);
+                lineSeriesList.add(series[i]);
             }
+
+            javafx.collections.ObservableList<Series> ols1 = FXCollections.observableList(lineSeriesList);
+            LineRenderer lineRenderer = new LineRenderer(ols1);
+            linePlot.getSeriesRenderers().add(lineRenderer);
+            linePlot.setGridLineColor(Color.red);
+            lineChart.getPlotPanel().getChildren().add(linePlot);
+
+
         } else {
-            chartDataSet.addDataSerie("",null);
+            lineChart.removeAll();
         }
 
-        lineChart.setDataSet(chartDataSet);
-        chartPanel.updateUI();
-
-
     }
-
 }
