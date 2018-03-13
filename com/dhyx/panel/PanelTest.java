@@ -2,6 +2,7 @@ package com.dhyx.panel;
 
 
 import com.dhyx.myClass.Const;
+import com.dhyx.myClass.MyChart;
 import com.dhyx.myClass.MyIconButton;
 import com.dhyx.myClass.MyTable;
 import com.dhyx.MainApp;
@@ -43,11 +44,14 @@ public class PanelTest extends JPanel {
     private String sqlSelectTest = "SELECT DISTINCT 浓度序号,X1,X2,TC值,实验ID,曲线ID,曲线分录ID,测试ID,测试时间  FROM view_exp_curve_test ";
     private String experimentID, curveID;
 
-
+    private MyChart panelChart;
     private LineRenderer lineRenderer;
-    private List<Series> seriesList;
+    private ArrayList<Series> lineSeriesList = new ArrayList<>();
+    private ArrayList<Series> x1x2SeriesList = new ArrayList<>();
     private ObservableList<Series> ols;
-    private Series2D defaultSeries2D;
+    private Series2D seriesZero,seriesPro;
+    private Plot2D gridArea;
+
 
 
     public PanelTest() {
@@ -161,62 +165,9 @@ public class PanelTest extends JPanel {
 
     //初始化图表
     private void initChart() {
-        Dashboard dashboard = new Dashboard();
-        LayoutBuilder layoutBuilder = new LayoutBuilder(dashboard);
-
-        Axis xAxis = new Axis();
-        xAxis.setMaxValue(300.0);
-        xAxis.setMinValue(0.0);
-        xAxis.setInterval(50);
-        xAxis.setTitle("");
-        Axis yAxis = new Axis();
-        yAxis.setMinValue(0.0);
-        yAxis.setMaxValue(12000.0);
-        yAxis.setInterval(2000);
-        yAxis.setTitle("");
-
-        //网格
-        Plot2D gridArea = new Plot2D();
-        //网格区域背景色，None时才显示
-        gridArea.setBackground(new SolidBrush(Color.white));
-        //网格区域类型
-        gridArea.setGridType(GridType.Crossed);
-        //网格区域背景色
-        gridArea.setGridColor1(Color.white);
-        gridArea.setGridColor2(Color.white);
-        //网格线类型，实线虚线
-        gridArea.setGridLineStyle(DashStyle.Dash);
-        //网格线颜色
-        gridArea.setGridLineColor(new Color(222, 222, 222));
-        //网格线对应的坐标轴
-        gridArea.setXAxis(xAxis);
-        gridArea.setYAxis(yAxis);
-
-
-        //折线样式
-        UniformSeriesStyle seriesStyle = new UniformSeriesStyle();
-        seriesStyle.setUniformStroke(new SolidBrush(Color.blue));
-
-        //默认数据系列，数值为(0,0)
-        defaultSeries2D = new Series2D(
-                Collections.singletonList(0D),
-                Collections.singletonList(0D),
-                Collections.singletonList(""));
-
-        //可以拖动的坐标轴。去掉这四行，则不能拖动
-        seriesList = Collections.singletonList(defaultSeries2D);
-        ols = FXCollections.observableList(seriesList);
-        lineRenderer = new LineRenderer(ols);
-        lineRenderer.setSeriesStyle(seriesStyle);
-        gridArea.getSeriesRenderers().add(lineRenderer);
-
-        XAxisRenderer gridAreaXRenderer = new XAxisRenderer(xAxis);
-        YAxisRenderer gridAreaYRenderer = new YAxisRenderer(yAxis);
-        layoutBuilder.createAndAddPlotWithBottomAndLeftAxes(gridArea, gridAreaXRenderer, gridAreaYRenderer);
-
-        dashboard.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.blue));
-        dashboard.setBounds(tblCurve.getX(), tblTestData.getY(), 640, 275);
-        this.add(dashboard);
+        panelChart = new MyChart();
+        panelChart.setBounds(tblCurve.getX(), tblTestData.getY(), 640, 275);
+        this.add(panelChart);
     }
 
 
@@ -328,7 +279,7 @@ public class PanelTest extends JPanel {
                 if (columnIndex == 0) {
                     selectAll(tblTest);
                     updateTestData("表头全选调用");
-                    updateChart("表头全选调用");
+
                 }
             }
         });
@@ -361,6 +312,7 @@ public class PanelTest extends JPanel {
         }
         //调用表格点击事件，刷新右侧数据
         tblExperimentClicked("查询按钮调用");
+
         //后续处理
         panelQuery.txtQuery.requestFocus();
         btnQuery.setEnabled(true);
@@ -397,6 +349,7 @@ public class PanelTest extends JPanel {
             dmCurve = MainApp.myDB.getTableModel(sqlSelectCurve + " WHERE 0=1");
             tblCurve.setModel(dmCurve);
         }
+
         tblCurveClicked("单击实验表格，方法内调用");
     }   // END : private void tblExperimentClicked()
 
@@ -424,7 +377,7 @@ public class PanelTest extends JPanel {
         //全选测试列表。如果没有数据，不影响
         selectAll(tblTest);
         updateTestData("曲线列表点击调用");
-        updateChart("曲线列表点击调用");
+        panelChart.updateChart(tblTestData);
     }
 
 
@@ -440,14 +393,9 @@ public class PanelTest extends JPanel {
             }
         }
         updateTestData(msg + " + \ntblTestClicked内部调用updateTestData");
-        updateChart(msg + "+ \ntblTestClicked内部调用updateChart");
+        panelChart.updateChart(tblTestData);
     }
 
-
-    private void tblTestDataRightClicked(String msg) {
-
-
-    }
 
 
     //表格全选，并打钩
@@ -498,50 +446,10 @@ public class PanelTest extends JPanel {
 
     }
 
-    private void updateChart(String msg) {
-        int rowCount = tblTestData.getRowCount();
-        int columnCount = tblTestData.getColumnCount();
-//        double xMax=1,yMax=1;
 
-        if (rowCount > 0) {
-            Series2D[] series2D = new Series2D[rowCount];
-            List<Double> xList = new ArrayList<>();
 
-            //每个series都要有x数据和y轴数据。由于x坐标相同，所以构建一个通用的x数据：xList
-            for (int column = 1; column < columnCount; column++) {
-                //第0列是TestID，所以从1开始
-                xList.add(NumberUtils.toDouble(tblTestData.getColumnName(column)));
-            }
-//            xMax = NumberUtils.toDouble(tblTestData.getColumnName(columnCount - 1));
 
-            //循环构建series2D数组
-            for (int row = 0; row < rowCount; row++) {
-                //构建每个series2D的yList
-                List<Double> yList = new ArrayList<>();
-                for (int column = 1; column < columnCount; column++) {
-                    yList.add(NumberUtils.toDouble(tblTestData.getValueAt(row, column).toString()));
-                }
 
-                //用xList和yList构建series2D数组
-                series2D[row] = new Series2D(xList, yList, null);
-
-                //计算y轴最大值
-//                Double tmp = Collections.max(yList);
-//                if (tmp > yMax) { yMax = tmp; }
-            }
-            //全部循环完成后，将series2D构建为seriesList
-            seriesList = Arrays.asList(series2D);
-
-        } else {
-            //没有任何测试数据时，用默认的点(0,0)构建seriesList
-            seriesList = Collections.singletonList(defaultSeries2D);
-        }
-
-        ols = FXCollections.observableList(seriesList);
-        lineRenderer.setSeries(ols);
-        lineRenderer.dataChanged();
-
-    }
 
 
 }
