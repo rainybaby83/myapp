@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Utility myClass for Dates
+ * Utility myclass for Dates
  *
  * @author Silvio Schneider
  */

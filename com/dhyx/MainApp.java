@@ -1,8 +1,8 @@
 package com.dhyx;
 
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import com.dhyx.myClass.Const;
-import com.dhyx.myClass.MyDatabase;
+import com.dhyx.myclass.Const;
+import com.dhyx.myclass.MyDatabase;
 import com.dhyx.panel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -151,6 +151,8 @@ public class MainApp extends JFrame{
             UIManager.put(item + ".font", f);
         }
     }
+
+
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {

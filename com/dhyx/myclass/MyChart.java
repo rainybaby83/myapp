@@ -1,5 +1,6 @@
-package com.dhyx.myClass;
+package com.dhyx.myclass;
 
+import com.dhyx.MainApp;
 import com.mindfusion.charting.*;
 import com.mindfusion.charting.swing.Dashboard;
 import com.mindfusion.charting.swing.LayoutBuilder;
@@ -11,6 +12,9 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,10 +35,12 @@ public class MyChart extends Dashboard {
     private ArrayList<Series> x1x2SeriesList = new ArrayList<>();
     private ObservableList<Series> ols,ols2;
     private LineRenderer lineRenderer;
+    private LineRenderer x1x2Renderer;
     private LayoutBuilder layoutBuilder;
     private Series2D defaultSeries = new Series2D(Arrays.asList(0D), Arrays.asList(0D), Collections.singletonList(""));
-    private BarRenderer x1x2Renderer;
 
+    private String projectID = "";
+    private Statement stmt = MainApp.myDB.stmt;
 
     public MyChart() {
         super();
@@ -101,28 +107,25 @@ public class MyChart extends Dashboard {
         seriesStyle.setUniformStroke(new SolidBrush(Color.blue));
 
         UniformSeriesStyle seriesStyle2 = new UniformSeriesStyle();
-        seriesStyle2.setUniformStroke(new SolidBrush(Color.blue));
+        seriesStyle2.setUniformStroke(new SolidBrush(Color.red));
 
         //可以拖动的坐标轴。去掉这四行，则不能拖动
         lineSeriesList.add(defaultSeries);
         ols = FXCollections.observableList(lineSeriesList);
         ols2 = FXCollections.observableList(x1x2SeriesList);
         lineRenderer = new LineRenderer(ols);
-        x1x2Renderer =  new BarRenderer(ols2);
+        x1x2Renderer =  new LineRenderer(ols2);
         lineRenderer.setSeriesStyle(seriesStyle);
         x1x2Renderer.setSeriesStyle(seriesStyle2);
         gridArea.getSeriesRenderers().add(lineRenderer);
         gridArea.getSeriesRenderers().add(x1x2Renderer);
-
-
-
     }
 
     /**
      * 更新统计图
      * @param mytable 传入的表格组件
      */
-    public void updateChart(MyTable mytable) {
+    public void updateChart(MyTable mytable,String varProjectID) {
         int rowCount = mytable.getRowCount();
         int columnCount = mytable.getColumnCount();
         lineSeriesList.clear();
@@ -148,44 +151,79 @@ public class MyChart extends Dashboard {
                 //用xList和yList构建series2D数组
                 seriesData[row] = new Series2D(xList, yList, null);
                 lineSeriesList.add(seriesData[row]);
-                this.updateChartX1X2();
+
             }
+
+            if (!projectID.equals(varProjectID)) {
+                projectID = varProjectID;
+            }
+
+            //获取四个边界的x、y值
+            int x[] = getXBorder();
+            int y[] = new int[x.length];
+            int tmpInt = 0;
+            for (int i = 0; i < x.length; i++) {
+                for (int j = 0; j < rowCount; j++) {
+                    tmpInt = (int) mytable.getValueAt(j, x[i]);
+                    y[i] = Math.max(y[i], tmpInt);
+                }
+            }
+            updateChartX1X2(x,y);
+
         } else {
             //没有任何测试数据时，用默认的点(0,0)构建seriesList
-            lineSeriesList.add(defaultSeries);
+            lineSeriesList.clear();
+            x1x2SeriesList.clear();
         }
-        ols = FXCollections.observableList(lineSeriesList);
-        lineRenderer.setSeries(ols);
+
         lineRenderer.dataChanged();
+        x1x2Renderer.dataChanged();
     }
 
 
     /**
      * 根据项目x1、x2的左右位置，构建纵坐标界线
      */
-    private void updateChartX1X2() {
-
-//        borderline =  new int[]{1,2,3,4};
-        ArrayList<Series> x1x2SeriesList = new ArrayList<>();
-
+    private void updateChartX1X2(int[] x, int[] y) {
         //全部循环完成后，将series2D构建为seriesList
-        List<Double> x = new ArrayList<>();
-        List<Double> y = new ArrayList<>();
-        x.add(100D);
-        x.add(100D);
-        y.add(0D);
-        y.add(10000D);
 
         Series2D[] seriesData = new Series2D[4];
+        x1x2SeriesList.clear();
 
-        for(int i = 0; i<1 ;i++) {
-            seriesData[i] = new Series2D(x, y, null);
+        for (int i = 0; i < x.length; i++) {
+            ArrayList<Double> xList = new ArrayList<>();
+            ArrayList<Double> yList = new ArrayList<>();
+            xList.add((double) x[i]);
+            xList.add((double) x[i]);
+            yList.add(0D);
+            yList.add((double) y[i]);
+            seriesData[i] = new Series2D(xList, yList, null);
             x1x2SeriesList.add(seriesData[i]);
         }
 
-        ObservableList<Series> ols2 = FXCollections.observableList(x1x2SeriesList);
-        x1x2Renderer.dataChanged();
+        ols2 = FXCollections.observableList(x1x2SeriesList);
 
+    }
+
+
+    private int[] getXBorder() {
+        int[] x = new int[4];
+        //获取四个边界
+        try {
+            String sql = "SELECT DISTINCT `X1左边界`,`X1右边界`,`X2左边界`,`X2右边界` FROM view_project " +
+                    "WHERE `项目ID` = " + projectID ;
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                for(int i = 0;i<4;i++) {
+                    x[i] = rs.getInt(i+1);
+                }
+            }
+        } catch (SQLException e) {
+            for(int i = 0;i<4;i++) {
+                x[i] = 0;
+            }
+        }
+        return x;
     }
 
 }

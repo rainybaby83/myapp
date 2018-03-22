@@ -1,8 +1,6 @@
 package com.dhyx.panel;
 
-import com.dhyx.myClass.Const;
-import com.dhyx.myClass.MyIconButton;
-import com.dhyx.myClass.MyTable;
+import com.dhyx.myclass.*;
 import com.dhyx.MainApp;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -16,6 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Date;
 
@@ -33,6 +32,8 @@ public class PanelExperiment extends JPanel {
     private String sqlSelectPro = "SELECT DISTINCT 项目ID,创建日期,修改日期,项目名称 FROM view_pro_exp ";
     private String sqlSelectExp = "SELECT DISTINCT 项目名称,实验创建日期,实验名称,实验ID FROM view_pro_exp ";
     private String projectID, projectName, experimentID, experimentName;
+    private MyDatabase db = MainApp.myDB;
+    private Connection conn = MainApp.myDB.conn;
 
 
 
@@ -48,6 +49,7 @@ public class PanelExperiment extends JPanel {
 
     //初始化面板基本属性
     private void initSelf() {
+
         this.setLayout(null);
         this.setBackground(Color.white);
         this.setBounds(Const.LEFT_MARGIN, Const.TITLE_HEIGHT, Const.PANEL_WIDHT, Const.PANEL_HEIGHT);
@@ -101,8 +103,8 @@ public class PanelExperiment extends JPanel {
     // 1. 创建TableModel
     private void initTableGetModel() {
         //从全局变量Const.myDB获得DefaultTableModel，用于创建table
-        dmProject = MainApp.myDB.getTableModel(sqlSelectPro + " LIMIT 50");
-        dmExperiment = MainApp.myDB.getTableModel(sqlSelectExp + "WHERE `实验ID` is not null LIMIT 50");
+        dmProject = TableMethod.getTableModel(sqlSelectPro + " LIMIT 50");
+        dmExperiment = TableMethod.getTableModel(sqlSelectExp + "WHERE `实验ID` is not null LIMIT 50");
     }
 
     // 2.初始化表格及滚动面板
@@ -209,7 +211,7 @@ public class PanelExperiment extends JPanel {
         strQueryKey = StringUtils.replace(strQueryKey, "%", "");
         sql = sqlSelectPro + " WHERE `实验名称` LIKE '%" + strQueryKey + "%'";
 
-        dmProject = MainApp.myDB.getTableModel(sql);
+        dmProject = TableMethod.getTableModel(sql);
         tblProject.setModel(dmProject);
 
         //后续处理
@@ -235,19 +237,19 @@ public class PanelExperiment extends JPanel {
                     "VALUES ( 'N' , ? , ? , ? , ?);";
             //try insert
             try {
-                MainApp.myDB.conn.setAutoCommit(false);
-                PreparedStatement pstmt = MainApp.myDB.conn.prepareStatement(insertExperiment);
+                conn.setAutoCommit(false);
+                PreparedStatement pstmt = conn.prepareStatement(insertExperiment);
                 pstmt.setString(1, createDate);
                 pstmt.setString(2, createDate);
                 pstmt.setString(3, projectID);
                 pstmt.setString(4, experimentName);
                 pstmt.executeUpdate();
                 pstmt.close();
-                MainApp.myDB.conn.commit();
+                conn.commit();
                 tblProjectClicked();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "创建失败，数据库未作任何修改。请查看日志。");
-                MainApp.myDB.dbRollback();
+                db.dbRollback();
             }// END : try catch
         } else {
             JOptionPane.showMessageDialog(null, "未输入实验名称，停止创建。");
@@ -258,7 +260,7 @@ public class PanelExperiment extends JPanel {
     //删除按钮
     private void btnDelClicked() {
         String sql = "SELECT COUNT(*) FROM `view_project_exp_curve` WHERE `实验ID` = ?";
-        if (MainApp.myDB.IsExistRecord(sql, experimentID)) {
+        if (db.isExistRecord(sql, experimentID)) {
             //允许删除则再次确认
             int answer = JOptionPane.showConfirmDialog(null, "即将删除实验“" + experimentName + "”，请再次确认！",
                     "警告", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
@@ -272,19 +274,19 @@ public class PanelExperiment extends JPanel {
             String updateExperiment = "UPDATE `experiment` SET `isDeleted`='Y' WHERE `experimentID` = ? AND `isDeleted` = 'N';";
 
             try {
-                MainApp.myDB.conn.setAutoCommit(false);
-                PreparedStatement pstmt = MainApp.myDB.conn.prepareStatement(updateExperiment);
+                conn.setAutoCommit(false);
+                PreparedStatement pstmt = conn.prepareStatement(updateExperiment);
                 pstmt.setString(1, experimentID);
                 pstmt.executeUpdate();
                 pstmt.close();
-                MainApp.myDB.conn.commit();
+                conn.commit();
                 //更新表格数据显示
                 tblProjectClicked();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "删除失败，请查看日志\n" + e.getMessage());
-                MainApp.myDB.dbRollback();
+                db.dbRollback();
             }   // END : catch e，回滚
-        }   // END : if (MainApp.myDB.IsExistRecord(sql, experimentID))
+        }   // END : if (db.isExistRecord(sql, experimentID))
     }   // END : private void btnDelClicked()
 
 
@@ -300,7 +302,7 @@ public class PanelExperiment extends JPanel {
                 projectName = tblProject.getValueAt(nowRow, currentDM.findColumn("项目名称")).toString();
                 sql = sqlSelectExp + "WHERE `项目ID` = '" + projectID + "' AND `实验ID` IS NOT NULL";
 
-                dmExperiment = MainApp.myDB.getTableModel(sql);
+                dmExperiment = TableMethod.getTableModel(sql);
                 tblExperiment.setModel(dmExperiment);
 
                 if (tblExperiment.getRowCount() > 0) {
@@ -309,7 +311,7 @@ public class PanelExperiment extends JPanel {
             }
         }else {
             // 查不到实验数据时，清空曲线列表
-            dmExperiment = MainApp.myDB.getTableModel(sqlSelectExp + " WHERE 0=1");
+            dmExperiment = TableMethod.getTableModel(sqlSelectExp + " WHERE 0=1");
             tblExperiment.setModel(dmExperiment);
         }
         tblExpClicked();

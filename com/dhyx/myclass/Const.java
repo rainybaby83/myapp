@@ -1,4 +1,4 @@
-package com.dhyx.myClass;
+package com.dhyx.myclass;
 
 import com.dhyx.MainApp;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -48,27 +47,6 @@ public class Const {
     public final static int SAVE_STATE_CANCEL = 0;
     public final static int SAVE_STATE_NEW = 1;
     public final static int SAVE_STATE_EDIT = 2;
-
-
-    /**
-     * 文本框只允许输入小数FocusListener
-    */
-    public static FocusListener floatTextFocusListener() {
-        return new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                JTextField jTextField = (JTextField) e.getSource();
-                float inputInt = NumberUtils.toFloat(jTextField.getText(),0.000F);
-                //负数取绝对值
-                if (inputInt > 0) {
-                    jTextField.setText(String.valueOf(inputInt));
-                }else {
-                    jTextField.setText(String.valueOf(0 - inputInt));
-                }
-            }   // END : public void focusLost()
-        };  // END : return new FocusListener()
-    }   // END : private FocusListener floatTextFocusListener()
-
 
 
 
@@ -188,11 +166,13 @@ public class Const {
         File file = new File("src/data.txt");
         ArrayList<Object> result = new ArrayList<>();
 
+        //构造一个BufferedReader类来读取文件
         try{
-            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+            BufferedReader br = new BufferedReader(new FileReader(file));
             String s = null;
             int i=0;
-            while ((s = br.readLine()) != null) {//使用readLine方法，一次读一行
+            while ((s = br.readLine()) != null) {
+                //使用readLine方法，一次读一行
                 result.add(NumberUtils.toDouble(s));
                 i++;
             }
@@ -205,66 +185,9 @@ public class Const {
     }
 
 
-    /**
-     *  文本框只允许输入整数的FocusListener
-     */
-    public static FocusListener integerTextFocusListener() {
-        return new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-
-                JTextField jTextField = (JTextField) e.getSource();
-                int inputInt = NumberUtils.toInt(jTextField.getText(),0);
-                //负数取绝对值
-                if (inputInt > 0) {
-                    jTextField.setText(String.valueOf(inputInt));
-                }else {
-                    //输入负数则取绝对值
-                    jTextField.setText(String.valueOf(0 - inputInt));
-                }
-            }   // END : public void focusLost()
-        };  // END : return new FocusListener()
-    }   // END : private FocusListener integerTextFocusListener()
 
 
-    /**
-     *  文本框只允许规定的字符数
-     *  @param count 限制输入的字符数量
-     */
-    public static KeyListener countTextCharListener(int count) {
-        return new KeyAdapter() {
-            JTextField jTextField;
-            @Override
-            public void keyTyped(KeyEvent e) {
-                jTextField = (JTextField) e.getSource();
-                if (jTextField.getText().length() >= count) {
-                    jTextField.setText("");
-                    e.consume();
-                }
-            }
-        };
-    }
 
-    /**
-     *  针对所有文本框去空格
-     */
-    public static FocusListener textTrimFocusListener() {
-        return new FocusAdapter() {
-            JTextField jTextField;
-            @Override
-            public void focusLost(FocusEvent e) {
-                jTextField = (JTextField) e.getSource();
-                jTextField.setText(jTextField.getText().trim());
-            }
-        };
-    }
-
-
-    /**
-     * 导出JTable的数据到Excel2003
-     * @param table 要导出的JTable
-     * @param file 要导出到的file
-     */
 
 
 }

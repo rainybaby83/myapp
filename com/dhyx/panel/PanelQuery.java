@@ -1,7 +1,7 @@
 package com.dhyx.panel;
 
-import com.dhyx.myClass.Const;
-import com.dhyx.myClass.MyIconButton;
+import com.dhyx.myclass.Const;
+import com.dhyx.myclass.MyIconButton;
 
 import javax.swing.*;
 import java.awt.*;

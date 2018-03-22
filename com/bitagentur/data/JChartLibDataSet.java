@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DataSet myClass for holding the Data Series
+ * DataSet myclass for holding the Data Series
  * 
  * @author Silvio Schneider
  */

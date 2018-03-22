@@ -1,4 +1,4 @@
-package com.dhyx.myClass;
+package com.dhyx.myclass;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,9 +1,6 @@
 package com.dhyx.panel;
 
-import com.dhyx.myClass.Const;
-import com.dhyx.myClass.MyIconButton;
-import com.dhyx.myClass.MyList;
-import com.dhyx.myClass.MyTable;
+import com.dhyx.myclass.*;
 import com.dhyx.MainApp;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +16,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
@@ -44,6 +42,8 @@ public class PanelProject extends JPanel {
     private int saveState = Const.SAVE_STATE_CANCEL;
     private String projectID, createDate, modifyDate, projectName, prepareDuration, peakTypeID, tcTypeID, subUnit, subMin, subMax;
     private int x1Left = 0, x2Left = 0, x1Right = 0, x2Right = 0, x1N = 0, x2N = 0;
+    private MyDatabase db = MainApp.myDB;
+    private Connection conn = MainApp.myDB.conn;
 
 
 
@@ -101,7 +101,7 @@ public class PanelProject extends JPanel {
     //初始化表格及滚动面板
     private void initTable() {
         //从全局变量Const.myDB获得DefaultTableModel，用于创建table
-        dm = MainApp.myDB.getTableModel(sqlSelectProject);
+        dm = TableMethod.getTableModel(sqlSelectProject);
         tblProject = new MyTable(dm);
         tblProject.setWidth(60, 80, 80, 130, 80, 110, 110, 70, 70, 70, 70, 70, 70, 70, 70, 70);
         tblProject.setBounds(0, lblProject.getY() + lblProject.getHeight(), 840, 325);
@@ -274,17 +274,17 @@ public class PanelProject extends JPanel {
 
             // 按需给文本框加监听
             // 1.所有失去焦点时去空格
-            text[i].addFocusListener(Const.textTrimFocusListener());
+            text[i].addFocusListener(TextListener.trimFocusListener());
 
             // 2.个别文本框只能输入整数。同时限制输入位数
             int[] arrayIntNo = {4, 7, 8, 9, 10, 11, 12, 13};
             if (ArrayUtils.contains(arrayIntNo, i)) {
-                text[i].addFocusListener(Const.integerTextFocusListener());
+                text[i].addFocusListener(TextListener.integerTextFocusListener());
                 text[i].setToolTipText("只能输入正整数");
                 if (i == 4 || i == 7) {
-                    text[i].addKeyListener(Const.countTextCharListener(5));
+                    text[i].addKeyListener(TextListener.countTextCharListener(5));
                 } else {
-                    text[i].addKeyListener(Const.countTextCharListener(3));
+                    text[i].addKeyListener(TextListener.countTextCharListener(3));
                 }
             }
 
@@ -292,8 +292,8 @@ public class PanelProject extends JPanel {
             int[] arrayFloatNo = {6};
             if (ArrayUtils.contains(arrayFloatNo, i)) {
                 text[i].setToolTipText("只能输入小数");
-                text[i].addFocusListener(Const.floatTextFocusListener());
-                text[i].addKeyListener(Const.countTextCharListener(5));
+                text[i].addFocusListener(TextListener.floatTextFocusListener());
+                text[i].addKeyListener(TextListener.countTextCharListener(5));
             }
 
             //添加所有文本框
@@ -372,7 +372,7 @@ public class PanelProject extends JPanel {
         str = StringUtils.replace(str, "%", "");
         String sql = sqlSelectProject + "WHERE 项目名称 LIKE '%" + str + "%' ";
 
-        dm = MainApp.myDB.getTableModel(sql);
+        dm = TableMethod.getTableModel(sql);
         tblProject.setModel(dm);
         //如果有数据，则选中第1行
         if (tblProject.getRowCount() > 0) {
@@ -409,11 +409,11 @@ public class PanelProject extends JPanel {
 
         //校验当前数据是否允许编辑
         String sql = "SELECT COUNT(*) FROM `view_project_exp_curve` WHERE `项目ID` = ?";
-        if (MainApp.myDB.IsExistRecord(sql, projectID)) {
+        if (db.isExistRecord(sql, projectID)) {
             //如果存在数据，则不允许编辑，给出提示。
-            JOptionPane.showMessageDialog(null, "该项目已有测试数据，不能编辑，否则会产生数据混乱。\n" +
-                    "请先去“生成曲线”页面尝试删除曲线，再返回本页面进行编辑。\n" +
-                    "如果曲线已锁定投入生产，则本项目不能再做任何修改。", "不能编辑", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "该项目已有测试数据，不能编辑，否则会影响数据准确性。\n" +
+                    "请在“生成曲线”页面尝试删除所有曲线，再返回本页面进行编辑。\n" +
+                    "如果曲线太多，建议创建新项目。", "不能编辑", JOptionPane.WARNING_MESSAGE);
         } else {
             //如果不存在数据，则允许编辑
             //启用子面板的各个控件，填充List
@@ -502,7 +502,7 @@ public class PanelProject extends JPanel {
     private void btnDelClicked() {
         //判断是否允许删除
         String sql = "SELECT COUNT(*) FROM view_project_exp_curve WHERE 项目ID = ?";
-        if (MainApp.myDB.IsExistRecord(sql, projectID)) {
+        if (db.isExistRecord(sql, projectID)) {
             //如果存在数据，则不允许删除，给出提示。
             JOptionPane.showMessageDialog(null, "该项目已有测试数据，不能删除，否则会导致数据混乱。",
                     "不能删除", JOptionPane.WARNING_MESSAGE);
@@ -514,15 +514,15 @@ public class PanelProject extends JPanel {
                 //删除数据，更新projcet、experiment
                 String updateProject = "UPDATE project SET isDeleted='Y' WHERE projectID = ? AND isDeleted = 'N';";
                 try {
-                    MainApp.myDB.conn.setAutoCommit(false);
-                    PreparedStatement pstmtUpdate = MainApp.myDB.conn.prepareStatement(updateProject);
+                    conn.setAutoCommit(false);
+                    PreparedStatement pstmtUpdate = conn.prepareStatement(updateProject);
                     pstmtUpdate.setString(1, projectID);
                     pstmtUpdate.executeUpdate();
                     pstmtUpdate.close();
-                    MainApp.myDB.conn.commit();
+                    conn.commit();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "删除失败，请查看日志\n" + e.getMessage());
-                    MainApp.myDB.dbRollback();
+                    db.dbRollback();
                 }   // END : catch e，回滚
 
                 //更新表格
@@ -751,18 +751,18 @@ public class PanelProject extends JPanel {
 
         //try insert
         try {
-            MainApp.myDB.conn.setAutoCommit(false);
-            PreparedStatement pstmt = MainApp.myDB.conn.prepareStatement(insertProject);
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt = conn.prepareStatement(insertProject);
             for (int i = 0; i < paraProject.length; i++) {
                 pstmt.setString(i + 1, paraProject[i]);
             }
             pstmt.executeUpdate();
-            MainApp.myDB.conn.commit();
+            conn.commit();
             JOptionPane.showMessageDialog(null, "更新成功!");
             return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "创建失败，数据库未作任何修改。请查看日志。");
-            MainApp.myDB.dbRollback();
+            db.dbRollback();
             return false;
         }   // END : try catch
     }   // END : private void insertForClickSave()
@@ -779,23 +779,23 @@ public class PanelProject extends JPanel {
                 String.valueOf(x2Left), String.valueOf(x2Right), String.valueOf(x2N)};
         try {
             //更新前，先禁用自动提交
-            MainApp.myDB.conn.setAutoCommit(false);
-            PreparedStatement pstmt = MainApp.myDB.conn.prepareStatement(updateProject);
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt = conn.prepareStatement(updateProject);
             for (int i = 0; i < paraProject.length; i++) {
                 pstmt.setString(i + 1, paraProject[i]);
             }
             pstmt.executeUpdate();
             // 更新完毕
-            MainApp.myDB.conn.commit();
+            conn.commit();
             JOptionPane.showMessageDialog(null, "更新成功!");
             return true;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "SQL语法错误，未能更新\n" + e.getMessage());
-            MainApp.myDB.dbRollback();
+            db.dbRollback();
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
             return false;
         } catch (Exception e) {
-            MainApp.myDB.dbRollback();
+            db.dbRollback();
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
             JOptionPane.showMessageDialog(null, "更新失败，数据库未作任何修改。请查看日志。");
             return false;

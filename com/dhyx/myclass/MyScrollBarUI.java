@@ -1,5 +1,5 @@
 
-package com.dhyx.myClass;
+package com.dhyx.myclass;
 
 import java.awt.*;
 import javax.swing.*;
@@ -9,7 +9,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class MyScrollBarUI extends BasicScrollBarUI {
 
-    MyScrollBarUI(){
+    public MyScrollBarUI(){
         super();
         configureScrollBarColors();
     }

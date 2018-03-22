@@ -1,4 +1,4 @@
-package com.dhyx.myClass;
+package com.dhyx.myclass;
 
 import jxl.Workbook;
 import jxl.write.WritableSheet;
@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.*;
 import java.awt.*;
@@ -17,7 +16,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 
 import static javax.swing.JFileChooser.APPROVE_OPTION;
 import static javax.swing.JFileChooser.FILES_ONLY;
@@ -39,8 +41,8 @@ public class MyTable extends JTable{
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
-//                    jPopupMenu.show(e.getComponent(), e.getX(), e.getY());
-                    jPopupMenu.show(e.getComponent().getParent().getParent().getParent(), 0, 0);
+                    jPopupMenu.show(e.getComponent(), e.getX(), e.getY());
+//                    jPopupMenu.show(e.getComponent().getParent().getParent().getParent(), 0, 0);
              }
             }
         });
@@ -181,7 +183,6 @@ public class MyTable extends JTable{
         }   // END : if (select == APPROVE_OPTION)
 
     }
-
 
 
 }

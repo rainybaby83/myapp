@@ -1,12 +1,14 @@
-package com.dhyx.myClass;
+package com.dhyx.myclass;
 
 import com.dhyx.MainApp;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -15,7 +17,7 @@ public class MyList extends JComboBox<String> {
 
     private LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
     private Logger logger = LogManager.getLogger();
-
+    private Statement stmt = MainApp.myDB.stmt;
 
     public MyList(String selectSQL) {
         super();
@@ -33,7 +35,7 @@ public class MyList extends JComboBox<String> {
         ResultSet rs;
         String key,value;
         try {
-            rs = MainApp.myDB.stmt.executeQuery(selectSQL);
+            rs = stmt.executeQuery(selectSQL);
             while (rs.next()) {
                 key = rs.getString(1);
                 value = rs.getString(2);
