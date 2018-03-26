@@ -18,8 +18,9 @@ import org.apache.logging.log4j.Logger;
  */
 
 public class TableMethod {
-    private static Statement stmt = MainApp.myDB.stmt;
+    private static Connection conn = MainApp.myDB.conn;
     private static Logger logger = LogManager.getLogger();
+
 
     //创建普通的表格Model
     public static DefaultTableModel getTableModel(String sql) {
@@ -29,7 +30,7 @@ public class TableMethod {
         Vector<Vector> vector = new Vector<>();
         Vector<String> vectorHead = new Vector<>();
         try {
-            rs = stmt.executeQuery(sql);
+            rs = conn.createStatement().executeQuery(sql);
             int count = rs.getMetaData().getColumnCount();
             for (i = 1; i <= count; i++) {
                 vectorHead.add(rs.getMetaData().getColumnName(i));
@@ -55,7 +56,7 @@ public class TableMethod {
 
 
     //创建带有复选框的表格Model
-    public static DefaultTableModel getTableModelWithCheckbox(String sql) {
+    public static DefaultTableModel getDMwithCheck(String sql) {
         int i, j;
         DefaultTableModel dm = null;
         ResultSet rs;
@@ -63,7 +64,7 @@ public class TableMethod {
         Vector<Object> vectorHead = new Vector<>();
         try {
             // 1 构造表头
-            rs = stmt.executeQuery(sql);
+            rs = conn.createStatement().executeQuery(sql);
             int count = rs.getMetaData().getColumnCount();
             vectorHead.add("□");
             for (j = 1; j <= count; j++) {
@@ -91,7 +92,7 @@ public class TableMethod {
 
 
     //针对TestData表格的getTableModel方法
-    public static DefaultTableModel getTableModelForTestData(String... testID) {
+    public static DefaultTableModel getDMforTestData(String... testID) {
 
         DefaultTableModel defaultTableModel;
         ResultSet rs;
@@ -115,9 +116,8 @@ public class TableMethod {
         // 1.2 获取这些testID对应的所有X，并构造到vectorHeader中
         sql = "SELECT DISTINCT x FROM test_original WHERE testID in (" + str + ") AND isDeleted = 'N' ORDER BY x ";
 
-
         try {
-            rs = stmt.executeQuery(sql);
+            rs = conn.createStatement().executeQuery(sql);
             while (rs.next()) {
                 x = rs.getInt("x");
                 header.add(x);
@@ -135,14 +135,13 @@ public class TableMethod {
                     //必须新建Vector，不能用clear()方法，否则会影响已添加到vector的数据
                     Vector<Object> vectorRow = new Vector<>();
                     vectorRow.add(aTestID);
-                    rs = stmt.executeQuery(sql);
+                    rs = conn.createStatement().executeQuery(sql);
 
                     if (rs.next()) {
                         x = rs.getInt("x");
                         for (int aHeader : header) {
                             if (aHeader < x || aHeader > x) {
                                 //如果某条testID数据的X小于header，则填充为0
-
                                 vectorRow.add(0);
                             } else if (aHeader == x) {
                                 //如果X等于header，则把Y添加到vectorRow
@@ -153,14 +152,12 @@ public class TableMethod {
                                 if (rs.next()) {
                                     x = rs.getInt("x");
                                 }
-                            }
-                        }
+                            }   // END : if...else if
+                        }   // END : for (int aHeader : header)
                         vector.addElement(vectorRow);
-                    }
+                    }   // END : if (rs.next())
                     rs.close();
-
-
-                }
+                }   // END : for
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "创建表格内容失败，请截图后联系开发人员。\n"
                         + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
@@ -171,12 +168,9 @@ public class TableMethod {
                     + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
         }
-
-        // 2 构造内容
-        //循环1  不同testID
-
         defaultTableModel = new DefaultTableModel(vector, vectorHeader);
         return defaultTableModel;
     }
+
 
 }

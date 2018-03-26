@@ -39,7 +39,9 @@ public class MyDatabase {
             String url1 = "jdbc:mysql://localhost:3306/information_schema?user=root&password=11111111&useSSL=false&useUnicode=true&characterEncoding=utf8";
             String sqlTable = "SELECT  DISTINCT `TABLE_SCHEMA` FROM `TABLES` WHERE `TABLE_SCHEMA` = '" + dbName + "'";
 
+
             conn = DriverManager.getConnection(url1);
+            conn.setAutoCommit(false);
             stmt = conn.createStatement();
             try {
                 //检查Database的表是否存在。 Database存在，运行dbStart()进行连接；Database不存在，运行dbCreate()进行创建
@@ -161,9 +163,8 @@ public class MyDatabase {
 
 
     //查找是否存在给定条件的记录，返回true或false
-    public boolean isExistRecord(String  selectSQL, String... field){
-
-        boolean isExsit ;
+    public boolean isExistRecord(String selectSQL, String... field) {
+        boolean isExsit;
         int count = 1;
         try {
             PreparedStatement pstmt = conn.prepareStatement(selectSQL);

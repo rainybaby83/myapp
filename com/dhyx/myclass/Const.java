@@ -1,6 +1,10 @@
 package com.dhyx.myclass;
 
 import com.dhyx.MainApp;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +13,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
 
 
 /**
@@ -18,6 +21,8 @@ import java.util.ArrayList;
  * @author R
  */
 public class Const {
+
+    public static TestDataClass[] testData = getArrayFromFile();
 
     /**
      * 软件名称,版本
@@ -50,24 +55,17 @@ public class Const {
 
 
 
-    /**
-     * 系统常用字体
-    */
+    // 系统常用字体
 //    public final static Font FONT_YAHEI_12 = new Font("微软雅黑", Font.PLAIN, 12);
     public final static Font SONG_12 = new Font("宋体", Font.PLAIN, 12);
 
-
-    /**
-     * 主窗口背景色
-     */
+    //主窗口背景色
     public final static Color GREEN = new Color(37, 174, 96);
     public final static Color GREEN_ACTIVE = new Color(106, 200, 146);
     public final static Color GREEN_LIGHT = new Color(166, 237, 198);
 
 
-    /**
-     * 主图标
-     */
+    //主图标
     public final static ImageIcon ICON_APP = new ImageIcon(MainApp.class.getResource("/icon/app.png"));
 
     //工具栏图标
@@ -110,9 +108,7 @@ public class Const {
     public final static ImageIcon MENU_EXIT_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/退出-激活.png"));
 
 
-    /**
-     * 按钮 图标
-     */
+    //按钮 图标
     // 查询
     public final static ImageIcon ICON_QUERY = new ImageIcon(MainApp.class.getResource("/icon/查询.png"));
     public final static ImageIcon ICON_QUERY_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/查询-激活.png"));
@@ -162,26 +158,33 @@ public class Const {
 
 
 
-    private ArrayList<Object> getArrayFromFile() {
-        File file = new File("src/data.txt");
-        ArrayList<Object> result = new ArrayList<>();
+    public static TestDataClass[] getArrayFromFile() {
+        try {
+            Workbook workbook = Workbook.getWorkbook(new File("src/data.xls"));
+            Sheet sheet = workbook.getSheet(0);
 
-        //构造一个BufferedReader类来读取文件
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String s = null;
-            int i=0;
-            while ((s = br.readLine()) != null) {
-                //使用readLine方法，一次读一行
-                result.add(NumberUtils.toDouble(s));
-                i++;
+            //excel表格中一列为一组数据，每组有超过255个数据，所以只能用列
+            int columnCount = sheet.getColumns();
+            int rowCount = sheet.getRows();
+            TestDataClass[] testdata = new TestDataClass[columnCount];
+
+            for(int i = 0; i< columnCount; i++){
+                testdata[i] = new TestDataClass(rowCount);
+
+                for(int j = 0; j< rowCount; j++){
+                    testdata[i].x[j] = j + 1;
+                    testdata[i].y[j] = NumberUtils.toInt(sheet.getCell(i,j).getContents());
+                }
             }
-            br.close();
-        }catch(Exception e){
+            workbook.close();
+            return testdata;
+        } catch (BiffException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return result;
+        return new TestDataClass[0];
     }
 
 
