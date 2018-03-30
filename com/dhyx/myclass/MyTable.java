@@ -3,6 +3,7 @@ package com.dhyx.myclass;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,16 +17,13 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
 
 import static javax.swing.JFileChooser.APPROVE_OPTION;
 import static javax.swing.JFileChooser.FILES_ONLY;
 
 public class MyTable extends JTable{
-    public JScrollPane jScrollPane;
+    public JScrollPane j;
     private Logger logger = LogManager.getLogger();
     private JPopupMenu jPopupMenu = new JPopupMenu();
 
@@ -113,14 +111,14 @@ public class MyTable extends JTable{
      * 设置滚动面板的默认属性
      */
     private void setScrollPanel() {
-        jScrollPane = new JScrollPane(this);
-        jScrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
-        jScrollPane.getHorizontalScrollBar().setUI(new MyScrollBarUI());
-        jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setWheelScrollingEnabled(true);
-        jScrollPane.setBackground(Color.white);
-        jScrollPane.getViewport().setOpaque(false);
+        j = new JScrollPane(this);
+        j.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        j.getHorizontalScrollBar().setUI(new MyScrollBarUI());
+        j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        j.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        j.setWheelScrollingEnabled(true);
+        j.setBackground(Color.white);
+        j.getViewport().setOpaque(false);
     }
 
     /**
@@ -185,4 +183,32 @@ public class MyTable extends JTable{
     }
 
 
+    //获取竖向列的最大值
+    public int getMaxValueByColumn(String columnName) {
+        int max = 0, tmp = 0;
+        DefaultTableModel currentDM = (DefaultTableModel) this.getModel();
+        int index = currentDM.findColumn(columnName);
+        if (index != -1) {
+            for (int i = 0; i < this.getRowCount(); i++) {
+                tmp = NumberUtils.toInt(this.getValueAt(i, index).toString());
+                if (tmp > max) {
+                    max = tmp;
+                }
+            }
+        }
+        return max;
+    }
+
+
+    public void setLastRow() {
+        if (this.getRowCount() > 0) {
+            super.setRowSelectionInterval(getRowCount() - 1, getRowCount() - 1);
+        }
+    }
+
+    public void setFirstRow() {
+        if (this.getRowCount() > 0) {
+            super.setRowSelectionInterval(0,0);
+        }
+    }
 }

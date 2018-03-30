@@ -33,7 +33,7 @@ public class TableMethod {
             rs = conn.createStatement().executeQuery(sql);
             int count = rs.getMetaData().getColumnCount();
             for (i = 1; i <= count; i++) {
-                vectorHead.add(rs.getMetaData().getColumnName(i));
+                vectorHead.add(rs.getMetaData().getColumnLabel(i));
             }
             while (rs.next()) {
                 Vector<Object> vectorRow = new Vector<>();

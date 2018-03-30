@@ -95,7 +95,7 @@ public class MyChart extends Dashboard {
 
         yAxis = new Axis();
         yAxis.setMinValue(0.0);
-        yAxis.setMaxValue(12000.0);
+        yAxis.setMaxValue(14000.0);
         yAxis.setInterval(2000);
         yAxis.setTitle("");
     }

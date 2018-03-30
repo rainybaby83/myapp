@@ -1,4 +1,4 @@
-package com.dhyx.myclass;
+package com.dhyx.dbclass;
 
 import com.ibatis.RuntimeSqlException;
 import com.ibatis.ScriptRunner;
@@ -8,12 +8,8 @@ import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Vector;
-
 
 
 public class MyDatabase {
@@ -149,27 +145,18 @@ public class MyDatabase {
     }  // END: private void dbClose()
 
 
-    public void dbRollback() {
-        if (conn != null) {
-            try {
-                //数据库回滚rollback
-                conn.rollback();
-                conn.commit();
-            } catch (Exception e) {
-                logger.error(e.getClass().getSimpleName() + "，回滚失败。" + e.getMessage());
-            }   // END : catch之后回滚
-        }   // END : if (MainApp.myDB.conn != null)
-    }
-
-
-    //查找是否存在给定条件的记录，返回true或false
-    public boolean isExistRecord(String selectSQL, String... field) {
-        boolean isExsit;
+    /**查找是否存在给定条件的记录，返回true或false
+     * @param SQL 要执行的sql
+     * @param param sql中的字段实际值
+     * @return 是或否
+     */
+    public boolean isExistByCount(String SQL, String... param) {
+        boolean isExist;
         int count = 1;
         try {
-            PreparedStatement pstmt = conn.prepareStatement(selectSQL);
-            for (int i = 0; i < field.length; i++) {
-                pstmt.setString(i + 1, field[i]);
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            for (int i = 0; i < param.length; i++) {
+                pstmt.setString(i + 1, param[i]);
             }
             ResultSet rs = pstmt.executeQuery();
             rs.next();
@@ -179,13 +166,65 @@ public class MyDatabase {
         }
 
         if (count == 0) {
-            isExsit = false;
+            isExist = false;
         } else {
-            isExsit = true;
+            isExist = true;
         }
-        return isExsit;
-    }   // END : private boolean clickEdit_CheckDB()
+        return isExist;
+    }   // END : private boolean isExistByCount()
 
+
+
+    public boolean pstmtUpdateAndCommit(String sql, String... param) {
+        try {
+            conn.setAutoCommit(false);
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            for (int i = 0; i < param.length; i++) {
+                pstmt.setString(i + 1, param[i]);
+            }
+            pstmt.executeUpdate();
+            // 更新完毕
+            JOptionPane.showMessageDialog(null, "操作成功!");
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+                conn.commit();
+            } catch (Exception e1) {
+                logger.error(e1.getClass().getSimpleName() + "，回滚失败。" + e.getMessage());
+            }
+
+            logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
+            JOptionPane.showMessageDialog(null, "操作失败，未能更新。请查看日志。\n" + e.getMessage());
+            return false;
+        } // END : try
+    }   // END : private boolean dbUpdate()
+
+
+    /**不提交，并获得插入后的键
+     * @param sql 要执行的SQL，
+     * @param param sql中字段的实际值
+     * @return 自动生成的键
+     * @throws SQLException
+     */
+    public String pstmtUpdateNotCommit(boolean isInsert, String sql, String... param) throws SQLException {
+        conn.setAutoCommit(false);
+        PreparedStatement pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        for (int i = 0; i < param.length; i++) {
+            pstmt.setString(i+1, param[i]);
+        }
+        pstmt.executeUpdate();
+        if (isInsert) {
+            ResultSet rs = pstmt.getGeneratedKeys();
+            rs.next();
+            return rs.getString(1);
+        }
+        return "";
+        // 更新完毕
+
+    }   // END : private void pstmtUpdateNotCommit()
 
 
 

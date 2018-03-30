@@ -2,7 +2,7 @@ package com.dhyx;
 
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import com.dhyx.myclass.Const;
-import com.dhyx.myclass.MyDatabase;
+import com.dhyx.dbclass.MyDatabase;
 import com.dhyx.panel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,78 +1,61 @@
 package com.dhyx.myclass;
 
-import com.dhyx.MainApp;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.swing.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Vector;
 
-public class MyList extends JComboBox<String> {
+public class MyList extends JList<String> {
+    public  JScrollPane j;
+    private ListModel<String> m;
 
-    private LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
-    private Logger logger = LogManager.getLogger();
-    private Statement stmt = MainApp.myDB.stmt;
-
-    public MyList(String selectSQL) {
+    public MyList(int start,int end) {
         super();
-        DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-        dlcr.setHorizontalAlignment(JLabel.CENTER);
-        setRenderer(dlcr);
-        super.setOpaque(false);
-
-        //根据SQL取得查询结果，遍历后添加到键值对数组
-        setKeyValue(selectSQL);
-        this.setSelectedIndex(-1);
+        addNumber(start, end);
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
+        j = new JScrollPane(this);
+        j.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        m = this.getModel();
     }
 
-    private void setKeyValue(String selectSQL) {
-        ResultSet rs;
-        String key,value;
-        try {
-            rs = stmt.executeQuery(selectSQL);
-            while (rs.next()) {
-                key = rs.getString(1);
-                value = rs.getString(2);
-                linkedHashMap.put(key, value);
-                this.addItem(value);
-            } ;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "下拉框初始化失败，请截图后联系开发人员。\n"
-                    + e.getClass().getSimpleName()+"\n"+e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
-            logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
+
+    //按照数字范围，添加到列表中
+    private void addNumber(int start, int end) {
+        this.removeAll();
+        Vector<String> vector = new Vector<>();
+        for (int i = start; i <= end; i++) {
+            vector.addElement(String.valueOf(i));
         }
-    }   // END: public void setKeyValue(String selectSQL)
+        this.setListData(vector);
+    }
 
 
-    public String getSelectedKey() {
-        String selectValue = Objects.requireNonNull(super.getSelectedItem()).toString();
-        String selectKey = "-1";
-        for (Map.Entry entry : linkedHashMap.entrySet()) {
-            if (selectValue.equals(entry.getValue().toString())) {
-                selectKey= entry.getKey().toString();
+    //根据传入的文字，遍历下拉框，选中跟传入参数一样的那一行数据
+    public void setSelectedByValue(String str) {
+        int i = 0;
+        for (i=0; i < m.getSize(); i++) {
+            if (str.equals(m.getElementAt(i))) {
                 break;
             }
         }
-        return selectKey;
+
+        if (i != m.getSize()) {
+            this.setSelectedIndex(i);
+        } else {
+            this.clearSelection();
+        }
     }
 
 
-    /*遍历JComboBox的Item，取到对应的Index，然后选中它，并break。
-        此处不用考虑value在Item不存在的情况，selectValue和Item都是数据库id的对应数据。
-    */
-    public void setSelectedIndexFromValue(String selectValue) {
-            for (int i = 0; i < super.getItemCount(); i++) {
-                if( selectValue.equals(super.getItemAt(i))){
-                    this.setSelectedIndex(i);
-                    break;
-                }
-            }
-    }   // END: public void setSelectedIndexFromValue(String value)
+    //选中当前行的下一行。若已是最大行，则选中第一行
+    public void nextSelectedRow() {
+        int nowIndex = this.getSelectedIndex();
+        if (nowIndex == m.getSize()) {
+            this.setSelectedIndex(0);
+        } else {
+            this.setSelectedIndex(nowIndex + 1);
+        }
+    }
+
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.dhyx.panel;
 
+import com.dhyx.dbclass.MyDatabase;
 import com.dhyx.dbclass.ProjectClass;
 import com.dhyx.myclass.*;
 import com.dhyx.MainApp;
@@ -18,14 +19,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Date;
 
 /**
  * @author zhangyu
  * 2018.3.9
  */
+
 public class PanelProject extends JPanel {
     private Logger logger = LogManager.getLogger();
     //查询面板
@@ -37,16 +37,13 @@ public class PanelProject extends JPanel {
     private JLabel[] label = new JLabel[14];
     private MyTable tblProject;
     private MyIconButton btnQuery, btnNew, btnEdit, btnSave, btnDel;
-    private MyList lstPeak, lstTC;
+    private MyComboBox lstPeak, lstTC;
     private String sqlSelectProject;
     private DefaultTableModel dm;
     private int saveState = Const.SAVE_STATE_CANCEL;
-    private String projectID, createDate, modifyDate, projectName, prepareDuration, peakTypeID, tcTypeID, subUnit, subMin, subMax;
-    private int x1Left = 0, x2Left = 0, x1Right = 0, x2Right = 0, x1N = 0, x2N = 0;
     private MyDatabase db = MainApp.myDB;
     private Connection conn = MainApp.myDB.conn;
     private ProjectClass p = new ProjectClass();
-
 
 
     public PanelProject() {
@@ -109,8 +106,8 @@ public class PanelProject extends JPanel {
         tblProject = new MyTable(dm);
         tblProject.setWidth(60, 80, 80, 130, 80, 110, 110, 70, 70, 70, 70, 70, 70, 70, 70, 70);
         tblProject.setBounds(0, lblProject.getY() + lblProject.getHeight(), 840, 325);
-        tblProject.jScrollPane.setBounds(tblProject.getBounds());
-        this.add(tblProject.jScrollPane);
+        tblProject.j.setBounds(tblProject.getBounds());
+        this.add(tblProject.j);
 
 
 
@@ -237,11 +234,11 @@ public class PanelProject extends JPanel {
         //填充下拉框
         String sqlPeak = "SELECT peakTypeID, peakName FROM peakType WHERE isDeleted = 'N' ORDER BY peakTypeID;";
         String sqlTC = "SELECT tcTypeID, tcExpession FROM tcType WHERE isDeleted = 'N' ORDER BY tcTypeID;";
-        lstPeak = new MyList(sqlPeak);
+        lstPeak = new MyComboBox(sqlPeak);
         lstPeak.setForeground(Color.blue);
         lstPeak.setVisible(false);
 
-        lstTC = new MyList(sqlTC);
+        lstTC = new MyComboBox(sqlTC);
         lstTC.setForeground(Color.blue);
         lstTC.setVisible(false);
 
@@ -379,11 +376,7 @@ public class PanelProject extends JPanel {
 
         dm = TableMethod.getTableModel(sql);
         tblProject.setModel(dm);
-        //如果有数据，则选中第1行
-        if (tblProject.getRowCount() > 0) {
-            tblProject.setRowSelectionInterval(0, 0);
-            click_tblProject();
-        }
+        tblProject.setLastRow();
 
         panelQuery.txtQuery.requestFocus();
         //btnEdit的True状态在选中表格行的单击事件里处理
@@ -414,7 +407,7 @@ public class PanelProject extends JPanel {
 
         //校验当前数据是否允许编辑
         String sql = "SELECT COUNT(*) FROM `view_project_exp_curve` WHERE `项目ID` = ?";
-        if (db.isExistRecord(sql, projectID)) {
+        if (db.isExistByCount(sql, p.projectID)) {
             //如果存在数据，则不允许编辑，给出提示。
             JOptionPane.showMessageDialog(null, "该项目已有测试数据，不能编辑，否则会影响数据准确性。\n" +
                     "请在“生成曲线”页面尝试删除所有曲线，再返回本页面进行编辑。\n" +
@@ -450,25 +443,24 @@ public class PanelProject extends JPanel {
                     "输入有空项", JOptionPane.ERROR_MESSAGE);
         } else {
             //2.获取字段数据
-            projectID = text[0].getText().trim();
-            projectName = text[1].getText().trim();
-            peakTypeID = lstPeak.getSelectedKey();
-            tcTypeID = lstTC.getSelectedKey();
-            prepareDuration = text[4].getText().trim();
-            subUnit = text[5].getText().trim();
-            subMin = text[6].getText().trim();
-            subMax = text[7].getText().trim();
-            createDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
-            modifyDate = createDate;
-            try {
-                x1Left = NumberUtils.toInt(text[8].getText());
-                x1Right = NumberUtils.toInt(text[9].getText());
-                x1N = NumberUtils.toInt(text[10].getText());
-                x2Left = NumberUtils.toInt(text[11].getText());
-                x2Right = NumberUtils.toInt(text[12].getText());
-                x2N = NumberUtils.toInt(text[13].getText());
-            } catch (NumberFormatException ignored) {
-            }
+
+            p.projectID = text[0].getText().trim();
+            p.projectName = text[1].getText().trim();
+            p.peakTypeID = lstPeak.getSelectedKey();
+            p.tcTypeID = lstTC.getSelectedKey();
+            p.prepareDuration = text[4].getText().trim();
+            p.subUnit = text[5].getText().trim();
+            p.subMin = text[6].getText().trim();
+            p.subMax = text[7].getText().trim();
+            p.createDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+            p.modifyDate = p.createDate;
+
+            p.x1Left = NumberUtils.toInt(text[8].getText());
+            p.x1Right = NumberUtils.toInt(text[9].getText());
+            p.x1N = NumberUtils.toInt(text[10].getText());
+            p.x2Left = NumberUtils.toInt(text[11].getText());
+            p.x2Right = NumberUtils.toInt(text[12].getText());
+            p.x2N = NumberUtils.toInt(text[13].getText());
 
             //3.校验数字的逻辑关系
             boolean isAllowedSave = checkLogicForClickSave();
@@ -478,10 +470,25 @@ public class PanelProject extends JPanel {
                 boolean isSuccess = false;
                 if (saveState == Const.SAVE_STATE_NEW) {
                     //如果是新建，则插入数据库。
-                    isSuccess = insertForClickSave();
+                    String sqlInsertProject = "INSERT INTO `project`(isDeleted , createDate , modifyDate , projectName , prepareDuration , " +
+                            "peakTypeID , tcTypeID , subUnit , subMin , subMax ,X1Left , X1Right , X1N , X2Left , X2Right , X2N ) " +
+                            " VALUES ( 'N', ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                    String[] paraProject = {p.createDate, p.modifyDate, p.projectName, p.prepareDuration, p.peakTypeID, p.tcTypeID,
+                            p.subUnit, p.subMin, p.subMax,
+                            String.valueOf(p.x1Left), String.valueOf(p.x1Right), String.valueOf(p.x1N),
+                            String.valueOf(p.x2Left), String.valueOf(p.x2Right), String.valueOf(p.x2N)};
+                    isSuccess = db.pstmtUpdateAndCommit(sqlInsertProject, paraProject);
                 } else if (saveState == Const.SAVE_STATE_EDIT) {
                     //如果是编辑，按照项目ID更新数据库
-                    isSuccess = updateForClickSave();
+                    String sqlUpdateProject = "UPDATE project SET modifyDate = ? , projectName= ? , prepareDuration = ? , " +
+                            " peakTypeID = ? , tcTypeID = ? , subUnit = ? , subMin = ? , subMax = ? , " +
+                            " X1Left = ? , X1Right = ? , X1N = ? , X2Left = ? , X2Right = ? , X2N = ? " +
+                            " WHERE projectID =? AND isDeleted = 'N';";
+                    String[] paraProject = {p.modifyDate, p.projectName, p.prepareDuration, p.peakTypeID, p.tcTypeID, p.subUnit, p.subMin, p.subMax,
+                            String.valueOf(p.x1Left), String.valueOf(p.x1Right), String.valueOf(p.x1N),
+                            String.valueOf(p.x2Left), String.valueOf(p.x2Right), String.valueOf(p.x2N),
+                            p.projectID};
+                    isSuccess = db.pstmtUpdateAndCommit(sqlUpdateProject, paraProject);
                 }
 
                 //5.更新或插入成功，则执行收尾工作
@@ -490,15 +497,10 @@ public class PanelProject extends JPanel {
                     btnEdit.setEnabled(true);
                     btnSave.setEnabled(false);
                     resetSubPanel(true, false);
-
-                    //选中最后一行
                     click_btnQuery();
-                    int rowCount = tblProject.getRowCount();
-                    if (rowCount > 0) {
-                        tblProject.setRowSelectionInterval(rowCount - 1, rowCount - 1);
-                    }
+                    tblProject.setLastRow();
                 }   // END 5 : if (isSuccess)
-            }   // END 4 : if (isAllowedSave == false) else
+            }   // END 4 : if (isAllowedSave)
         }   // END 1 : if (checkComponetReady()==false) else
     }   // END : private void click_btnSave()
 
@@ -507,28 +509,18 @@ public class PanelProject extends JPanel {
     private void click_btnDel() {
         //判断是否允许删除
         String sql = "SELECT COUNT(*) FROM view_project_exp_curve WHERE 项目ID = ?";
-        if (db.isExistRecord(sql, projectID)) {
+        if (db.isExistByCount(sql, p.projectID)) {
             //如果存在数据，则不允许删除，给出提示。
             JOptionPane.showMessageDialog(null, "该项目已有测试数据，不能删除，否则会导致数据混乱。",
                     "不能删除", JOptionPane.WARNING_MESSAGE);
         } else {
             //如果不存在数据，则允许删除。需用户二次确认
-            int answer = JOptionPane.showConfirmDialog(null, "即将删除项目“" + projectName + "”，请再次确认！",
+            int answer = JOptionPane.showConfirmDialog(null, "即将删除项目“" + p.projectName + "”，请再次确认！",
                     "警告", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
             if (answer == JOptionPane.OK_OPTION) {
                 //删除数据，更新projcet、experiment
-                String updateProject = "UPDATE project SET isDeleted='Y' WHERE projectID = ? AND isDeleted = 'N';";
-                try {
-                    conn.setAutoCommit(false);
-                    PreparedStatement pstmtUpdate = conn.prepareStatement(updateProject);
-                    pstmtUpdate.setString(1, projectID);
-                    pstmtUpdate.executeUpdate();
-                    pstmtUpdate.close();
-                    conn.commit();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "删除失败，请查看日志\n" + e.getMessage());
-                    db.dbRollback();
-                }   // END : catch e，回滚
+                String sqlUpdateProject = "UPDATE project SET isDeleted='Y' WHERE projectID = ? AND isDeleted = 'N';";
+                db.pstmtUpdateAndCommit(sqlUpdateProject,  p.projectID);
 
                 //更新表格
                 click_btnQuery();
@@ -542,60 +534,45 @@ public class PanelProject extends JPanel {
         resetSubPanel(true, false);
         int nowRow = tblProject.getSelectedRow();
         if (nowRow != -1) {
-            DefaultTableModel currentDM = (DefaultTableModel) tblProject.getModel();
+
             btnEdit.setEnabled(true);
             btnSave.setEnabled(false);
             btnDel.setEnabled(true);
-            String peakName, tcExpession;
 
             //项目ID，projectID
-            projectID = tblProject.getValueAt(nowRow, currentDM.findColumn("项目ID")).toString();
-            p.setData(projectID);
-            text[0].setText(projectID);
+            DefaultTableModel currentDM = (DefaultTableModel) tblProject.getModel();
+            p.projectID = tblProject.getValueAt(nowRow, currentDM.findColumn("项目ID")).toString();
+            p.setData(p.projectID);
+            text[0].setText(p.projectID);
 
             // 项目名称projectName
-            projectName = tblProject.getValueAt(nowRow, currentDM.findColumn("项目名称")).toString();
-            text[1].setText(projectName);
-
+            text[1].setText(p.projectName);
             //取峰算法 peakName
-            peakName = tblProject.getValueAt(nowRow, currentDM.findColumn("取峰算法")).toString();
-            lstPeak.setSelectedIndexFromValue(peakName);
-            text[2].setText(peakName);
-
+            lstPeak.setSelectedIndexFromValue(p.peakName);
+            text[2].setText(p.peakName);
             //TC公式 tcExpession
-            tcExpession = tblProject.getValueAt(nowRow, currentDM.findColumn("TC公式")).toString();
-            lstTC.setSelectedIndexFromValue(tcExpession);
-            text[3].setText(tcExpession);
-
+            lstTC.setSelectedIndexFromValue(p.tcExpession);
+            text[3].setText(p.tcExpession);
             // 准备时长 prepareDuration
-            text[4].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("准备时长")).toString());
-
+            text[4].setText(p.prepareDuration);
             //浓度单位 subUnit
-            text[5].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("浓度单位")).toString());
-
+            text[5].setText(p.subUnit);
             //最小值 subMin
-            text[6].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("最小值")).toString());
-
+            text[6].setText(p.subMax);
             //最大值 subMax
-            text[7].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("最大值")).toString());
-
+            text[7].setText(p.subMax);
             //X1左边界
-            text[8].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X1左边界")).toString());
-
+            text[8].setText(String.valueOf(p.x1Left));
             //X1右边界
-            text[9].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X1右边界")).toString());
-
+            text[9].setText(String.valueOf(p.x1Right));
             //X1取数N
-            text[10].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X1取数N")).toString());
-
+            text[10].setText(String.valueOf(p.x1N));
             //X2左边界
-            text[11].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X2左边界")).toString());
-
+            text[11].setText(String.valueOf(p.x2Left));
             //X2右边界
-            text[12].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X2右边界")).toString());
-
+            text[12].setText(String.valueOf(p.x2Right));
             //X2取数N
-            text[13].setText(tblProject.getValueAt(nowRow, currentDM.findColumn("X2取数N")).toString());
+            text[13].setText(String.valueOf(p.x2N));
         } else {
             //未选中，清空并禁用
             btnEdit.setEnabled(false);
@@ -682,42 +659,42 @@ public class PanelProject extends JPanel {
         boolean checkMaxMix = true;
         boolean isAllowedSave;
 
-        if (x1Left < x1Right) {
+        if (p.x1Left < p.x1Right) {
             text[8].setOpaque(false);
         } else {
             checkPosition = false;
             text[8].setOpaque(true);
         }
 
-        if (x1Right < x2Left) {
+        if (p.x1Right < p.x2Left) {
             text[9].setOpaque(false);
         } else {
             checkPosition = false;
             text[9].setOpaque(true);
         }
 
-        if (x2Left < x2Right) {
+        if (p.x2Left < p.x2Right) {
             text[11].setOpaque(false);
         } else {
             checkPosition = false;
             text[11].setOpaque(true);
         }
 
-        if (x1N <= (x1Right - x1Left) && x1N != 0) {
+        if (p.x1N <= (p.x1Right - p.x1Left) && p.x1N != 0) {
             text[10].setOpaque(false);
         } else {
             text[10].setOpaque(true);
             checkN = false;
         }
 
-        if (x2N <= (x2Right - x2Left) && x2N != 0) {
+        if (p.x2N <= (p.x2Right - p.x2Left) && p.x2N != 0) {
             text[13].setOpaque(false);
         } else {
             text[13].setOpaque(true);
             checkN = false;
         }
 
-        if (NumberUtils.toInt(subMax) > NumberUtils.toInt(subMin)) {
+        if (NumberUtils.toInt(p.subMax) > NumberUtils.toInt(p.subMin)) {
             //正确的情况
             text[6].setOpaque(false);
             text[7].setOpaque(false);
@@ -745,67 +722,5 @@ public class PanelProject extends JPanel {
         return isAllowedSave;
     }   // END : private boolean checkLogicForClickSave()
 
-
-    //点击新建再点保存，插入数据库
-    private boolean insertForClickSave() {
-        String insertProject = "INSERT INTO `project`(isDeleted , createDate , modifyDate , projectName , prepareDuration , " +
-                "peakTypeID , tcTypeID , subUnit , subMin , subMax ,X1Left , X1Right , X1N , X2Left , X2Right , X2N ) " +
-                " VALUES ( 'N', ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-        String[] paraProject = {createDate, modifyDate, projectName, prepareDuration, peakTypeID, tcTypeID, subUnit, subMin, subMax,
-                String.valueOf(x1Left), String.valueOf(x1Right), String.valueOf(x1N),
-                String.valueOf(x2Left), String.valueOf(x2Right), String.valueOf(x2N)};
-
-        //try insert
-        try {
-            conn.setAutoCommit(false);
-            PreparedStatement pstmt = conn.prepareStatement(insertProject);
-            for (int i = 0; i < paraProject.length; i++) {
-                pstmt.setString(i + 1, paraProject[i]);
-            }
-            pstmt.executeUpdate();
-            conn.commit();
-            JOptionPane.showMessageDialog(null, "更新成功!");
-            return true;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "创建失败，数据库未作任何修改。请查看日志。");
-            db.dbRollback();
-            return false;
-        }   // END : try catch
-    }   // END : private void insertForClickSave()
-
-
-    //点击编辑再点保存，更新数据库
-    private boolean updateForClickSave() {
-        String updateProject = "UPDATE project SET modifyDate = ? , projectName= ? , prepareDuration = ? , " +
-                " peakTypeID = ? , tcTypeID = ? , subUnit = ? , subMin = ? , subMax = ? , " +
-                " X1Left = ? , X1Right = ? , X1N = ? , X2Left = ? , X2Right = ? , X2N = ? " +
-                " WHERE projectID =? AND isDeleted = 'N';";
-        String[] paraProject = {modifyDate, projectName, prepareDuration, peakTypeID, tcTypeID, subUnit, subMin, subMax, projectID,
-                String.valueOf(x1Left), String.valueOf(x1Right), String.valueOf(x1N),
-                String.valueOf(x2Left), String.valueOf(x2Right), String.valueOf(x2N)};
-        try {
-            //更新前，先禁用自动提交
-            conn.setAutoCommit(false);
-            PreparedStatement pstmt = conn.prepareStatement(updateProject);
-            for (int i = 0; i < paraProject.length; i++) {
-                pstmt.setString(i + 1, paraProject[i]);
-            }
-            pstmt.executeUpdate();
-            // 更新完毕
-            conn.commit();
-            JOptionPane.showMessageDialog(null, "更新成功!");
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "SQL语法错误，未能更新\n" + e.getMessage());
-            db.dbRollback();
-            logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            db.dbRollback();
-            logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
-            JOptionPane.showMessageDialog(null, "更新失败，数据库未作任何修改。请查看日志。");
-            return false;
-        } // END : try
-    }   // END : private void updateForClickSave()
 
 }   // END class

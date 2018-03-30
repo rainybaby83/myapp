@@ -1,5 +1,6 @@
 package com.dhyx.panel;
 
+import com.dhyx.dbclass.MyDatabase;
 import com.dhyx.myclass.*;
 import com.dhyx.MainApp;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.Date;
 
 /**
@@ -29,7 +29,7 @@ public class PanelExperiment extends JPanel {
     private MyTable tblProject, tblExperiment;
     private DefaultTableModel dmProject, dmExperiment;
     private MyIconButton btnQuery, btnNew, btnDel;
-    private String sqlSelectPro = "SELECT DISTINCT 项目ID,创建日期,修改日期,项目名称 FROM view_pro_exp ";
+    private String sqlSelectPro = "SELECT DISTINCT 项目ID,创建日期,修改日期,项目名称 FROM view_project ";
     private String sqlSelectExp = "SELECT DISTINCT 项目名称,实验创建日期,实验名称,实验ID FROM view_pro_exp ";
     private String projectID, projectName, experimentID, experimentName;
     private MyDatabase db = MainApp.myDB;
@@ -43,7 +43,7 @@ public class PanelExperiment extends JPanel {
         initLabel();
         initTable();
         initButton();
-        btnQueryClicked();
+        click_btnQuery();
     }
 
 
@@ -61,14 +61,14 @@ public class PanelExperiment extends JPanel {
         panelQuery = new PanelQuery();
 
         panelQuery.txtQuery.setSize(275, Const.BUTTON_HEIGHT);
-        panelQuery.txtQuery.setToolTipText("请输入实验名称。支持模糊查询，不区分大小写");
+        panelQuery.txtQuery.setToolTipText("请输入项目名称。支持模糊查询，不区分大小写");
         panelQuery.txtQuery.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 //按回车键执行相应操作;
                 if(e.getKeyChar()==KeyEvent.VK_ENTER )
                 {
-                    btnQueryClicked();
+                    click_btnQuery();
                 }
             }
         });
@@ -118,12 +118,10 @@ public class PanelExperiment extends JPanel {
 
         tblProject.setBounds(0, lblProject.getY() + lblProject.getHeight(), 345, 545);
         tblExperiment.setBounds(lblExperiment.getX(), lblExperiment.getY() + lblExperiment.getHeight(), 450, 545);
-
-        tblProject.jScrollPane.setBounds(tblProject.getBounds());
-        this.add(tblProject.jScrollPane);
-
-        tblExperiment.jScrollPane.setBounds(tblExperiment.getBounds());
-        this.add(tblExperiment.jScrollPane);
+        tblProject.j.setBounds(tblProject.getBounds());
+        tblExperiment.j.setBounds(tblExperiment.getBounds());
+        this.add(tblProject.j);
+        this.add(tblExperiment.j);
     }   // END : private void initTableCreateTable()
 
 
@@ -134,7 +132,7 @@ public class PanelExperiment extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    tblProjectClicked();
+                    click_tblProject();
                 }
             }
         });
@@ -143,7 +141,7 @@ public class PanelExperiment extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    tblExpClicked();
+                    click_tblExperiment();
                 }
             }
         });
@@ -159,7 +157,7 @@ public class PanelExperiment extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnQuery.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：实验管理-查询" + panelQuery.txtQuery.getText());
-                    btnQueryClicked();
+                    click_btnQuery();
                 }
             }
         });
@@ -174,7 +172,8 @@ public class PanelExperiment extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnNew.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：实验管理-新建实验");
-                    btnNewClicked();
+                    click_btnNew();
+                    click_btnQuery();
                 }
             }
         });
@@ -189,7 +188,7 @@ public class PanelExperiment extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：实验管理-删除");
-                    btnDelClicked();
+                    click_btnDel();
                 }
             }
         });
@@ -202,30 +201,29 @@ public class PanelExperiment extends JPanel {
 
 
     //查询按钮
-    private void btnQueryClicked() {
+    private void click_btnQuery() {
         btnQuery.setEnabled(false);
         //处理SQL，避免注入。例如   C%' or 1=1 or 项目ID like '%C
         String sql,sql2;
         String strQueryKey = panelQuery.txtQuery.getText().trim();
         strQueryKey = StringUtils.replace(strQueryKey, "'", "");
         strQueryKey = StringUtils.replace(strQueryKey, "%", "");
-        sql = sqlSelectPro + " WHERE `实验名称` LIKE '%" + strQueryKey + "%'";
+        sql = sqlSelectPro + " WHERE `项目名称` LIKE '%" + strQueryKey + "%'";
 
         dmProject = TableMethod.getTableModel(sql);
         tblProject.setModel(dmProject);
 
+
         //后续处理
-        if (tblProject.getRowCount() > 0) {
-            tblProject.setRowSelectionInterval(0, 0);
-        }
-        tblProjectClicked();
+        tblProject.setLastRow();
+        click_tblProject();
         panelQuery.txtQuery.requestFocus();
         btnQuery.setEnabled(true);
-    }   // END : private void btnQueryClicked()
+    }   // END : private void click_btnQuery()
 
 
     //新建实验按钮
-    private void btnNewClicked() {
+    private void click_btnNew() {
         String createDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
         String defautlName = DateFormatUtils.format(new Date(), "yyyyMMdd");
         experimentName = JOptionPane.showInputDialog(null, "当前项目为" + projectID + "." + projectName + "\n请输入新的实验名称：", defautlName);
@@ -235,32 +233,18 @@ public class PanelExperiment extends JPanel {
         if (StringUtils.isNotEmpty(experimentName)) {
             String insertExperiment = "INSERT INTO `experiment` (`isDeleted`,`createDate`,`modifyDate`,`projectID`,`experimentName`) " +
                     "VALUES ( 'N' , ? , ? , ? , ?);";
-            //try insert
-            try {
-                conn.setAutoCommit(false);
-                PreparedStatement pstmt = conn.prepareStatement(insertExperiment);
-                pstmt.setString(1, createDate);
-                pstmt.setString(2, createDate);
-                pstmt.setString(3, projectID);
-                pstmt.setString(4, experimentName);
-                pstmt.executeUpdate();
-                pstmt.close();
-                conn.commit();
-                tblProjectClicked();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "创建失败，数据库未作任何修改。请查看日志。");
-                db.dbRollback();
-            }// END : try catch
+            String[] paramExperiment = {createDate,createDate,projectID,experimentName};
+            db.pstmtUpdateAndCommit(insertExperiment, paramExperiment);
         } else {
             JOptionPane.showMessageDialog(null, "未输入实验名称，停止创建。");
         }
-    }   // END : private void btnNewClicked()
+    }   // END : private void click_btnNew()
 
 
     //删除按钮
-    private void btnDelClicked() {
+    private void click_btnDel() {
         String sql = "SELECT COUNT(*) FROM `view_project_exp_curve` WHERE `实验ID` = ?";
-        if (db.isExistRecord(sql, experimentID)) {
+        if (db.isExistByCount(sql, experimentID)) {
             //允许删除则再次确认
             int answer = JOptionPane.showConfirmDialog(null, "即将删除实验“" + experimentName + "”，请再次确认！",
                     "警告", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
@@ -272,26 +256,13 @@ public class PanelExperiment extends JPanel {
         } else {
             //删除数据，更新experiment
             String updateExperiment = "UPDATE `experiment` SET `isDeleted`='Y' WHERE `experimentID` = ? AND `isDeleted` = 'N';";
-
-            try {
-                conn.setAutoCommit(false);
-                PreparedStatement pstmt = conn.prepareStatement(updateExperiment);
-                pstmt.setString(1, experimentID);
-                pstmt.executeUpdate();
-                pstmt.close();
-                conn.commit();
-                //更新表格数据显示
-                tblProjectClicked();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "删除失败，请查看日志\n" + e.getMessage());
-                db.dbRollback();
-            }   // END : catch e，回滚
-        }   // END : if (db.isExistRecord(sql, experimentID))
-    }   // END : private void btnDelClicked()
+            db.pstmtUpdateAndCommit(updateExperiment, experimentID);
+        }   // END : if (db.isExistByCount(sql, experimentID))
+    }   // END : private void click_btnDel()
 
 
     //点击左侧项目列表，自动查找右侧的实验数据。
-    private void tblProjectClicked() {
+    private void click_tblProject() {
         if (tblProject.getRowCount() > 0) {
             int nowRow = tblProject.getSelectedRow();
             String sql;
@@ -300,26 +271,23 @@ public class PanelExperiment extends JPanel {
                 DefaultTableModel currentDM = (DefaultTableModel) tblProject.getModel();
                 projectID = tblProject.getValueAt(nowRow, currentDM.findColumn("项目ID")).toString();
                 projectName = tblProject.getValueAt(nowRow, currentDM.findColumn("项目名称")).toString();
-                sql = sqlSelectExp + "WHERE `项目ID` = '" + projectID + "' AND `实验ID` IS NOT NULL";
+                sql = sqlSelectExp + "WHERE `项目ID` = " + projectID +" AND `实验ID` IS NOT NULL";
 
                 dmExperiment = TableMethod.getTableModel(sql);
                 tblExperiment.setModel(dmExperiment);
-
-                if (tblExperiment.getRowCount() > 0) {
-                    tblExperiment.setRowSelectionInterval(0, 0);
-                }
+                tblExperiment.setLastRow();
             }
         }else {
             // 查不到实验数据时，清空曲线列表
             dmExperiment = TableMethod.getTableModel(sqlSelectExp + " WHERE 0=1");
             tblExperiment.setModel(dmExperiment);
         }
-        tblExpClicked();
-    }   // END : private void tblProjectClicked()
+        click_tblExperiment();
+    }   // END : private void click_tblProject()
 
 
     //点击实验列表，设置删除键是否可用
-    private void tblExpClicked() {
+    private void click_tblExperiment() {
         if (tblExperiment.getRowCount() > 0) {
             int nowRow = tblExperiment.getSelectedRow();
             DefaultTableModel currentDM = (DefaultTableModel) tblExperiment.getModel();
@@ -329,7 +297,7 @@ public class PanelExperiment extends JPanel {
         } else {
             btnDel.setEnabled(false);
         }
-    }   // END : private  void tblExpClicked()
+    }   // END : private  void click_tblExperiment()
 
 
 }
