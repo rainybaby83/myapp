@@ -1,11 +1,15 @@
 package com.dhyx.myclass;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import javax.swing.*;
+import java.awt.*;
 import java.util.Vector;
 
 public class MyList extends JList<String> {
     public  JScrollPane j;
     private ListModel<String> m;
+    public int maxNumber=0;
 
     public MyList(int start,int end) {
         super();
@@ -25,36 +29,36 @@ public class MyList extends JList<String> {
             vector.addElement(String.valueOf(i));
         }
         this.setListData(vector);
+        maxNumber = end;
     }
 
 
-    //根据传入的文字，遍历下拉框，选中跟传入参数一样的那一行数据
-    public void setSelectedByValue(String str) {
+    //根据传入的序号，遍历下拉框，选中跟传入参数一样的那一行数据
+    public void setSelectedByValue(int number) {
         int i = 0;
         for (i=0; i < m.getSize(); i++) {
-            if (str.equals(m.getElementAt(i))) {
+            if (number==(NumberUtils.toInt(m.getElementAt(i)))) {
                 break;
             }
         }
 
         if (i != m.getSize()) {
-            this.setSelectedIndex(i);
+            setSelectedIndex(i);
+            ensureIndexIsVisible(i);
         } else {
-            this.clearSelection();
+            clearSelection();
         }
     }
 
 
-    //选中当前行的下一行。若已是最大行，则选中第一行
+    //选中当前行的下一行。
     public void nextSelectedRow() {
         int nowIndex = this.getSelectedIndex();
-        if (nowIndex == m.getSize()) {
-            this.setSelectedIndex(0);
-        } else {
-            this.setSelectedIndex(nowIndex + 1);
+        if (nowIndex < m.getSize()) {
+            setSelectedIndex(nowIndex + 1);
+            ensureIndexIsVisible(nowIndex + 1);
         }
     }
-
 
 
 

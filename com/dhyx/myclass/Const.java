@@ -1,13 +1,14 @@
 package com.dhyx.myclass;
 
 import com.dhyx.MainApp;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
+import jdk.nashorn.internal.scripts.JO;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -160,27 +161,25 @@ public class Const {
 
     public static TestDataClass[] getArrayFromFile() {
         try {
-            Workbook workbook = Workbook.getWorkbook(new File("src/data.xls"));
-            Sheet sheet = workbook.getSheet(0);
+
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream( new File("src/data.xlsx")));
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            XSSFRow row = sheet.getRow(0);
 
             //excel表格中一列为一组数据，每组有超过255个数据，所以只能用列
-            int columnCount = sheet.getColumns();
-            int rowCount = sheet.getRows();
+            int columnCount = row.getLastCellNum();
+            int rowCount = sheet.getLastRowNum() + 1;
             TestDataClass[] testdata = new TestDataClass[columnCount];
 
-            for(int i = 0; i< columnCount; i++){
+            for (int i = 0; i < columnCount; i++) {
                 testdata[i] = new TestDataClass(rowCount);
-
-                for(int j = 0; j< rowCount; j++){
+                for (int j = 0; j < rowCount; j++) {
                     testdata[i].x[j] = j + 1;
-                    testdata[i].y[j] = NumberUtils.toInt(sheet.getCell(i,j).getContents());
+                    testdata[i].y[j] = (float) sheet.getRow(j).getCell(i).getNumericCellValue();
                 }
             }
             workbook.close();
             return testdata;
-        } catch (BiffException e) {
-            e.printStackTrace();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

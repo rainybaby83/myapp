@@ -33,8 +33,30 @@ public class TestDataClass {
         return x2Value;
     }
 
-    public float getTCValue() {
+    public float getTCValue() throws Exception {
         return TCClass.getTCValue(p.tcTypeID, getX1Value(), getX2Value());
 
+    }
+
+    public float getMaxY(int left, int right) {
+        float maxY = y[left];
+        for (int i = left; i <= right; i++) {
+            if (y[i] > maxY) {
+                maxY = y[i];
+            }
+        }
+        return maxY;
+    }
+
+    public int getMaxX(int left, int right) {
+        float maxY = y[left];
+        int maxX = left;
+        for (int i = left; i <= right; i++) {
+            if (y[i] > maxY) {
+                maxY = y[i];
+                maxX = i;
+            }
+        }
+        return maxX;
     }
 }

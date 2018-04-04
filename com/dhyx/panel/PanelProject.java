@@ -176,7 +176,16 @@ public class PanelProject extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if ((btnSave.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：项目管理-保存");
-                    click_btnSave();
+
+                    //更新或插入成功，则执行收尾工作
+                    if (click_btnSave()) {
+                        btnNew.setEnabled(true);
+                        btnEdit.setEnabled(true);
+                        btnSave.setEnabled(false);
+                        resetSubPanel(true, false);
+                        click_btnQuery();
+                        tblProject.setLastRow();
+                    }   // END 5 : if (isSuccess)
                 }
             }
         });
@@ -191,7 +200,9 @@ public class PanelProject extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：项目管理-删除");
-                    click_btnDel();
+                    if (click_btnDel()) {
+                        click_btnQuery();
+                    }
                 }
             }
         });
@@ -433,9 +444,9 @@ public class PanelProject extends JPanel {
      * 2.获取字段数据
      * 3.校验数字的逻辑关系
      * 4.满足逻辑关系时，判断是新建，还是编辑
-     * 5.更新或插入成功，则执行收尾工作
      */
-    private void click_btnSave() {
+    private boolean click_btnSave() {
+        boolean result = false;
         //1.验证所有必选项是否已填写
         if (checkEmptyForClickSave()) {
             // 如果有空项，返回值为true，则不允许继续。
@@ -467,7 +478,6 @@ public class PanelProject extends JPanel {
 
             //4.满足逻辑关系时，判断是新建，还是编辑
             if (isAllowedSave) {
-                boolean isSuccess = false;
                 if (saveState == Const.SAVE_STATE_NEW) {
                     //如果是新建，则插入数据库。
                     String sqlInsertProject = "INSERT INTO `project`(isDeleted , createDate , modifyDate , projectName , prepareDuration , " +
@@ -477,7 +487,7 @@ public class PanelProject extends JPanel {
                             p.subUnit, p.subMin, p.subMax,
                             String.valueOf(p.x1Left), String.valueOf(p.x1Right), String.valueOf(p.x1N),
                             String.valueOf(p.x2Left), String.valueOf(p.x2Right), String.valueOf(p.x2N)};
-                    isSuccess = db.pstmtUpdateAndCommit(sqlInsertProject, paraProject);
+                    result = db.pstmtUpdateAndCommit(sqlInsertProject, paraProject);
                 } else if (saveState == Const.SAVE_STATE_EDIT) {
                     //如果是编辑，按照项目ID更新数据库
                     String sqlUpdateProject = "UPDATE project SET modifyDate = ? , projectName= ? , prepareDuration = ? , " +
@@ -488,25 +498,18 @@ public class PanelProject extends JPanel {
                             String.valueOf(p.x1Left), String.valueOf(p.x1Right), String.valueOf(p.x1N),
                             String.valueOf(p.x2Left), String.valueOf(p.x2Right), String.valueOf(p.x2N),
                             p.projectID};
-                    isSuccess = db.pstmtUpdateAndCommit(sqlUpdateProject, paraProject);
+                    result = db.pstmtUpdateAndCommit(sqlUpdateProject, paraProject);
                 }
-
-                //5.更新或插入成功，则执行收尾工作
-                if (isSuccess) {
-                    btnNew.setEnabled(true);
-                    btnEdit.setEnabled(true);
-                    btnSave.setEnabled(false);
-                    resetSubPanel(true, false);
-                    click_btnQuery();
-                    tblProject.setLastRow();
-                }   // END 5 : if (isSuccess)
             }   // END 4 : if (isAllowedSave)
         }   // END 1 : if (checkComponetReady()==false) else
+
+        return result;
     }   // END : private void click_btnSave()
 
 
     //删除按钮
-    private void click_btnDel() {
+    private boolean click_btnDel() {
+        boolean result = false;
         //判断是否允许删除
         String sql = "SELECT COUNT(*) FROM view_project_exp_curve WHERE 项目ID = ?";
         if (db.isExistByCount(sql, p.projectID)) {
@@ -520,12 +523,10 @@ public class PanelProject extends JPanel {
             if (answer == JOptionPane.OK_OPTION) {
                 //删除数据，更新projcet、experiment
                 String sqlUpdateProject = "UPDATE project SET isDeleted='Y' WHERE projectID = ? AND isDeleted = 'N';";
-                db.pstmtUpdateAndCommit(sqlUpdateProject,  p.projectID);
-
-                //更新表格
-                click_btnQuery();
-            }
+                result = db.pstmtUpdateAndCommit(sqlUpdateProject, p.projectID);
+             }
         }
+        return result;
     }   // END : private void click_btnDel()
 
 
@@ -558,7 +559,7 @@ public class PanelProject extends JPanel {
             //浓度单位 subUnit
             text[5].setText(p.subUnit);
             //最小值 subMin
-            text[6].setText(p.subMax);
+            text[6].setText(p.subMin);
             //最大值 subMax
             text[7].setText(p.subMax);
             //X1左边界
@@ -680,14 +681,14 @@ public class PanelProject extends JPanel {
             text[11].setOpaque(true);
         }
 
-        if (p.x1N <= (p.x1Right - p.x1Left) && p.x1N != 0) {
+        if (p.x1N <= (p.x1Right - p.x1Left) && p.x1N > 0) {
             text[10].setOpaque(false);
         } else {
             text[10].setOpaque(true);
             checkN = false;
         }
 
-        if (p.x2N <= (p.x2Right - p.x2Left) && p.x2N != 0) {
+        if (p.x2N <= (p.x2Right - p.x2Left) && p.x2N > 0) {
             text[13].setOpaque(false);
         } else {
             text[13].setOpaque(true);
@@ -709,7 +710,7 @@ public class PanelProject extends JPanel {
             message.append("● X1左边界 ＜ X1右边界 ＜ X2左边界 ＜ X2右边界\n");
         }
         if (!checkN) {
-            message.append("● 取数N ≤（右边界 - 左边界）\n");
+            message.append("● 取数N ≤（右边界 - 左边界），且不能为0\n");
         }
         if (!checkMaxMix) {
             message.append("● 最小值 < 最大值\n");
