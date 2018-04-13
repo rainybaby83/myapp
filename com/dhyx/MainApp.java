@@ -120,6 +120,16 @@ public class MainApp extends JFrame{
         });
 
 
+        //菜单：生成曲线
+        panelMenu.btnMenuNewCurve.addActionListener(e -> {
+            logger.trace("点击菜单：生成曲线");
+            panelMain.removeAll();
+            lblTitle.setText("    生成曲线");
+            panelMain.add(lblTitle);
+            panelMain.add(new PanelNewCurve());
+            panelMain.updateUI();
+        });
+
         //右上角退出
         this.addWindowListener(new WindowAdapter() {
             @Override

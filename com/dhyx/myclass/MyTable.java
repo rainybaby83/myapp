@@ -42,7 +42,6 @@ public class MyTable extends JTable{
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     jPopupMenu.show(e.getComponent(), e.getX(), e.getY());
-//                    jPopupMenu.show(e.getComponent().getParent().getParent().getParent(), 0, 0);
              }
             }
         });

@@ -2,13 +2,12 @@ package com.dhyx.panel;
 
 import com.dhyx.myclass.Const;
 import com.dhyx.myclass.MyIconButton;
-
 import javax.swing.*;
 
 public class PanelMenu extends JPanel
 {
     public MyIconButton btnMenuProject,btnMenuExperiment,btnMenuTest;
-    public MyIconButton btnMenuCurveNew,btnMenuCurveEstimate,btnMenuCurveList;
+    public MyIconButton btnMenuNewCurve, btnMenuEstimateCurve, btnMenuLockedCurve;
     public MyIconButton btnMenuBatchNew, btnMenuBatchQuery;
     public MyIconButton btnMenuOption,btnMenuExit;
 
@@ -21,7 +20,6 @@ public class PanelMenu extends JPanel
     private void initSelf() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(Const.GREEN);
-
         this.setBounds(0, 0, 120,Const.APP_HEIGHT);
     }
 
@@ -37,9 +35,9 @@ public class PanelMenu extends JPanel
         btnMenuTest = new MyIconButton(Const.MENU_TEST, Const.MENU_TEST_CHECKED, Const.MENU_TEST);
 
         //生成曲线、评估曲线、历史曲线
-        btnMenuCurveNew = new MyIconButton(Const.MENU_NEW_CURVE, Const.MENU_NEW_CURVE_CHECKED, Const.MENU_NEW_CURVE);
-        btnMenuCurveEstimate = new MyIconButton(Const.MENU_ESTIMATE_CURVE, Const.MENU_ESTIMATE_CURVE_CHECKED, Const.MENU_ESTIMATE_CURVE);
-        btnMenuCurveList = new MyIconButton(Const.MENU_CURVE_LIST, Const.MENU_CURVE_LIST_CHECKED, Const.MENU_CURVE_LIST);
+        btnMenuNewCurve = new MyIconButton(Const.MENU_NEW_CURVE, Const.MENU_NEW_CURVE_CHECKED, Const.MENU_NEW_CURVE);
+        btnMenuEstimateCurve = new MyIconButton(Const.MENU_ESTIMATE_CURVE, Const.MENU_ESTIMATE_CURVE_CHECKED, Const.MENU_ESTIMATE_CURVE);
+        btnMenuLockedCurve = new MyIconButton(Const.MENU_LOCKED_CURVE, Const.MENU_LOCKED_CURVE_CHECKED, Const.MENU_LOCKED_CURVE);
 
         //新建批号、追溯批号
         btnMenuBatchNew = new MyIconButton(Const.MENU_NEW_BATCH, Const.MENU_NEW_BATCH_CHECKED, Const.MENU_NEW_BATCH);
@@ -54,9 +52,9 @@ public class PanelMenu extends JPanel
         this.add(btnMenuExperiment);
         this.add(btnMenuTest);
         this.add(lblCurve);
-        this.add(btnMenuCurveNew);
-        this.add(btnMenuCurveEstimate);
-        this.add(btnMenuCurveList);
+        this.add(btnMenuNewCurve);
+        this.add(btnMenuEstimateCurve);
+        this.add(btnMenuLockedCurve);
         this.add(lblBatch);
         this.add(btnMenuBatchNew);
         this.add(btnMenuBatchQuery);

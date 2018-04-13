@@ -5,34 +5,29 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class MyComboBox extends JComboBox<String> {
 
-    private LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
     private Logger logger = LogManager.getLogger();
     private Statement stmt = MainApp.myDB.stmt;
 
-    public MyComboBox(String selectSQL) {
+
+    public MyComboBox() {
         super();
         DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
         dlcr.setHorizontalAlignment(JLabel.CENTER);
         setRenderer(dlcr);
-        super.setOpaque(false);
-
-        //根据SQL取得查询结果，遍历后添加到键值对数组
-        setKeyValue(selectSQL);
-        this.setSelectedIndex(-1);
+        setOpaque(false);
     }
 
 
-    private void setKeyValue(String selectSQL) {
+    //根据SQL取得查询结果，遍历后添加到键值对数组
+    public void setKeyValueBySQL(String selectSQL) {
         ResultSet rs;
         String key,value;
         try {
@@ -48,7 +43,17 @@ public class MyComboBox extends JComboBox<String> {
                     + e.getClass().getSimpleName()+"\n"+e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
         }
-    }   // END: public void setKeyValue(String selectSQL)
+        this.setSelectedIndex(-1);
+    }   // END: public void setKeyValueBySQL(String selectSQL)
+
+
+    public void setKeyValue(String[] key,String[] value) {
+        int length = Math.min(key.length, value.length);
+        for (int i = 0; i < length; i++) {
+            linkedHashMap.put(key[i], value[i]);
+            this.addItem(value[i]);
+        }
+    }
 
 
     public String getSelectedKey() {

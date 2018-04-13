@@ -70,7 +70,7 @@ public class PanelTest extends JPanel {
     //初始化查询面板
     private void initQueryPanel() {
         panelQuery = new PanelQuery();
-
+        panelQuery.lblQuery.setText("实验关键字");
         panelQuery.txtQuery.setSize(250, Const.BUTTON_HEIGHT);
         panelQuery.txtQuery.setToolTipText("请输入实验名称。支持模糊查询，不区分大小写");
         panelQuery.txtQuery.addKeyListener(new KeyAdapter() {
@@ -90,6 +90,7 @@ public class PanelTest extends JPanel {
     }   // END :  private void initQueryPanel()
 
 
+    //初始化按钮
     private void initButton() {
         //查询按钮
         btnQuery.addMouseListener(new MouseAdapter() {
@@ -112,7 +113,7 @@ public class PanelTest extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    logger.trace("点击按钮：实验管理-删除选中记录");
+                    logger.trace("点击按钮：测试管理-删除选中记录");
                     click_btnDel();
                 }
             }
@@ -138,15 +139,14 @@ public class PanelTest extends JPanel {
 
     //初始化4个标签
     private void initLabel() {
-        int standardY = panelQuery.getY() + panelQuery.getHeight();
         lblExperiment = new JLabel("实验列表");
-        lblExperiment.setBounds(0, standardY, TABLE_WIDHT_325, 25);
+        lblExperiment.setBounds(0, 40, TABLE_WIDHT_325, 25);
 
         lblCurve = new JLabel("曲线列表");
-        lblCurve.setBounds(btnQuery.getX(), standardY, 120, 25);
+        lblCurve.setBounds(btnQuery.getX(), 40, 120, 25);
 
         lblTest = new JLabel("测试记录");
-        lblTest.setBounds(lblCurve.getX() + lblCurve.getWidth() + 30, standardY, 360, 25);
+        lblTest.setBounds(lblCurve.getX() + lblCurve.getWidth() + 30, 40, 360, 25);
 
         lblTestData = new JLabel("原始数据");
         lblTestData.setBounds(0, 325, TABLE_WIDHT_325, 25);
@@ -238,7 +238,7 @@ public class PanelTest extends JPanel {
     }
 
 
-    // 添加监听
+    // 添加表格的监听
     private void initTableAddListener() {
 
         // 在实验列表释放鼠标，触发实验列表单击事件
@@ -257,8 +257,10 @@ public class PanelTest extends JPanel {
         tblCurve.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                click_tblCurve("监听：单击曲线列表调用");
-                setSelectedCurveOrder("监听：单击曲线列表调用");
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    click_tblCurve("监听：单击曲线列表调用");
+                    setSelectedCurveOrder("监听：单击曲线列表调用");
+                }
             }
         });
 
@@ -580,6 +582,9 @@ public class PanelTest extends JPanel {
 
     // 点击曲线某行数据，则在右侧测试数据列表展示对应数据
     private void click_tblCurve(String msg) {
+        //设置DM默认值，如果符合if条件，则设置为正确的
+        dmTest = TableMethod.getTableModel(sqlSelectTest + " WHERE 0=1");
+
         if (tblCurve.getRowCount() > 0) {
             int nowRow = tblCurve.getSelectedRow();
             if (nowRow > -1) {
@@ -587,17 +592,11 @@ public class PanelTest extends JPanel {
                 String curveID = tblCurve.getValueAt(nowRow, currentDM.findColumn("曲线ID")).toString();
                 isLocked = tblCurve.getValueAt(nowRow, currentDM.findColumn("锁定")).toString();
                 dmTest = TableMethod.getDMwithCheck(sqlSelectTest + "WHERE `曲线ID` = '" + curveID + "' ORDER BY `测试ID`");
-            } else {
-                dmTest = TableMethod.getTableModel(sqlSelectTest + " WHERE 0=1");
             }
-
             if (!"N".equals(isLocked)) {
                 btnDel.setEnabled(false);
                 btnStartTest.setEnabled(false);
             }
-        } else {
-            // 查不到实验数据时，测试列表
-            dmTest = TableMethod.getTableModel(sqlSelectTest + " WHERE 0=1");
         }
         tblTest.setModel(dmTest);
 

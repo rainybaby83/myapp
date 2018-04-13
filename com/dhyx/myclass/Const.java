@@ -22,12 +22,11 @@ import java.io.*;
  * @author R
  */
 public class Const {
-
     public static TestDataClass[] testData = getArrayFromFile();
 
     /**
      * 软件名称,版本
-    */
+     */
     public final static String APP_NAME = "诊断分析系统";
     public final static int APP_WIDHT = 1220;
     public final static int APP_HEIGHT = 700;
@@ -42,7 +41,7 @@ public class Const {
     private static Logger logger = LogManager.getLogger();
     /**
      * 系统当前路径
-    */
+     */
     public final static String CURRENT_DIR = System.getProperty("user.dir");
     public final static File DESKTOP_DIR = FileSystemView.getFileSystemView().getHomeDirectory();
 
@@ -53,7 +52,6 @@ public class Const {
     public final static int SAVE_STATE_CANCEL = 0;
     public final static int SAVE_STATE_NEW = 1;
     public final static int SAVE_STATE_EDIT = 2;
-
 
 
     // 系统常用字体
@@ -93,8 +91,8 @@ public class Const {
     public final static ImageIcon MENU_ESTIMATE_CURVE = new ImageIcon(MainApp.class.getResource("/icon/评估曲线.png"));
     public final static ImageIcon MENU_ESTIMATE_CURVE_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/评估曲线-激活.png"));
     //历史曲线
-    public final static ImageIcon MENU_CURVE_LIST = new ImageIcon(MainApp.class.getResource("/icon/历史曲线.png"));
-    public final static ImageIcon MENU_CURVE_LIST_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/历史曲线-激活.png"));
+    public final static ImageIcon MENU_LOCKED_CURVE = new ImageIcon(MainApp.class.getResource("/icon/历史曲线.png"));
+    public final static ImageIcon MENU_LOCKED_CURVE_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/历史曲线-激活.png"));
     //新建批号
     public final static ImageIcon MENU_NEW_BATCH = new ImageIcon(MainApp.class.getResource("/icon/新建批号.png"));
     public final static ImageIcon MENU_NEW_BATCH_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/新建批号-激活.png"));
@@ -131,7 +129,7 @@ public class Const {
     public final static ImageIcon ICON_SAVE_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/保存-禁用.png"));
 
     // 删除
-    public final static ImageIcon ICON_DEL= new ImageIcon(MainApp.class.getResource("/icon/删除.png"));
+    public final static ImageIcon ICON_DEL = new ImageIcon(MainApp.class.getResource("/icon/删除.png"));
     public final static ImageIcon ICON_DEL_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/删除-激活.png"));
     public final static ImageIcon ICON_DEL_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/删除-禁用.png"));
 
@@ -155,14 +153,22 @@ public class Const {
     public final static ImageIcon ICON_TEST_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/开始测试-激活.png"));
     public final static ImageIcon ICON_TEST_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/开始测试-禁用.png"));
 
+    // 删除选中曲线
+    public final static ImageIcon ICON_CURVE_DEL = new ImageIcon(MainApp.class.getResource("/icon/删除选中曲线.png"));
+    public final static ImageIcon ICON_CURVE_DEL_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/删除选中曲线-激活.png"));
+    public final static ImageIcon ICON_CURVE_DEL_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/删除选中曲线-禁用.png"));
+
+    // 查看所有拟合
+    public final static ImageIcon ICON_FIT = new ImageIcon(MainApp.class.getResource("/icon/查看所有拟合.png"));
+    public final static ImageIcon ICON_FIT_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/查看所有拟合-激活.png"));
+    public final static ImageIcon ICON_FIT_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/查看所有拟合-禁用.png"));
 
 
-
-
-    public static TestDataClass[] getArrayFromFile() {
+    //调用excel文件里的数据，模拟从设备端采集数据
+    private static TestDataClass[] getArrayFromFile() {
         try {
 
-            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream( new File("src/data.xlsx")));
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("src/data.xlsx")));
             XSSFSheet sheet = workbook.getSheetAt(0);
             XSSFRow row = sheet.getRow(0);
 
@@ -185,11 +191,6 @@ public class Const {
         }
         return new TestDataClass[0];
     }
-
-
-
-
-
 
 
 }

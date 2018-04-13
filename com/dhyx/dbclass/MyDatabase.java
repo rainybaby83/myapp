@@ -4,7 +4,6 @@ import com.ibatis.RuntimeSqlException;
 import com.ibatis.ScriptRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -35,7 +34,6 @@ public class MyDatabase {
             String url1 = "jdbc:mysql://localhost:3306/information_schema?user=root&password=11111111&useSSL=false&useUnicode=true&characterEncoding=utf8";
             String sqlTable = "SELECT  DISTINCT `TABLE_SCHEMA` FROM `TABLES` WHERE `TABLE_SCHEMA` = '" + dbName + "'";
 
-
             conn = DriverManager.getConnection(url1);
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
@@ -48,11 +46,6 @@ public class MyDatabase {
                     dbCreateBySqlFile();
                 }
                 rs.close();
-            } catch (MySQLSyntaxErrorException e) {
-                JOptionPane.showMessageDialog(null, "SQL语法错误，程序中止。\n" + e.getMessage());
-                logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
-                System.exit(0);
-
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "查找数据表失败。\n" + e.getMessage());
                 logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());

@@ -28,22 +28,20 @@ import java.util.List;
 public class MyChart extends Dashboard {
 
 
-    public Axis xAxis;
-    public Axis yAxis;
+    private Axis xAxis;
+    private Axis yAxis;
     private Plot2D gridArea;
     private ArrayList<Series> lineSeriesList = new ArrayList<>();
     private ArrayList<Series> x1x2SeriesList = new ArrayList<>();
     private ObservableList<Series> ols,ols2;
     private LineRenderer lineRenderer;
     private LineRenderer x1x2Renderer;
-    private LayoutBuilder layoutBuilder;
     private Series2D defaultSeries = new Series2D(Arrays.asList(0D), Arrays.asList(0D), Collections.singletonList(""));
 
     private String projectID = "";
     private Statement stmt = MainApp.myDB.stmt;
 
     public MyChart() {
-        super();
         initAxis();
         initGridArea(xAxis,yAxis);
         initRenderer();
@@ -52,7 +50,7 @@ public class MyChart extends Dashboard {
 
 
     private void initOther() {
-        layoutBuilder = new LayoutBuilder(this);
+        LayoutBuilder layoutBuilder = new LayoutBuilder(this);
         XAxisRenderer gridAreaXRenderer = new XAxisRenderer(xAxis);
         YAxisRenderer gridAreaYRenderer = new YAxisRenderer(yAxis);
         layoutBuilder.createAndAddPlotWithBottomAndLeftAxes(gridArea, gridAreaXRenderer, gridAreaYRenderer);
@@ -109,12 +107,12 @@ public class MyChart extends Dashboard {
         UniformSeriesStyle seriesStyle2 = new UniformSeriesStyle();
         seriesStyle2.setUniformStroke(new SolidBrush(Color.red));
 
-        //可以拖动的坐标轴。去掉这四行，则不能拖动
+        //可以拖动的坐标轴。去掉则不能拖动
         lineSeriesList.add(defaultSeries);
         ols = FXCollections.observableList(lineSeriesList);
         ols2 = FXCollections.observableList(x1x2SeriesList);
         lineRenderer = new LineRenderer(ols);
-        x1x2Renderer =  new LineRenderer(ols2);
+        x1x2Renderer = new LineRenderer(ols2);
         lineRenderer.setSeriesStyle(seriesStyle);
         x1x2Renderer.setSeriesStyle(seriesStyle2);
         gridArea.getSeriesRenderers().add(lineRenderer);
@@ -124,11 +122,13 @@ public class MyChart extends Dashboard {
     /**
      * 更新统计图
      * @param mytable 传入的表格组件
+     * @param varProjectID 要显示的折线对应的项目ID
      */
     public void updateChart(MyTable mytable,String varProjectID) {
         int rowCount = mytable.getRowCount();
         int columnCount = mytable.getColumnCount();
         lineSeriesList.clear();
+        double max=0D;
 
         if (rowCount > 0) {
             Series2D[] seriesData = new Series2D[rowCount];
@@ -145,14 +145,17 @@ public class MyChart extends Dashboard {
                 //构建每个Series2D的yList
                 List<Double> yList = new ArrayList<>();
                 for (int column = 1; column < columnCount; column++) {
-                    yList.add(NumberUtils.toDouble(mytable.getValueAt(row, column).toString()));
+                    Double y;
+                    y = NumberUtils.toDouble(mytable.getValueAt(row, column).toString());
+                    max = max > y ? max : y;
+                    yList.add(y);
                 }
-
                 //用xList和yList构建series2D数组
                 seriesData[row] = new Series2D(xList, yList, null);
                 lineSeriesList.add(seriesData[row]);
+            }   // END : for
+            updateYAxis(max);
 
-            }
 
             if (!projectID.equals(varProjectID)) {
                 projectID = varProjectID;
@@ -168,14 +171,13 @@ public class MyChart extends Dashboard {
                     y[i] = Math.max(y[i], tmpInt);
                 }
             }
-            updateChartX1X2(x,y);
+            updateChartX1X2(x, y);
 
         } else {
             //没有任何测试数据时，用默认的点(0,0)构建seriesList
             lineSeriesList.clear();
             x1x2SeriesList.clear();
         }
-
         lineRenderer.dataChanged();
         x1x2Renderer.dataChanged();
     }
@@ -186,7 +188,6 @@ public class MyChart extends Dashboard {
      */
     private void updateChartX1X2(int[] x, int[] y) {
         //全部循环完成后，将series2D构建为seriesList
-
         Series2D[] seriesData = new Series2D[4];
         x1x2SeriesList.clear();
 
@@ -200,9 +201,7 @@ public class MyChart extends Dashboard {
             seriesData[i] = new Series2D(xList, yList, null);
             x1x2SeriesList.add(seriesData[i]);
         }
-
         ols2 = FXCollections.observableList(x1x2SeriesList);
-
     }
 
 
@@ -219,11 +218,36 @@ public class MyChart extends Dashboard {
                 }
             }
         } catch (SQLException e) {
-            for(int i = 0;i<4;i++) {
+            for (int i = 0; i < 4; i++) {
                 x[i] = 0;
             }
         }
         return x;
+    }   // END : private int[] getXBorder()
+
+
+    private void updateYAxis(double max) {
+        int interval[] = {10000, 5000, 2000, 1000, 500, 200, 100, 50, 10, 5};
+        int yMax = (int) max;
+        int axis;
+        for (int i = 0; i < interval.length - 1; i++) {
+            if (yMax / interval[i] == 1) {
+                int mode = yMax % interval[i];
+                if (mode > interval[i + 1]) {
+                    axis = interval[i] * 2;
+                } else {
+                    axis = interval[i] + interval[i + 1];
+                }
+                yAxis.setInterval(interval[i+1]);
+                yAxis.setMaxValue((double) axis);
+                break;
+            }
+        }
+
+
     }
+
+
+
 
 }

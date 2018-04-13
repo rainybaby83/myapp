@@ -42,7 +42,6 @@ public class PanelProject extends JPanel {
     private DefaultTableModel dm;
     private int saveState = Const.SAVE_STATE_CANCEL;
     private MyDatabase db = MainApp.myDB;
-    private Connection conn = MainApp.myDB.conn;
     private ProjectClass p = new ProjectClass();
 
 
@@ -69,7 +68,7 @@ public class PanelProject extends JPanel {
     //初始化查询面板
     private void initQueryPanel() {
         panelQuery = new PanelQuery();
-
+        panelQuery.lblQuery.setText("项目关键字");
         panelQuery.txtQuery.setSize(275, Const.BUTTON_HEIGHT);
         panelQuery.txtQuery.setToolTipText("请输入项目名称关键字。支持模糊查询，不区分大小写");
         panelQuery.txtQuery.addKeyListener(new KeyAdapter() {
@@ -245,14 +244,14 @@ public class PanelProject extends JPanel {
         //填充下拉框
         String sqlPeak = "SELECT peakTypeID, peakName FROM peakType WHERE isDeleted = 'N' ORDER BY peakTypeID;";
         String sqlTC = "SELECT tcTypeID, tcExpession FROM tcType WHERE isDeleted = 'N' ORDER BY tcTypeID;";
-        lstPeak = new MyComboBox(sqlPeak);
+        lstPeak = new MyComboBox();
+        lstTC = new MyComboBox();
+        lstPeak.setKeyValueBySQL(sqlPeak);
+        lstTC.setKeyValueBySQL(sqlTC);
         lstPeak.setForeground(Color.blue);
-        lstPeak.setVisible(false);
-
-        lstTC = new MyComboBox(sqlTC);
         lstTC.setForeground(Color.blue);
+        lstPeak.setVisible(false);
         lstTC.setVisible(false);
-
         subPanel.add(lstPeak);
         subPanel.add(lstTC);
     }   // END : private void initSubPanelList()
