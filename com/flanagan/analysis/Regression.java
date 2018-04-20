@@ -10039,7 +10039,7 @@ public class Regression {
             var5 = var14;
             var9 = var6 - var2;
             var10 = var6 - var14;
-            System.out.println("package flanagan.analysis; class Regression; method testAdditionalTerms");
+            System.out.println("package com.flanagan.analysis; class Regression; method testAdditionalTerms");
             System.out.println("the order of the chi-squares has been reversed to give a second chi- square with the lowest degrees of freedom");
         }
 
@@ -10088,7 +10088,7 @@ public class Regression {
             var3 = var12;
             var9 = var6 - var5;
             var10 = var6 - var2;
-            System.out.println("package flanagan.analysis; class Regression; method testAdditionalTermsFratio");
+            System.out.println("package com.flanagan.analysis; class Regression; method testAdditionalTermsFratio");
             System.out.println("the order of the chi-squares has been reversed to give a second chi- square with the lowest degrees of freedom");
         }
 
@@ -10114,7 +10114,7 @@ public class Regression {
             var3 = var12;
             var9 = var6 - var5;
             var10 = var6 - var2;
-            System.out.println("package flanagan.analysis; class Regression; method testAdditionalTermsFprobability");
+            System.out.println("package com.flanagan.analysis; class Regression; method testAdditionalTermsFprobability");
             System.out.println("the order of the chi-squares has been reversed to give a second chi- square with the lowest degrees of freedom");
         }
 

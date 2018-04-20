@@ -1,7 +1,10 @@
 package com.dhyx.myclass;
 
+
+
 import javax.swing.*;
 import java.awt.*;
+
 
 /**
  * 自定义按钮类，支持自定义默认图标、激活图标、失效图标和tip提示
@@ -12,7 +15,6 @@ import java.awt.*;
 public class MyIconButton extends JButton {
 
 	private ImageIcon iconEnable, iconDisable;
-	private String tip;
 
 	/**
 	 * 构造
@@ -31,8 +33,6 @@ public class MyIconButton extends JButton {
 		this.iconDisable = iconDisable;
 		this.setSize(iconNormal.getIconWidth(),iconNormal.getIconHeight());
 
-
-
 		initialize();
 		setUp();
 	}
@@ -48,18 +48,15 @@ public class MyIconButton extends JButton {
 		this.setMargin(new Insets(-3, -3, -3, -3));
 	}
 
+
 	/**
 	 * 设置按钮图标：鼠标移过、按压、失效的图标 和设置按钮提示
 	 */
 	private void setUp() {
 		this.setRolloverIcon(iconEnable);
-		// this.setSelectedIcon(iconEnable);
 		this.setPressedIcon(iconEnable);
 		this.setDisabledIcon(iconDisable);
-
-		if (!"".equals(tip)) {
-			this.setToolTipText(tip);
-		}
-
 	}
+
+
 }

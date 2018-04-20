@@ -135,14 +135,14 @@ public class MainApp extends JFrame{
             @Override
             public void windowClosing(WindowEvent e) {
                 logger.trace("点击右上角退出。");
-                myDB.dbClose();
+//                myDB.dbClose();
             }
         });
 
         //退出菜单
         panelMenu.btnMenuExit.addActionListener(e -> {
             logger.trace("点击菜单：退出");
-            myDB.dbClose();
+//            myDB.dbClose();
             System.exit(0);
         });
     }

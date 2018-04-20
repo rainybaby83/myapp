@@ -12,11 +12,12 @@ public class MyList extends JList<String> {
 
     public MyList(int start,int end) {
 //        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
-//        j = new JScrollPane(this);
-//        j.getVerticalScrollBar().setUI(new MyScrollBarUI());
+//        jScrollPane = new JScrollPane(this);
+//        jScrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
 //        model = this.getModel();
         MyList();
         addNumber(start, end);
+        model = this.getModel();
     }
 
 
@@ -24,7 +25,7 @@ public class MyList extends JList<String> {
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
         j = new JScrollPane(this);
         j.getVerticalScrollBar().setUI(new MyScrollBarUI());
-        model = this.getModel();
+
     }
 
     //按照数字范围，添加到列表中

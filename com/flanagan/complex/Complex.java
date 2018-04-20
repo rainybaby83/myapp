@@ -305,7 +305,7 @@ public class Complex {
         }
 
         if (var4 == -1) {
-            throw new NumberFormatException("no i or j found");
+            throw new NumberFormatException("no i or jScrollPane found");
         } else {
             byte var5 = 1;
             int var6 = var0.indexOf(43);

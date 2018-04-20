@@ -18,7 +18,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
 import java.util.Date;
 
 /**
@@ -30,6 +29,7 @@ public class PanelProject extends JPanel {
     private Logger logger = LogManager.getLogger();
     //查询面板
     private PanelQuery panelQuery;
+
     //下部的面板
     private JPanel subPanel;
     private JLabel lblProject;
@@ -43,15 +43,16 @@ public class PanelProject extends JPanel {
     private int saveState = Const.SAVE_STATE_CANCEL;
     private MyDatabase db = MainApp.myDB;
     private ProjectClass p = new ProjectClass();
+    private int standardY;
 
 
     public PanelProject() {
         initSelf();
         initQueryPanel();
         initLabel();
+        initButton();
         initTable();
         initSubPanel();
-        initButton();
         click_btnQuery();
         click_tblProject();
     }
@@ -93,24 +94,31 @@ public class PanelProject extends JPanel {
         lblProject = new JLabel("项目列表");
         lblProject.setBounds(0, panelQuery.getY() + panelQuery.getHeight(), 850, 25);
         this.add(lblProject);
+        standardY = lblProject.getY() + lblProject.getHeight();
     }
 
 
     //初始化表格及滚动面板
     private void initTable() {
-        //从全局变量Const.myDB获得DefaultTableModel，用于创建table
+        // 1.创建TableModel
         sqlSelectProject = "SELECT 项目ID,创建日期,修改日期,项目名称,准备时长,取峰算法,TC公式,浓度单位,最小值,最大值," +
                 "X1左边界,X1右边界,X1取数N,X2左边界,X2右边界,X2取数N FROM view_project ";
         dm = TableMethod.getTableModel(sqlSelectProject);
+
+        // 2.用TableModel创建表格，并设置尺寸、位置
         tblProject = new MyTable(dm);
         tblProject.setWidth(60, 80, 80, 130, 80, 110, 110, 70, 70, 70, 70, 70, 70, 70, 70, 70);
-        tblProject.setBounds(0, lblProject.getY() + lblProject.getHeight(), 840, 325);
-        tblProject.j.setBounds(tblProject.getBounds());
-        this.add(tblProject.j);
+        tblProject.setBounds(0, standardY, 840, 325);
 
+        // 3.设置滚动面板尺寸，并添加到窗口面板
+        tblProject.jScrollPane.setBounds(tblProject.getBounds());
+        this.add(tblProject.jScrollPane);
 
+        //4.添加弹出菜单
+//        tblProject.jPopupMenu.add(btnEdit);
+//        tblProject.jPopupMenu.add(btnDel);
 
-        //添加监听，单击时选中某行，并在下方显示明细
+        //5.添加监听，单击时选中某行，在下方显示明细
         tblProject.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -138,7 +146,7 @@ public class PanelProject extends JPanel {
 
         //新建按钮
         btnNew = new MyIconButton(Const.ICON_NEW, Const.ICON_NEW_ENABLED, Const.ICON_NEW_DISABLED);
-        btnNew.setLocation(this.getWidth() - Const.BUTTON_WIDTH, tblProject.getY());
+        btnNew.setLocation(this.getWidth() - Const.BUTTON_WIDTH, standardY);
         btnNew.setEnabled(true);
         btnNew.addMouseListener(new MouseAdapter() {
             @Override
@@ -198,13 +206,13 @@ public class PanelProject extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    logger.trace("点击按钮：项目管理-删除");
-                    if (click_btnDel()) {
-                        click_btnQuery();
-                    }
+                    boolean status = click_btnDel();
+                    logger.trace("点击按钮：项目管理-删除。项目ID=" + p.projectID + "，结果=" + status);
                 }
             }
         });
+
+
 
 
         //添加到面板
@@ -508,13 +516,14 @@ public class PanelProject extends JPanel {
 
     //删除按钮
     private boolean click_btnDel() {
-        boolean result = false;
+        boolean status = false;
         //判断是否允许删除
         String sql = "SELECT COUNT(*) FROM view_project_exp_curve WHERE 项目ID = ?";
         if (db.isExistByCount(sql, p.projectID)) {
             //如果存在数据，则不允许删除，给出提示。
             JOptionPane.showMessageDialog(null, "该项目已有测试数据，不能删除，否则会导致数据混乱。",
                     "不能删除", JOptionPane.WARNING_MESSAGE);
+            return false;
         } else {
             //如果不存在数据，则允许删除。需用户二次确认
             int answer = JOptionPane.showConfirmDialog(null, "即将删除项目“" + p.projectName + "”，请再次确认！",
@@ -522,10 +531,10 @@ public class PanelProject extends JPanel {
             if (answer == JOptionPane.OK_OPTION) {
                 //删除数据，更新projcet、experiment
                 String sqlUpdateProject = "UPDATE project SET isDeleted='Y' WHERE projectID = ? AND isDeleted = 'N';";
-                result = db.pstmtUpdateAndCommit(sqlUpdateProject, p.projectID);
+                status = db.pstmtUpdateAndCommit(sqlUpdateProject, p.projectID);
              }
         }
-        return result;
+        return status;
     }   // END : private void click_btnDel()
 
 

@@ -171,14 +171,13 @@ public class MyDatabase {
     public boolean pstmtUpdateAndCommit(String sql, String... param) {
         try {
             conn.setAutoCommit(false);
-
             PreparedStatement pstmt = conn.prepareStatement(sql);
             for (int i = 0; i < param.length; i++) {
                 pstmt.setString(i + 1, param[i]);
             }
             pstmt.executeUpdate();
             // 更新完毕
-            JOptionPane.showMessageDialog(null, "操作成功!");
+//            JOptionPane.showMessageDialog(null, "操作成功!");
             conn.commit();
             return true;
         } catch (Exception e) {
@@ -208,7 +207,7 @@ public class MyDatabase {
         for (int i = 0; i < param.length; i++) {
             pstmt.setString(i+1, param[i]);
         }
-        pstmt.executeUpdate();
+        int a = pstmt.executeUpdate();
         if (isInsert) {
             ResultSet rs = pstmt.getGeneratedKeys();
             rs.next();

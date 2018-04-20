@@ -1,28 +1,38 @@
 package com.dhyx.panel;
 
+import com.dhyx.MainApp;
+import com.dhyx.dbclass.MyDatabase;
 import com.dhyx.myclass.*;
 import flanagan.physchem.ImmunoAssay;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.Date;
 
 
 public class PanelNewCurve extends JPanel {
     private Logger logger = LogManager.getLogger();
+    private MyDatabase db = MainApp.myDB;
+
     private PanelQuery panelQuery;
     private MyIconButton btnQuery, btnDel, btnFit;
     private DefaultTableModel dmCurve,dmConcentration;
     private String sqlSelectCurve = "SELECT DISTINCT 项目名称,实验名称,曲线序号,曲线日期,曲线ID,实验ID,项目ID FROM view_project_exp_curve";
-    private String sqlSelectConcentration = "SELECT DISTINCT 浓度序号,浓度值,反应值 FROM view_curve_concentration";
+    private String sqlSelectConcentration = "SELECT DISTINCT 浓度序号,浓度值,反应值,浓度ID FROM view_curve_concentration";
+    private String curveID;
     private MyTable tblCurve,tblConcentration;
     private MyComboBox lstXType,lstYType ;
     private JLabel[] lRight = new JLabel[6];
@@ -34,7 +44,9 @@ public class PanelNewCurve extends JPanel {
         initQueryPanel();
         initButton();
         initLabel();
-        initTable();
+        initTableGetModel();
+        initTableCreate();
+        initTableAddListener();
         initList();
         initOther();
         click_btnQuery("启动窗体调用");
@@ -89,7 +101,7 @@ public class PanelNewCurve extends JPanel {
             }
         });
 
-        //删除选中曲线按钮
+        //"删除选中曲线"按钮
         btnDel = new MyIconButton(Const.ICON_CURVE_DEL, Const.ICON_CURVE_DEL_ENABLED, Const.ICON_CURVE_DEL_DISABLED);
         btnDel.setBounds(625, 0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT);
         btnDel.setEnabled(false);
@@ -97,14 +109,15 @@ public class PanelNewCurve extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    logger.trace("点击按钮：生成曲线-删除选中曲线");
-                    click_btnDel();
+                    boolean status = click_btnDel();
+                    logger.trace("点击按钮：生成曲线-删除选中曲线。曲线ID=" + curveID + "，结果=" + status);
+                    click_btnQuery("点击删除按钮后调用");
                 }
             }
         });
         panelQuery.add(btnDel);
 
-        //查看所有拟合按钮
+        //"查看所有拟合"按钮
         btnFit = new MyIconButton(Const.ICON_FIT, Const.ICON_FIT_ENABLED, Const.ICON_FIT_DISABLED);
         btnFit.setBounds(845, 170, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT);
         btnFit.addMouseListener(new MouseAdapter() {
@@ -169,14 +182,6 @@ public class PanelNewCurve extends JPanel {
     }
 
 
-    //初始化3个表格
-    private void initTable() {
-        initTableGetModel();
-        initTableCreate();
-        initTableAddListener();
-    }  // END:initTalbe()
-
-
     // 1. 创建TableModel
     private void initTableGetModel() {
         dmCurve = TableMethod.getTableModel(sqlSelectCurve + " WHERE 0=1");
@@ -184,25 +189,30 @@ public class PanelNewCurve extends JPanel {
     }
 
 
-    // 2.初始化表格
+    // 2.创建表格并设置属性
     private void initTableCreate() {
-
         // 2.1 创建表格
         tblCurve = new MyTable(dmCurve);
         tblConcentration = new MyTable(dmConcentration){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 2;
+            }
+
             @Override   // 表格带有单选框
             public Class getColumnClass(int c) {
                 Object value = getValueAt(0, c);
                 if (value != null) {
                     return value.getClass();
-                } else {
+                } else{
                     return super.getClass();
                 }
             }
         };
+        tblConcentration.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         tblConcentration.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        // 2.2 设置颜色、尺寸等基本属性
+        // 2.2 设置尺寸
         tblCurve.setBounds(0, 65, 385, 550);
         tblConcentration.setBounds(435,65,315,550);
 
@@ -211,21 +221,27 @@ public class PanelNewCurve extends JPanel {
         tblConcentration.setWidth(30, 75, 105, 105);
 
         // 2.4 设置滚动面板
-        tblCurve.j.setBounds(tblCurve.getBounds());
-        tblConcentration.j.setBounds(tblConcentration.getBounds());
-        tblConcentration.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tblCurve.jScrollPane.setBounds(tblCurve.getBounds());
+        tblConcentration.jScrollPane.setBounds(tblConcentration.getBounds());
+        tblConcentration.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        this.add(tblCurve.j);
-        this.add(tblConcentration.j);
+        //2.5 取得“浓度值”的index，然后对该列设置CellEditor，使其只能输入小数
+        int index = dmConcentration.findColumn("浓度值");
+        tblConcentration.getColumnModel().getColumn(index).setCellEditor(new FloatCellEditor());
+
+        //2.6 添加弹出菜单
+//        tblCurve.jPopupMenu.add(btnDel);
+
+        // 2.7 添加表格到面板
+        this.add(tblCurve.jScrollPane);
+        this.add(tblConcentration.jScrollPane);
     }
 
 
-
-
-    // 添加表格的监听
+    // 3.添加表格的监听
     private void initTableAddListener() {
 
-        // 在实验列表释放鼠标，触发实验列表单击事件
+        // 曲线列表的单击事件
         tblCurve.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -235,7 +251,7 @@ public class PanelNewCurve extends JPanel {
             }
         });
 
-        //单击监听
+        // 浓度列表的单击事件
         tblConcentration.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -244,7 +260,24 @@ public class PanelNewCurve extends JPanel {
                 }
             }
         });
+
+        //对浓度表的列“浓度值”添加监听，当编辑结束时，把手写的浓度值写入数据库
+        int index = dmConcentration.findColumn("浓度值");
+        tblConcentration.getColumnModel().getColumn(index).getCellEditor().addCellEditorListener(new CellEditorListener() {
+            @Override
+            public void editingStopped(ChangeEvent e) {
+                //此处退出编辑状态，如果数据符合要求，则写入数据库
+                updateDB_StopEdit("监听：editingStopped");
+            }
+            @Override
+            public void editingCanceled(ChangeEvent e) {
+            }
+        });
     }   // END : private void initTableAddListener()
+
+
+
+
 
 
     // 初始化列表框
@@ -288,8 +321,7 @@ public class PanelNewCurve extends JPanel {
         strQueryKey = panelQuery.txtQuery.getText().trim();
         strQueryKey = StringUtils.replace(strQueryKey, "'", "");
         strQueryKey = StringUtils.replace(strQueryKey, "%", "");
-        sql = sqlSelectCurve + " WHERE `实验名称` LIKE '%" + strQueryKey + "%' " +
-                " AND `锁定`='N' ORDER BY `项目ID`,`实验ID`,`曲线序号`";
+        sql = sqlSelectCurve + " WHERE `实验名称` LIKE '%" + strQueryKey + "%' AND `锁定`='N' ORDER BY `项目ID`,`实验ID`,`曲线序号`";
         dmCurve = TableMethod.getTableModel(sql);
         tblCurve.setModel(dmCurve);
         tblCurve.setFirstRow();
@@ -300,8 +332,76 @@ public class PanelNewCurve extends JPanel {
     }
 
 
+    /**
+     * 删除曲线的代码
+     * 取消自动提交
+     * 逻辑删除曲线
+     * 获取浓度ID集合，循环1
+     *      获得1个浓度ID，逻辑删除该浓度
+     *      根据该浓度查询所有testID集合，进入循环2
+     *          获得1个testID，逻辑删除该test数据
+     *          逻辑删除该testID对应的所有test_original
+     *      结束循环2
+     * 结束循环1
+     * 提交
+     */
+    private boolean click_btnDel() {
+        boolean status = false;
+        String modifyDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
-    private void click_btnDel() {
+        try {
+            //取消自动提交
+            db.conn.setAutoCommit(false);
+
+            //逻辑删除曲线
+            String sqlUpdateCurve = "UPDATE curve SET isDeleted = 'Y' WHERE curveID = ?";
+            db.pstmtUpdateNotCommit(false, sqlUpdateCurve, curveID);
+
+            //获取浓度ID集合，循环1
+            String sqlSelectConcentration = "SELECT DISTINCT concentrationID FROM concentration WHERE curveID = " +
+                    curveID + " AND isDeleted = 'N';";
+            ResultSet rs1 = db.conn.createStatement().executeQuery(sqlSelectConcentration);
+
+            while (rs1.next()) {
+                // 获得1个浓度ID
+                String delConcentrationID = rs1.getString("ConcentrationID");
+                // 逻辑删除该浓度
+                String sqlUpdateConcentration = "UPDATE concentration SET isDeleted = 'Y' WHERE concentrationID = ?";
+                db.pstmtUpdateNotCommit(false, sqlUpdateConcentration, delConcentrationID);
+
+                // 根据该浓度查询所有testID集合，进入循环2
+                String sqlSelectTest = "SELECT DISTINCT testID FROM test WHERE concentrationID = " +
+                        delConcentrationID + " AND isDeleted = 'N';";
+                ResultSet rs2 = db.conn.createStatement().executeQuery(sqlSelectTest);
+                while (rs2.next()) {
+
+                    // 获得1个testID，逻辑删除该test数据。
+                    String testID = rs2.getString("testID");
+                    String sqlUpdateTest = "UPDATE test SET isDeleted = 'Y' ,modifyDate = ? WHERE testID = ?";
+
+                    db.pstmtUpdateNotCommit(false, sqlUpdateTest, modifyDate, testID);
+
+                    // 逻辑删除该testID对应的所有test_original
+                    String sqlUpdateTestOriginal = "UPDATE test_original SET isDeleted = 'Y' , modifyDate = ? WHERE testID = ?";
+                    db.pstmtUpdateNotCommit(false, sqlUpdateTestOriginal, modifyDate, testID);
+                }   // END : rs2的循环
+            }   // END : rs1的循环
+
+            //提交
+
+            db.conn.commit();
+            status = true;
+        } catch (SQLException e) {
+            try {
+                db.conn.rollback();
+//                db.conn.commit();
+            } catch (SQLException e1) {
+                logger.error(e1.getClass().getSimpleName() + "，回滚失败。" + e.getMessage());
+            }
+            logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
+            JOptionPane.showMessageDialog(null, "删除失败，数据库未作任何修改。请查看日志。");
+        }
+        return status;
     }
 
 
@@ -323,13 +423,14 @@ public class PanelNewCurve extends JPanel {
             int nowRow = tblCurve.getSelectedRow();
             if (nowRow > -1) {
                 DefaultTableModel currentDM = (DefaultTableModel) tblCurve.getModel();
-                String curveID = tblCurve.getValueAt(nowRow, currentDM.findColumn("曲线ID")).toString();
+                curveID = tblCurve.getValueAt(nowRow, currentDM.findColumn("曲线ID")).toString();
                 String sql = sqlSelectConcentration + " WHERE `曲线ID` = '" + curveID + "' AND `锁定`= 'N' ORDER BY `浓度序号`";
                 dmConcentration = TableMethod.getDMwithCheck(sql);
                 btnDel.setEnabled(true);
                 btnFit.setEnabled(true);
             }
         }
+
         tblConcentration.setModel(dmConcentration);
     }
 
@@ -347,6 +448,53 @@ public class PanelNewCurve extends JPanel {
                 tblConcentration.setValueAt(false, i, 0);
             }
         }
+
+        tblConcentration.getCellRenderer(1, 2).getTableCellRendererComponent
+                (tblConcentration, "123", true, true, 1, 3)
+                .addFocusListener(new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        JOptionPane.showMessageDialog(null,1);
+                    }
+                });
     }
+
+
+    /**
+     * 内部类，仅在生成曲线模块，输入浓度时使用。
+     * 用于限制JTable的某个单元格只能输入小数。用NumberUtils进行转化，如果不能转化为小数则设置为0
+     */
+    class FloatCellEditor extends DefaultCellEditor {
+        FloatCellEditor() {
+            super(new JTextField());
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            String value = (String) delegate.getCellEditorValue();
+            String pattern = "0";
+            float tmp = NumberUtils.toFloat(value);
+            if (tmp != 0) {
+                pattern = "0.0000";
+            }
+            DecimalFormat df = new DecimalFormat(pattern);
+            return df.format(tmp);
+        }
+
+    }
+
+
+    //退出浓度表某个单元格的编辑状态时，将符合条件的浓度写入数据库，不符合的给出提示，不保存
+    private void updateDB_StopEdit(String msg) {
+        int nowRow = tblConcentration.getSelectedRow();
+        DefaultTableModel currentDM = (DefaultTableModel) tblConcentration.getModel();
+        String concentrationID = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度ID")).toString();
+        String concentrationValue = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度值")).toString();
+        String sqlUpdate = "UPDATE concentration SET concentrationValue = ? WHERE concentrationID = ? ";
+        String[] param = {concentrationValue, concentrationID};
+        db.pstmtUpdateAndCommit(sqlUpdate, param);
+    }
+
+
 
 }

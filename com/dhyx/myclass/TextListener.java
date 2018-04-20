@@ -62,6 +62,7 @@ public class TextListener {
                 }else {
                     jTextField.setText(String.valueOf(0 - inputInt));
                 }
+                JOptionPane.showMessageDialog(null,123);
             }   // END : public void focusLost()
         };  // END : return new FocusListener()
     }   // END : private FocusListener floatTextFocusListener()

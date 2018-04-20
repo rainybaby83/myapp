@@ -45,6 +45,7 @@ public class PanelTest extends JPanel {
     private MyDatabase db = MainApp.myDB;
     private Connection conn = MainApp.myDB.conn;
     private ProjectClass pro = new ProjectClass();
+    private String testIDdel;
 
 
     public PanelTest() {
@@ -98,8 +99,9 @@ public class PanelTest extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnQuery.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    logger.trace("点击按钮：测试管理-查询" + panelQuery.txtQuery.getText());
+
                     click_btnQuery();
+                    logger.trace("点击按钮：测试管理-查询" + panelQuery.txtQuery.getText());
                 }
             }
         });
@@ -113,8 +115,10 @@ public class PanelTest extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    logger.trace("点击按钮：测试管理-删除选中记录");
-                    click_btnDel();
+                    boolean status = click_btnDel();
+                    logger.trace("点击按钮：测试管理-删除选中记录。测试ID=" + testIDdel + "，结果=" + status);
+                    click_tblCurve("点击按钮：测试管理-删除选中记录");
+
                 }
             }
         });
@@ -223,18 +227,18 @@ public class PanelTest extends JPanel {
         tblTestData.setAutoCreateColumnsFromModel(true);
 
         // 2.4 设置滚动面板
-        tblExperiment.j.setBounds(tblExperiment.getBounds());
-        tblCurve.j.setBounds(tblCurve.getBounds());
-        tblTest.j.setBounds(tblTest.getBounds());
-        tblTestData.j.setBounds(tblTestData.getBounds());
+        tblExperiment.jScrollPane.setBounds(tblExperiment.getBounds());
+        tblCurve.jScrollPane.setBounds(tblCurve.getBounds());
+        tblTest.jScrollPane.setBounds(tblTest.getBounds());
+        tblTestData.jScrollPane.setBounds(tblTestData.getBounds());
 
-        tblExperiment.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        tblCurve.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tblExperiment.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tblCurve.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        this.add(tblExperiment.j);
-        this.add(tblCurve.j);
-        this.add(tblTest.j);
-        this.add(tblTestData.j);
+        this.add(tblExperiment.jScrollPane);
+        this.add(tblCurve.jScrollPane);
+        this.add(tblTest.jScrollPane);
+        this.add(tblTestData.jScrollPane);
     }
 
 
@@ -368,9 +372,9 @@ public class PanelTest extends JPanel {
      * 4 逻辑删除Test、Test_Original
      * 5 重新计算concentration。如果该浓度ID还有对应的testID数据，则计算平均值，否则逻辑删除该浓度ID数据并设置为0
      * 6 提交事务
-     * 6 调用曲线列表点击事件，刷新表格数据和统计图
      */
-    private void click_btnDel() {
+    private boolean click_btnDel() {
+        boolean status = false;
         // 1 校验是否允许删除:
         int[] nowRows = tblTest.getSelectedRows();
 
@@ -379,8 +383,9 @@ public class PanelTest extends JPanel {
             // 选中行数不等于1行，给出提示，结束。
             JOptionPane.showMessageDialog(null, "请单选1行，然后点击删除按钮。");
 
-            // 1.2 曲线没有被锁。此校验在曲线列表的点击事件已校验过一次，当点击了已锁定曲线时，删除按钮不可用
+
         } else if (!"N".equals(isLocked)) {
+            // 1.2 曲线没有被锁。此校验在曲线列表的点击事件已校验过一次，当点击了已锁定曲线时，删除按钮不可用
             JOptionPane.showMessageDialog(null, "曲线已被锁定，不能删除记录。");
         } else {
             try {
@@ -389,14 +394,14 @@ public class PanelTest extends JPanel {
 
                 // 3 取得testID、concentrationID
                 DefaultTableModel currentDM = ((DefaultTableModel) tblTest.getModel());
-                String testID = tblTest.getValueAt(nowRows[0], currentDM.findColumn("测试ID")).toString();
+                testIDdel = tblTest.getValueAt(nowRows[0], currentDM.findColumn("测试ID")).toString();
                 String concentrationID = tblTest.getValueAt(nowRows[0], currentDM.findColumn("浓度ID")).toString();
 
                 // 4 逻辑删除Test、Test_Original
                 String sqlDeleteTest = "UPDATE test SET isDeleted = 'Y', modifyDate = ? WHERE isDeleted = 'N' AND testID = ?;";
                 String sqlDeleteTestOriginal = "UPDATE test_original SET isDeleted = 'Y' , modifyDate = ? WHERE isDeleted = 'N' AND testID = ?;";
                 modifyDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
-                String[] param = {modifyDate, testID};
+                String[] param = {modifyDate, testIDdel};
                 db.pstmtUpdateNotCommit(false, sqlDeleteTest, param);
                 db.pstmtUpdateNotCommit(false, sqlDeleteTestOriginal, param);
 
@@ -405,21 +410,21 @@ public class PanelTest extends JPanel {
 
                 // 6 提交事务
                 conn.commit();
+                status = true;
 
-                // 7 调用曲线列表点击事件，刷新表格数据和统计图
-                click_tblCurve("单击：删除按钮");
-
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 try {
                     conn.rollback();
                     conn.commit();
-                } catch (Exception e1) {
+                } catch (SQLException e1) {
                     logger.error(e1.getClass().getSimpleName() + "，回滚失败。" + e.getMessage());
                 }
                 logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
                 JOptionPane.showMessageDialog(null, "删除失败，数据库未作任何修改。请查看日志。");
             }
         }   // END : if else
+
+        return status;
     }   // END : private void click_btnDel()
 
 

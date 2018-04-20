@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -76,7 +78,12 @@ public class TableMethod {
                 Vector<Object> vectorRow = new Vector<>();
                 vectorRow.add(Boolean.FALSE);
                 for (i = 1; i <= count; i++) {
-                    vectorRow.add(rs.getString(i));
+                    if (rs.getString(i) == null) {
+                        vectorRow.add("");
+                    } else {
+                        vectorRow.add(rs.getString(i));
+                    }
+
                 }
                 vector.addElement(vectorRow);
             }
