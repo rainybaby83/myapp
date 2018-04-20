@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.math.MaximizationFunction;
+import com.flanagan.math.MaximizationFunction;
 
 class GaussianMaxFunction implements MaximizationFunction {
     public double[] sortedData = null;

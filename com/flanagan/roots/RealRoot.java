@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.roots;
+package com.flanagan.roots;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexPoly;
-import flanagan.math.Fmath;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexPoly;
+import com.flanagan.math.Fmath;
 import java.util.ArrayList;
 
 public class RealRoot {

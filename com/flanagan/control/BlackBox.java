@@ -3,17 +3,17 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.control;
+package com.flanagan.control;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexMatrix;
-import flanagan.complex.ComplexPoly;
-import flanagan.interpolation.CubicSpline;
-import flanagan.io.Db;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.plot.PlotGraph;
-import flanagan.plot.PlotPoleZero;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexMatrix;
+import com.flanagan.complex.ComplexPoly;
+import com.flanagan.interpolation.CubicSpline;
+import com.flanagan.io.Db;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.plot.PlotGraph;
+import com.flanagan.plot.PlotPoleZero;
 
 public class BlackBox {
     protected int sampLen = 0;

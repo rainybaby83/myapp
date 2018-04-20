@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.control;
+package com.flanagan.control;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexPoly;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexPoly;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
 
 public class AtoD extends BlackBox {
     private int nBits = 0;

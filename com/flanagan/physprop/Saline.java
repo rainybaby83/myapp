@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physprop;
+package com.flanagan.physprop;
 
-import flanagan.interpolation.CubicSpline;
+import com.flanagan.interpolation.CubicSpline;
 
 public class Saline {
     public static final double MOLWEIGHT = 58.45D;

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.roots.RealRootFunction;
+import com.flanagan.roots.RealRootFunction;
 
 class BetaFunct implements RealRootFunction {
     public double alpha = 0.0D;

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.optics;
+package com.flanagan.optics;
 
-import flanagan.analysis.ErrorProp;
+import com.flanagan.analysis.ErrorProp;
 
 public class PrismCoupler extends PlanarWaveguide {
     private double[] thicknessesTE = null;

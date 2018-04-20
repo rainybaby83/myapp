@@ -3,14 +3,14 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.io.FileChooser;
-import flanagan.io.FileOutput;
-import flanagan.math.ArrayMaths;
-import flanagan.math.Fmath;
-import flanagan.math.TimeAndDate;
-import flanagan.util.Strings;
+import com.flanagan.io.FileChooser;
+import com.flanagan.io.FileOutput;
+import com.flanagan.math.ArrayMaths;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.TimeAndDate;
+import com.flanagan.util.Strings;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

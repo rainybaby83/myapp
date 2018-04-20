@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

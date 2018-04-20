@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.io;
+package com.flanagan.io;
 
 import java.awt.Component;
 import java.io.File;

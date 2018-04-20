@@ -13,8 +13,8 @@ package com;/*      ImmunoAssayExampleOne
  *       7 February 2011
  */
 
-import flanagan.physchem.ImmunoAssay;
-import flanagan.io.Db;
+import com.flanagan.physchem.ImmunoAssay;
+import com.flanagan.io.Db;
 
 public class ImmunoAssayExampleOne{
     public static void main(String[] args){

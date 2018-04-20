@@ -3,14 +3,14 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.analysis.ErrorProp;
-import flanagan.circuits.Phasor;
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexErrorProp;
-import flanagan.complex.ComplexPoly;
-import flanagan.io.DialogueBox;
+import com.flanagan.analysis.ErrorProp;
+import com.flanagan.circuits.Phasor;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexErrorProp;
+import com.flanagan.complex.ComplexPoly;
+import com.flanagan.io.DialogueBox;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.ByteArrayInputStream;

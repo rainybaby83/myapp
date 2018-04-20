@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class Logistic5FixedFunction implements RegressionFunction {
     private double bottom = 0.0D;

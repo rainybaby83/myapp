@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.interpolation;
+package com.flanagan.interpolation;
 
 public class CubicSplineShort {
     private int nPoints = 0;

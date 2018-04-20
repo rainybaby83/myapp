@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.control;
+package com.flanagan.control;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexPoly;
-import flanagan.plot.PlotGraph;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexPoly;
+import com.flanagan.plot.PlotGraph;
 
 public class PropInt extends BlackBox {
     private double kp = 1.0D;

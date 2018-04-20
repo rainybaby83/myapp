@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physprop;
+package com.flanagan.physprop;
 
 import java.awt.Component;
 import javax.swing.Icon;

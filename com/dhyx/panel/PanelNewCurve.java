@@ -3,7 +3,7 @@ package com.dhyx.panel;
 import com.dhyx.MainApp;
 import com.dhyx.dbclass.MyDatabase;
 import com.dhyx.myclass.*;
-import flanagan.physchem.ImmunoAssay;
+import com.flanagan.physchem.ImmunoAssay;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -21,12 +21,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 
 public class PanelNewCurve extends JPanel {
     private Logger logger = LogManager.getLogger();
     private MyDatabase db = MainApp.myDB;
-
     private PanelQuery panelQuery;
     private MyIconButton btnQuery, btnDel, btnFit;
     private DefaultTableModel dmCurve,dmConcentration;
@@ -36,7 +37,7 @@ public class PanelNewCurve extends JPanel {
     private MyTable tblCurve,tblConcentration;
     private MyComboBox lstXType,lstYType ;
     private JLabel[] lRight = new JLabel[6];
-
+    public ImmunoAssay assay = new ImmunoAssay("123");
 
 
     public PanelNewCurve() {
@@ -407,8 +408,50 @@ public class PanelNewCurve extends JPanel {
 
     private void click_btnFit() {
 
-        ImmunoAssay assay = new ImmunoAssay("123");
-        assay.selectEquation();
+        /*
+            获取被选中的行数
+            校验是否满足拟合数量要求
+            数据按浓度排序，写入数组
+            校验浓度为0的数据的个数，最多只有1个
+            数组的浓度、反应值，写入免疫类
+            弹出新窗口，传入免疫类，代码转至新窗口
+         */
+
+//        获取被选中的行数
+//        校验是否满足拟合数量要求
+        int[] nowRows = tblConcentration.getSelectedRows();
+        int minCount = 6;
+        if (nowRows.length < minCount) {
+            JOptionPane.showMessageDialog(null, "拟合至少需要" + minCount + "个数据，还需再选"
+                    + String.valueOf(minCount - nowRows.length) + "个。", "缺少数据", JOptionPane.ERROR_MESSAGE);
+        } else {
+            //数据按浓度排序，写入数组
+            TreeMap<Double,Double> fitData = new TreeMap<>();
+            DefaultTableModel dm = (DefaultTableModel) tblConcentration.getModel();
+            for(int i =0;i<nowRows.length;i++) {
+
+
+            }
+
+
+
+
+
+            // 校验浓度为0的数据的个数，最多只有1个
+
+
+        }
+
+
+
+
+    }
+
+
+
+    // 用户查看所有拟合后，选定一个拟合，然后新面板调用本面板的receiveFitData()，接收数据。
+    public void receiveFitData() {
+
     }
 
 

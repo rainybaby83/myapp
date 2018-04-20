@@ -3,13 +3,13 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.io;
+package com.flanagan.io;
 
-import flanagan.circuits.Phasor;
-import flanagan.complex.Complex;
-import flanagan.math.ArrayMaths;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
+import com.flanagan.circuits.Phasor;
+import com.flanagan.complex.Complex;
+import com.flanagan.math.ArrayMaths;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

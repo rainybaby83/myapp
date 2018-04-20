@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
 public class Minimization extends Minimisation {
     public Minimization() {

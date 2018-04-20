@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physprop;
+package com.flanagan.physprop;
 
-import flanagan.interpolation.BiCubicSpline;
-import flanagan.interpolation.CubicSpline;
-import flanagan.math.ArrayMaths;
+import com.flanagan.interpolation.BiCubicSpline;
+import com.flanagan.interpolation.CubicSpline;
+import com.flanagan.math.ArrayMaths;
 
 public class Sucrose {
     public static final double MOLWEIGHT = 342.3D;

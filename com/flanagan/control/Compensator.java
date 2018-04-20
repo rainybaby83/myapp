@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.control;
+package com.flanagan.control;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexPoly;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexPoly;
 
 public class Compensator extends BlackBox {
     private double kConst = 1.0D;

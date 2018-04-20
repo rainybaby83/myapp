@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.io.Db;
+import com.flanagan.io.Db;
 import java.util.Calendar;
 
 public class TimeAndDate {

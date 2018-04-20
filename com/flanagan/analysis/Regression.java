@@ -3,16 +3,16 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.interpolation.CubicSpline;
-import flanagan.io.Db;
-import flanagan.io.FileOutput;
-import flanagan.math.ArrayMaths;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.math.Matrix;
-import flanagan.plot.PlotGraph;
+import com.flanagan.interpolation.CubicSpline;
+import com.flanagan.io.Db;
+import com.flanagan.io.FileOutput;
+import com.flanagan.math.ArrayMaths;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.Matrix;
+import com.flanagan.plot.PlotGraph;
 import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;

@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.integration;
+package com.flanagan.integration;
 
 public interface DerivFunction {
     double deriv(double var1, double var3);

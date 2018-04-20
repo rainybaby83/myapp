@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class ShiftedRectangularHyperbolaFunction implements RegressionFunction {
     ShiftedRectangularHyperbolaFunction() {

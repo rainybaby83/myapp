@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.analysis.Regression;
-import flanagan.analysis.Stat;
+import com.flanagan.analysis.Regression;
+import com.flanagan.analysis.Stat;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

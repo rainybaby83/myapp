@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.plot;
+package com.flanagan.plot;
 
 import java.awt.Color;
 import java.awt.Component;

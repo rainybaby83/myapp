@@ -34,10 +34,7 @@ public class PanelTest extends JPanel {
     private String sqlSelectExp = "SELECT DISTINCT 项目名称,实验ID,实验名称,实验创建日期,项目ID  FROM view_pro_exp ";
     private String sqlSelectCurve = "SELECT DISTINCT 曲线序号,曲线ID,锁定 FROM view_project_exp_curve ";
     private String sqlSelectTest = "SELECT DISTINCT 浓度序号,X1,X2,TC值,实验ID,曲线ID,浓度ID,测试ID,测试时间  FROM view_exp_curve_test ";
-    private String experimentID;
-    private String createDate;
-    private String modifyDate;
-    private String isLocked = "Y";
+    private String experimentID,createDate,modifyDate,isLocked = "Y",testIDdel;
     private static int TABLE_WIDHT_325 = 325;
     private static int TABLE_HEIGHT_275 = 275, TABLE_HEIGHT_250 = 250;
     private MyChart panelChart;
@@ -45,7 +42,7 @@ public class PanelTest extends JPanel {
     private MyDatabase db = MainApp.myDB;
     private Connection conn = MainApp.myDB.conn;
     private ProjectClass pro = new ProjectClass();
-    private String testIDdel;
+
 
 
     public PanelTest() {

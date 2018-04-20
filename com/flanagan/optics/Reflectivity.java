@@ -3,14 +3,14 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.optics;
+package com.flanagan.optics;
 
-import flanagan.analysis.Regression;
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexMatrix;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.plot.PlotGraph;
+import com.flanagan.analysis.Regression;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexMatrix;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.plot.PlotGraph;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 

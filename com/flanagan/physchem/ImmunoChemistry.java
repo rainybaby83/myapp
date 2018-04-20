@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physchem;
+package com.flanagan.physchem;
 
-import flanagan.analysis.Stat;
+import com.flanagan.analysis.Stat;
 
 public class ImmunoChemistry {
     private static double molecularWeightIgG1 = 146000.0D;

@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.interpolation;
+package com.flanagan.interpolation;
 
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
 
 public class LinearInterpolation {
     private int nPoints = 0;

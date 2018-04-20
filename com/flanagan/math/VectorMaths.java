@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.circuits.Phasor;
+import com.flanagan.circuits.Phasor;
 
 public class VectorMaths {
     Point point0 = null;

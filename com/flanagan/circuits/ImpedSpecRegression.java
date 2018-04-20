@@ -3,18 +3,18 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.analysis.ErrorProp;
-import flanagan.analysis.Regression;
-import flanagan.analysis.RegressionFunction2;
-import flanagan.analysis.Stat;
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexErrorProp;
-import flanagan.io.FileOutput;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.plot.PlotGraph;
+import com.flanagan.analysis.ErrorProp;
+import com.flanagan.analysis.Regression;
+import com.flanagan.analysis.RegressionFunction2;
+import com.flanagan.analysis.Stat;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexErrorProp;
+import com.flanagan.io.FileOutput;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.plot.PlotGraph;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;

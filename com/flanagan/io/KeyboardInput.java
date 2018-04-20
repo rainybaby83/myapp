@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.io;
+package com.flanagan.io;
 
-import flanagan.circuits.Phasor;
-import flanagan.complex.Complex;
+import com.flanagan.circuits.Phasor;
+import com.flanagan.complex.Complex;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.io.FileOutput;
+import com.flanagan.io.FileOutput;
 import java.util.ArrayList;
 
 public class Minimisation {

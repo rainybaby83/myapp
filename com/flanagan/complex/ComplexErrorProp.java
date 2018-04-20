@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.complex;
+package com.flanagan.complex;
 
-import flanagan.analysis.ErrorProp;
-import flanagan.math.Fmath;
-import flanagan.math.PsRandom;
+import com.flanagan.analysis.ErrorProp;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.PsRandom;
 
 public class ComplexErrorProp {
     private ErrorProp eReal = new ErrorProp();

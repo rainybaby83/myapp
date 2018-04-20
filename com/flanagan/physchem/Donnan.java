@@ -3,14 +3,14 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physchem;
+package com.flanagan.physchem;
 
-import flanagan.io.Db;
-import flanagan.io.FileOutput;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.math.Minimisation;
-import flanagan.physprop.IonicRadii;
+import com.flanagan.io.Db;
+import com.flanagan.io.FileOutput;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.Minimisation;
+import com.flanagan.physprop.IonicRadii;
 import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;

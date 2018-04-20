@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.math.ArrayMaths;
+import com.flanagan.math.ArrayMaths;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.control;
+package com.flanagan.control;
 
-import flanagan.complex.Complex;
+import com.flanagan.complex.Complex;
 import java.util.ArrayList;
 import java.util.Vector;
 

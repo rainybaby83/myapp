@@ -1,9 +1,9 @@
 //
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+//// Source code recreated from a .class file by IntelliJ IDEA
+//// (powered by Fernflower decompiler)
+////
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class FrechetProbPlotFunc implements RegressionFunction {
     private int nPoints = 0;

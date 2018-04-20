@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.optics;
+package com.flanagan.optics;
 
-import flanagan.roots.RealRootFunction;
+import com.flanagan.roots.RealRootFunction;
 
 class FunctTEsuper implements RealRootFunction {
     public double substrateRefractiveIndex2 = 0.0D;

@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.interpolation;
+package com.flanagan.interpolation;
 
-import flanagan.math.ArrayMaths;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
+import com.flanagan.math.ArrayMaths;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
 
 public class CubicInterpolation {
     private int nPoints = 0;

@@ -3,13 +3,13 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.optics;
+package com.flanagan.optics;
 
-import flanagan.analysis.Stat;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.plot.PlotGraph;
-import flanagan.roots.RealRoot;
+import com.flanagan.analysis.Stat;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.plot.PlotGraph;
+import com.flanagan.roots.RealRoot;
 import java.util.ArrayList;
 
 public class PlanarWaveguide {

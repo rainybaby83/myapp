@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.complex.Complex;
-import flanagan.io.FileInput;
-import flanagan.io.FileOutput;
-import flanagan.plot.PlotGraph;
+import com.flanagan.complex.Complex;
+import com.flanagan.io.FileInput;
+import com.flanagan.io.FileOutput;
+import com.flanagan.plot.PlotGraph;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;

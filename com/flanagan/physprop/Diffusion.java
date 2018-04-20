@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physprop;
+package com.flanagan.physprop;
 
-import flanagan.analysis.Stat;
+import com.flanagan.analysis.Stat;
 
 public class Diffusion {
     public Diffusion() {

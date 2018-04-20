@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.util;
+package com.flanagan.util;
 
 public class Chars {
     private char enteredChar = ' ';

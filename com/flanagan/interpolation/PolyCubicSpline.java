@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.interpolation;
+package com.flanagan.interpolation;
 
-import flanagan.math.Fmath;
+import com.flanagan.math.Fmath;
 import java.lang.reflect.Array;
 
 public class PolyCubicSpline {

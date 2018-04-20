@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physchem;
+package com.flanagan.physchem;
 
-import flanagan.analysis.RegressionFunction;
-import flanagan.math.Fmath;
+import com.flanagan.analysis.RegressionFunction;
+import com.flanagan.math.Fmath;
 
 class Amersham implements RegressionFunction {
     Amersham() {

@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.analysis.RegressionFunction2;
-import flanagan.complex.Complex;
+import com.flanagan.analysis.RegressionFunction2;
+import com.flanagan.complex.Complex;
 
 public class ImpedSpecRegressionFunction2 implements RegressionFunction2 {
     public int numberOfFrequencies = 0;

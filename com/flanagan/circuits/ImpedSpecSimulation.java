@@ -3,14 +3,14 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.complex.Complex;
-import flanagan.io.Db;
-import flanagan.io.FileOutput;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.plot.PlotGraph;
+import com.flanagan.complex.Complex;
+import com.flanagan.io.Db;
+import com.flanagan.io.FileOutput;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.plot.PlotGraph;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;

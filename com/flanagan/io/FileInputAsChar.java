@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.io;
+package com.flanagan.io;
 
 import java.io.BufferedReader;
 import java.io.File;

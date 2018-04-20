@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.io;
+package com.flanagan.io;
 
-import flanagan.analysis.ErrorProp;
-import flanagan.circuits.Phasor;
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexErrorProp;
+import com.flanagan.analysis.ErrorProp;
+import com.flanagan.circuits.Phasor;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexErrorProp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.math.Fmath;
+import com.flanagan.math.Fmath;
 
 public class ErrorProp {
     private double value = 0.0D;

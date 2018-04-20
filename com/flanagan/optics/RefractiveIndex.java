@@ -3,14 +3,14 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.optics;
+package com.flanagan.optics;
 
-import flanagan.complex.Complex;
-import flanagan.interpolation.BiCubicSpline;
-import flanagan.interpolation.CubicSpline;
-import flanagan.physprop.Saline;
-import flanagan.physprop.Sucrose;
-import flanagan.physprop.Water;
+import com.flanagan.complex.Complex;
+import com.flanagan.interpolation.BiCubicSpline;
+import com.flanagan.interpolation.CubicSpline;
+import com.flanagan.physprop.Saline;
+import com.flanagan.physprop.Sucrose;
+import com.flanagan.physprop.Water;
 
 public class RefractiveIndex {
     private static double imagPlusMinus = -1.0D;

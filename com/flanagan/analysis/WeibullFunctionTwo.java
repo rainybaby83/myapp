@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class WeibullFunctionTwo implements RegressionFunction {
     private int typeFlag = 0;

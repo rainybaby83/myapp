@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexMatrix;
-import flanagan.math.Fmath;
-import flanagan.math.Matrix;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexMatrix;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.Matrix;
 
 public class PhasorMatrix {
     private int nrow = 0;

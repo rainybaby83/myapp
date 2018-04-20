@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 public interface RegressionDerivativeFunction {
     double[] function(double[] var1, double[] var2, int var3, int var4);

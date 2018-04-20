@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexMatrix;
-import flanagan.math.Fmath;
-import flanagan.plot.PlotGraph;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexMatrix;
+import com.flanagan.math.Fmath;
+import com.flanagan.plot.PlotGraph;
 
 public class TransmissionLine {
     protected String title = "Transmission Line";

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physchem;
+package com.flanagan.physchem;
 
-import flanagan.math.MinimisationFunction;
+import com.flanagan.math.MinimisationFunction;
 
 class GCSminim implements MinimisationFunction {
     public double psiDelta = 0.0D;

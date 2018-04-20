@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class ExponentialMultipleFunction implements RegressionFunction {
     private int nExps = 0;

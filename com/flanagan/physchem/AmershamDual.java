@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physchem;
+package com.flanagan.physchem;
 
-import flanagan.analysis.RegressionFunction3;
-import flanagan.math.Fmath;
+import com.flanagan.analysis.RegressionFunction3;
+import com.flanagan.math.Fmath;
 
 class AmershamDual implements RegressionFunction3 {
     private double[][] xErrors = (double[][])null;

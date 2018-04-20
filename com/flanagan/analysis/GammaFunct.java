@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.roots.RealRootFunction;
+import com.flanagan.roots.RealRootFunction;
 
 class GammaFunct implements RealRootFunction {
     public double mu = 0.0D;

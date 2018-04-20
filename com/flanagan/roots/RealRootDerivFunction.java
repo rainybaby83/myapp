@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.roots;
+package com.flanagan.roots;
 
 public interface RealRootDerivFunction {
     double[] function(double var1);

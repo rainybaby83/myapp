@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexPoly;
-import flanagan.io.FileOutput;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexPoly;
+import com.flanagan.io.FileOutput;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

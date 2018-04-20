@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.integration;
+package com.flanagan.integration;
 
-import flanagan.interpolation.CubicSpline;
-import flanagan.math.ArrayMaths;
-import flanagan.math.DeepCopy;
-import flanagan.plot.PlotGraph;
+import com.flanagan.interpolation.CubicSpline;
+import com.flanagan.math.ArrayMaths;
+import com.flanagan.math.DeepCopy;
+import com.flanagan.plot.PlotGraph;
 import java.util.ArrayList;
 
 public class RungeKutta {

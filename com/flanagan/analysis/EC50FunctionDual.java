@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class EC50FunctionDual implements RegressionFunction3 {
     private double[][] xErrors = (double[][])null;

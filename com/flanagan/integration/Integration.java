@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.integration;
+package com.flanagan.integration;
 
-import flanagan.math.Fmath;
+import com.flanagan.math.Fmath;
 import java.util.ArrayList;
 
 public class Integration {

@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physprop;
+package com.flanagan.physprop;
 
 public class Pva {
     public Pva() {

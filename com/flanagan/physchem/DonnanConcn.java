@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physchem;
+package com.flanagan.physchem;
 
-import flanagan.math.Fmath;
-import flanagan.math.Matrix;
-import flanagan.math.MinimisationFunction;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.Matrix;
+import com.flanagan.math.MinimisationFunction;
 
 class DonnanConcn implements MinimisationFunction {
     public int numOfIons = 0;

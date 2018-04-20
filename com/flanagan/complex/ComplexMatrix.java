@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.complex;
+package com.flanagan.complex;
 
-import flanagan.math.Fmath;
-import flanagan.math.Matrix;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.Matrix;
 
 public class ComplexMatrix {
     private int nrow = 0;

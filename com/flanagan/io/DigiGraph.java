@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.io;
+package com.flanagan.io;
 
-import flanagan.interpolation.CubicSpline;
-import flanagan.math.Fmath;
-import flanagan.plot.PlotGraph;
+import com.flanagan.interpolation.CubicSpline;
+import com.flanagan.math.Fmath;
+import com.flanagan.plot.PlotGraph;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;

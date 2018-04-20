@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.math.ArrayMaths;
-import flanagan.math.MaximizationFunction;
+import com.flanagan.math.ArrayMaths;
+import com.flanagan.math.MaximizationFunction;
 
 class BoxCoxFunction implements MaximizationFunction {
     public double[] shiftedData = null;

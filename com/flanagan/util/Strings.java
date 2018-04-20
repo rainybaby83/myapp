@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.util;
+package com.flanagan.util;
 
-import flanagan.io.PrintToScreen;
-import flanagan.math.Fmath;
+import com.flanagan.io.PrintToScreen;
+import com.flanagan.math.Fmath;
 import java.util.ArrayList;
 
 public class Strings {

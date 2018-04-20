@@ -3,18 +3,18 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.circuits.Phasor;
-import flanagan.complex.Complex;
-import flanagan.integration.Integration;
-import flanagan.interpolation.CubicSpline;
-import flanagan.math.ArrayMaths;
-import flanagan.math.Conv;
-import flanagan.math.Fmath;
-import flanagan.math.PsRandom;
-import flanagan.plot.PlotGraph;
-import flanagan.roots.RealRoot;
+import com.flanagan.circuits.Phasor;
+import com.flanagan.complex.Complex;
+import com.flanagan.integration.Integration;
+import com.flanagan.interpolation.CubicSpline;
+import com.flanagan.math.ArrayMaths;
+import com.flanagan.math.Conv;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.PsRandom;
+import com.flanagan.plot.PlotGraph;
+import com.flanagan.roots.RealRoot;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

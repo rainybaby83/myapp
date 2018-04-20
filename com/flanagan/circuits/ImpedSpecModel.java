@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.complex.Complex;
+import com.flanagan.complex.Complex;
 
 public interface ImpedSpecModel {
     Complex modelImpedance(double[] var1, double var2);

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.integration.IntegralFunction;
+import com.flanagan.integration.IntegralFunction;
 
 class CrigFunct implements IntegralFunction {
     private double a = 0.0D;

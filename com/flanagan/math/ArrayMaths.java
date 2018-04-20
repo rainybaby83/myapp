@@ -3,16 +3,16 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.analysis.Stat;
-import flanagan.circuits.Phasor;
-import flanagan.circuits.PhasorMatrix;
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexMatrix;
-import flanagan.io.PrintToScreen;
-import flanagan.plot.PlotGraph;
-import flanagan.util.Strings;
+import com.flanagan.analysis.Stat;
+import com.flanagan.circuits.Phasor;
+import com.flanagan.circuits.PhasorMatrix;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexMatrix;
+import com.flanagan.io.PrintToScreen;
+import com.flanagan.plot.PlotGraph;
+import com.flanagan.util.Strings;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;

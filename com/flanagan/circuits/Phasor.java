@@ -3,11 +3,11 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.complex.Complex;
-import flanagan.math.Fmath;
-import flanagan.math.VectorMaths;
+import com.flanagan.complex.Complex;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.VectorMaths;
 import java.io.IOException;
 
 public class Phasor {

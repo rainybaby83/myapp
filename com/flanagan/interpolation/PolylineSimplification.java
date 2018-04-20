@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.interpolation;
+package com.flanagan.interpolation;
 
-import flanagan.math.Fmath;
-import flanagan.math.Point;
-import flanagan.math.VectorMaths;
-import flanagan.plot.PlotGraph;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.Point;
+import com.flanagan.math.VectorMaths;
+import com.flanagan.plot.PlotGraph;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 

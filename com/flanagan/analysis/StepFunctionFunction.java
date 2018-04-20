@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class StepFunctionFunction implements RegressionFunction {
     private boolean scaleOption = true;

@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physchem;
+package com.flanagan.physchem;
 
-import flanagan.integration.IntegralFunction;
+import com.flanagan.integration.IntegralFunction;
 
 class FunctionPatX implements IntegralFunction {
     public int numOfIons = 0;

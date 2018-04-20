@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class GumbelMinProbPlotFunc implements RegressionFunction {
     private int nPoints = 0;

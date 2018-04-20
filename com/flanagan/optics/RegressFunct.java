@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.optics;
+package com.flanagan.optics;
 
-import flanagan.analysis.RegressionFunction;
-import flanagan.complex.Complex;
+import com.flanagan.analysis.RegressionFunction;
+import com.flanagan.complex.Complex;
 
 class RegressFunct implements RegressionFunction {
     public int numberOfLayers = 0;

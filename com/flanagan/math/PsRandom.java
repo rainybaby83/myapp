@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.analysis.Stat;
-import flanagan.roots.RealRoot;
+import com.flanagan.analysis.Stat;
+import com.flanagan.roots.RealRoot;
 import java.io.Serializable;
 import java.util.Random;
 

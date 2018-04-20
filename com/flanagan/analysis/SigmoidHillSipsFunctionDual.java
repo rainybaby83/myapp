@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class SigmoidHillSipsFunctionDual implements RegressionFunction3 {
     private boolean scaleOption = true;

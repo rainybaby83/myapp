@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.control;
+package com.flanagan.control;
 
 public class DelayLine extends BlackBox {
     public DelayLine(double var1, int var3) {

@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
 public class TwoWireLine extends TransmissionLine {
     private double wireRadius = -1.0D;

@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
 public class ParallelPlateLine extends TransmissionLine {
     private double plateWidth = -1.0D;

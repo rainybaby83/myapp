@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
-import flanagan.math.Fmath;
-import flanagan.math.MinimizationFunction;
+import com.flanagan.math.Fmath;
+import com.flanagan.math.MinimizationFunction;
 
 class LogNormalThreeParProbPlotFunc implements MinimizationFunction {
     private double[] dataArray = null;

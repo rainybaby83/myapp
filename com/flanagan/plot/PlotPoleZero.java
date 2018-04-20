@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.plot;
+package com.flanagan.plot;
 
-import flanagan.complex.Complex;
-import flanagan.complex.ComplexPoly;
-import flanagan.io.FileOutput;
-import flanagan.math.Fmath;
+import com.flanagan.complex.Complex;
+import com.flanagan.complex.ComplexPoly;
+import com.flanagan.io.FileOutput;
+import com.flanagan.math.Fmath;
 
 public class PlotPoleZero {
     private ComplexPoly numerPoly = null;

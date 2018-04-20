@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.analysis;
+package com.flanagan.analysis;
 
 class MultipleCummulativeGaussianFunction implements RegressionFunction {
     public int nGaussians = 1;

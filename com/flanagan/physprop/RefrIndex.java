@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.physprop;
+package com.flanagan.physprop;
 
-import flanagan.complex.Complex;
-import flanagan.optics.RefractiveIndex;
+import com.flanagan.complex.Complex;
+import com.flanagan.optics.RefractiveIndex;
 
 public class RefrIndex {
     public RefrIndex() {

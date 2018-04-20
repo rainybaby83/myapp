@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.complex;
+package com.flanagan.complex;
 
-import flanagan.math.Fmath;
+import com.flanagan.math.Fmath;
 import java.io.IOException;
 
 public class Complex {

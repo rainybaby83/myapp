@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.math;
+package com.flanagan.math;
 
-import flanagan.interpolation.BiCubicSplineFirstDerivative;
-import flanagan.interpolation.CubicSpline;
+import com.flanagan.interpolation.BiCubicSplineFirstDerivative;
+import com.flanagan.interpolation.CubicSpline;
 import java.util.ArrayList;
 
 public class Gradient {

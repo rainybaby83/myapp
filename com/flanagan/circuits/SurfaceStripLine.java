@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package flanagan.circuits;
+package com.flanagan.circuits;
 
-import flanagan.complex.Complex;
-import flanagan.math.Fmath;
+import com.flanagan.complex.Complex;
+import com.flanagan.math.Fmath;
 
 public class SurfaceStripLine extends TransmissionLine {
     private double trackWidth = -1.0D;
