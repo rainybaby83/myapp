@@ -23,10 +23,10 @@ public class ImmunoAssayExampleOne{
         String title = "ImmunoAssay Example One";
 
         // Analyte concentrations
-        double[] analyteConcentrations = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 10};
+        double[] analyteConcentrations = {0.0, 6.5, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 10};
 
         // assay responses
-        double[] assayResponses = {0.0, 0.05, 0.1, 0.6, 1.0, 1.5, 2.0, 2.5, 3.0, 3.4, 3.5, 3.7, 3.9, 3.94, 3.95};
+        double[] assayResponses = {0.0, 3.94,0.05, 0.1, 0.6, 1.0, 1.5, 2.0, 2.5, 3.0, 3.4, 3.5, 3.7, 3.9,  3.95};
 
         // Create an instance of ImmunoAssay
         ImmunoAssay assay = new ImmunoAssay(title);
@@ -39,8 +39,8 @@ public class ImmunoAssayExampleOne{
 
         // Fit assay data to a five parameter logistic function
         assay.fiveParameterLogisticFit();
-        assay.fourParameterLogisticFit();
-        assay.bestPolynomialFit();
+//        assay.fourParameterLogisticFit();
+//        assay.bestPolynomialFit();
 
         // Print an analysis of the fit to a test file named ImmunoAssayOneOutput.txt
 //        assay.print("ImmunoAssayOneOutput.txt");

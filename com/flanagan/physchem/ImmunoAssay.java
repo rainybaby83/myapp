@@ -471,10 +471,10 @@ public class ImmunoAssay extends Regression {
         this.methodIndices[14] = 14;
     }
 
-    public void enterAnalyteConcns(double[] var1) {
+    public void enterAnalyteConcns(double[] concentration) {
         this.setDataOneDone = false;
-        this.nAnalyteConcns = var1.length;
-        this.analyteConcns = Conv.copy(var1);
+        this.nAnalyteConcns = concentration.length;
+        this.analyteConcns = Conv.copy(concentration);
         this.analyteConcnFlag = 0;
         this.analyteEntered = true;
     }
@@ -497,10 +497,10 @@ public class ImmunoAssay extends Regression {
         this.analyteEntered = true;
     }
 
-    public void enterResponses(double[] var1) {
+    public void enterResponses(double[] value) {
         this.setDataOneDone = false;
-        this.nResponses = var1.length;
-        this.responses = Conv.copy(var1);
+        this.nResponses = value.length;
+        this.responses = Conv.copy(value);
         this.responsesFlag = 0;
         this.responsesEntered = true;
     }
@@ -1308,12 +1308,12 @@ public class ImmunoAssay extends Regression {
     }
 
     public void selectEquation() {
-        ArrayList var1 = this.chooseEquation(0);
-        int var2 = (Integer)var1.get(0);
-        int var3 = (Integer)var1.get(1);
-        double var4 = (Double)var1.get(2);
-        double var6 = (Double)var1.get(3);
-        switch(var2) {
+        ArrayList arrayList = this.chooseEquation(0);
+        int selectCase = (Integer)arrayList.get(0);
+        int var3 = (Integer)arrayList.get(1);
+        double var4 = (Double)arrayList.get(2);
+        double var6 = (Double)arrayList.get(3);
+        switch(selectCase) {
             case 1:
                 this.fiveParameterLogisticFit();
                 break;
@@ -1359,53 +1359,57 @@ public class ImmunoAssay extends Regression {
 
     }
 
-    private ArrayList<Object> chooseEquation(int var1) {
-        ArrayList var2 = new ArrayList();
+    private ArrayList<Object> chooseEquation(int chooseInt) {
+        ArrayList arrayList = new ArrayList();
         String var3 = null;
-        String[] var4 = null;
+        String[] text = null;
         String[] var5 = null;
-        switch(var1) {
+        switch(chooseInt) {
             case 0:
                 var3 = "Choose a fitting equation";
-                var4 = new String[15];
+                text = new String[15];
                 break;
             case 1:
                 var3 = "Choose the first equation of the comparison";
-                var4 = new String[13];
+                text = new String[13];
                 break;
             case 2:
                 var3 = "Choose the second equation of the comparison";
-                var4 = new String[13];
+                text = new String[13];
+                break;
+            default:
+
         }
 
-        var4[0] = "1.  Five paramater logistic equation";
-        var4[1] = "2.  Five paramater logistic equation (top & bottom fixed)";
-        var4[2] = "3.  Four paramater logistic equation";
-        var4[3] = "4.  Four paramater logistic equation (top & bottom fixed)";
-        var4[4] = "5.  Best fit polynomial";
-        var4[5] = "6.  Polynomial of user supplied degree";
-        var4[6] = "7.  Non-integer polynomial";
-        var4[7] = "8.  Sigmoid threshold function";
-        var4[8] = "9.  Sips sigmoid function";
-        var4[9] = "10.  Shifted rectangular hyperbola";
-        var4[10] = "11.  Rectangular hyperbola";
-        var4[11] = "12.  Amersham mass action model";
+        assert text != null;
+        text[0] = "1.  Five paramater logistic equation";
+        text[1] = "2.  Five paramater logistic equation (top & bottom fixed)";
+        text[2] = "3.  Four paramater logistic equation";
+        text[3] = "4.  Four paramater logistic equation (top & bottom fixed)";
+        text[4] = "5.  Best fit polynomial";
+        text[5] = "6.  Polynomial of user supplied degree";
+        text[6] = "7.  Non-integer polynomial";
+        text[7] = "8.  Sigmoid threshold function";
+        text[8] = "9.  Sips sigmoid function";
+        text[9] = "10.  Shifted rectangular hyperbola";
+        text[10] = "11.  Rectangular hyperbola";
+        text[11] = "12.  Amersham mass action model";
         String[] var6;
-        if (var1 == 0) {
-            var4[12] = "13.  Cubic spline";
-            var4[13] = "14.  Linear interpolation\n\n";
-            var4[14] = "Click on the appropriate button below";
+        if (chooseInt == 0) {
+            text[12] = "13.  Cubic spline";
+            text[13] = "14.  Linear interpolation\n\n";
+            text[14] = "Click on the appropriate button below";
             var6 = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"};
             var5 = var6;
         } else {
-            var4[12] = "\nClick on the appropriate button below";
+            text[12] = "\nClick on the appropriate button below";
             var6 = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
             var5 = var6;
         }
 
         byte var13 = 0;
-        int var7 = 1 + JOptionPane.showOptionDialog((Component)null, var4, var3, 1, 3, (Icon)null, var5, var5[var13]);
-        var2.add(new Integer(var7));
+        int var7 = 1 + JOptionPane.showOptionDialog((Component)null, text, var3, 1, 3, (Icon)null, var5, var5[var13]);
+        arrayList.add(new Integer(var7));
         int var8 = 0;
         if (var7 == 6) {
             var8 = Db.readInt("enter polynomial degree");
@@ -1415,7 +1419,7 @@ public class ImmunoAssay extends Regression {
             var8 = Db.readInt("enter non-integer polynomial number of terms");
         }
 
-        var2.add(new Integer(var8));
+        arrayList.add(new Integer(var8));
         double var9 = 0.0D;
         double var11 = 0.0D;
         if (var7 == 2) {
@@ -1428,9 +1432,9 @@ public class ImmunoAssay extends Regression {
             var11 = Db.readDouble("Enter four parameter logistic fixed top value");
         }
 
-        var2.add(new Double(var9));
-        var2.add(new Double(var11));
-        return var2;
+        arrayList.add(new Double(var9));
+        arrayList.add(new Double(var11));
+        return arrayList;
     }
 
     private double[] log10(double[] var1) {
@@ -1468,26 +1472,26 @@ public class ImmunoAssay extends Regression {
         return var3;
     }
 
-    private double[] antiLog10(double[] var1) {
-        int var2 = var1.length;
-        double[] var3 = new double[var2];
+    private double[] antiLog10(double[] data) {
+        int length = data.length;
+        double[] result = new double[length];
 
-        for(int var4 = 0; var4 < var2; ++var4) {
-            var3[var4] = Math.pow(10.0D, var1[var4]);
+        for(int i = 0; i < length; ++i) {
+            result[i] = Math.pow(10.0D, data[i]);
         }
 
-        return var3;
+        return result;
     }
 
-    private double[] antiLoge(double[] var1) {
-        int var2 = var1.length;
-        double[] var3 = new double[var2];
+    private double[] antiLoge(double[] data) {
+        int length = data.length;
+        double[] result = new double[length];
 
-        for(int var4 = 0; var4 < var2; ++var4) {
-            var3[var4] = Math.exp(var1[var4]);
+        for(int i = 0; i < length; ++i) {
+            result[i] = Math.exp(data[i]);
         }
 
-        return var3;
+        return result;
     }
 
     public void setData() {
@@ -2251,46 +2255,46 @@ public class ImmunoAssay extends Regression {
             this.errorp = new CubicSpline(var27, var31);
             this.propagatedErrors = new String[this.nAnalyteConcns];
             double var34 = 0.0D;
-            ArrayList var35 = new ArrayList();
+            ArrayList arrayList = new ArrayList();
 
-            int var36;
-            for(var36 = 0; var36 < this.nAnalyteConcns; ++var36) {
+            int i;
+            for(i = 0; i < this.nAnalyteConcns; ++i) {
                 boolean var37 = false;
                 if (this.curveDirection) {
-                    if (this.responses[var36] < this.interpResponseStart || this.responses[var36] > this.interpResponseEnd) {
+                    if (this.responses[i] < this.interpResponseStart || this.responses[i] > this.interpResponseEnd) {
                         var37 = true;
                     }
-                } else if (this.responses[var36] > this.interpResponseStart || this.responses[var36] < this.interpResponseEnd) {
+                } else if (this.responses[i] > this.interpResponseStart || this.responses[i] < this.interpResponseEnd) {
                     var37 = true;
                 }
 
                 if (var37) {
-                    this.propagatedErrors[var36] = "**";
+                    this.propagatedErrors[i] = "**";
                 } else {
-                    var35.add(new Double(this.responses[var36]));
-                    this.getSampleConcn(this.responses[var36]);
+                    arrayList.add(new Double(this.responses[i]));
+                    this.getSampleConcn(this.responses[i]);
                     var34 = this.getSampleConcnError();
-                    var35.add(new Double(var34));
+                    arrayList.add(new Double(var34));
                     var34 = Fmath.truncate(var34, super.prec);
-                    this.propagatedErrors[var36] = (new Double(var34)).toString();
+                    this.propagatedErrors[i] = (new Double(var34)).toString();
                 }
             }
 
-            var36 = var35.size() / 2;
-            double[] var39 = new double[var36];
-            var20 = new double[var36];
+            i = arrayList.size() / 2;
+            double[] var39 = new double[i];
+            var20 = new double[i];
 
-            for(var21 = 0; var21 < var36; ++var21) {
-                var39[var21] = (Double)var35.get(2 * var21);
-                var20[var21] = (Double)var35.get(2 * var21 + 1);
+            for(var21 = 0; var21 < i; ++var21) {
+                var39[var21] = (Double)arrayList.get(2 * var21);
+                var20[var21] = (Double)arrayList.get(2 * var21 + 1);
             }
 
             CubicSpline var42 = new CubicSpline(var39, var20);
             var41 = new double[1001];
             double[] var43 = new double[1001];
             var41[0] = var39[0];
-            var41[1000] = var39[var36 - 1];
-            var23 = (var39[var36 - 1] - var39[0]) / 1000.0D;
+            var41[1000] = var39[i - 1];
+            var23 = (var39[i - 1] - var39[0]) / 1000.0D;
 
             int var26;
             for(var26 = 1; var26 < 1000; ++var26) {
@@ -2324,13 +2328,13 @@ public class ImmunoAssay extends Regression {
 
         if (var5) {
             if (this.ambigCheck) {
-                System.out.println("The sample response, " + var1 + ", is outside the useable part of the standard curve:");
+//                System.out.println("The sample response, " + var1 + ", is outside the useable part of the standard curve:");
             } else {
-                System.out.println("The sample response, " + var1 + ", is outside the limits of the standard curve:");
+//                System.out.println("The sample response, " + var1 + ", is outside the limits of the standard curve:");
             }
 
-            System.out.println(this.interpResponseStart + " to " + this.interpResponseEnd);
-            System.out.println("NaN returned");
+//            System.out.println(this.interpResponseStart + " to " + this.interpResponseEnd);
+//            System.out.println("NaN returned");
             return var3;
         } else {
             if (this.methodUsed == 14) {
@@ -2420,6 +2424,7 @@ public class ImmunoAssay extends Regression {
         return this.nTurningPoints;
     }
 
+    @Override
     public double getSumOfSquares() {
         return super.sumOfSquaresError;
     }

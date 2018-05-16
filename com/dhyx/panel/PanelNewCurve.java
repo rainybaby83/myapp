@@ -408,17 +408,7 @@ public class PanelNewCurve extends JPanel {
 
     private void click_btnFit() {
 
-        /*
-            获取被选中的行数
-            校验是否满足拟合数量要求
-            数据按浓度排序，写入数组
-            校验浓度为0的数据的个数，最多只有1个
-            数组的浓度、反应值，写入免疫类
-            弹出新窗口，传入免疫类，代码转至新窗口
-         */
-
-//        获取被选中的行数
-//        校验是否满足拟合数量要求
+        //获取被选中的行数，校验是否满足拟合数量要求
         int[] nowRows = tblConcentration.getSelectedRows();
         int minCount = 6;
         if (nowRows.length < minCount) {
@@ -426,12 +416,32 @@ public class PanelNewCurve extends JPanel {
                     + String.valueOf(minCount - nowRows.length) + "个。", "缺少数据", JOptionPane.ERROR_MESSAGE);
         } else {
             //数据按浓度排序，写入数组
-            TreeMap<Double,Double> fitData = new TreeMap<>();
             DefaultTableModel dm = (DefaultTableModel) tblConcentration.getModel();
+            int index1 = dm.findColumn("浓度值");
+            int index2 = dm.findColumn("反应值");
+            double[] key = new double[nowRows.length];
+            double[] value = new double[nowRows.length];
+            int count0=0;
             for(int i =0;i<nowRows.length;i++) {
+                key[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index1).toString());
+                if (key[i] == 0) {
+                    count0++;
+                }
+                value[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index2).toString());
+            }
 
+            // 校验浓度为0的个数，最多只有1个
+            if (count0 > 1) {
+                JOptionPane.showMessageDialog(null, "浓度值为0的数据最多只能有1个，当前有"
+                        + count0 + "个，请检查。", "数据错误", JOptionPane.ERROR_MESSAGE);
+            } else {
+                //将数组的浓度、反应值，写入免疫类
+                assay.enterAnalyteConcns(key);
+                assay.enterResponses(value);
+                assay.selectEquation();
 
             }
+
 
 
 
