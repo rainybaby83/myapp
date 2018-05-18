@@ -2750,9 +2750,9 @@ public class Regression {
         return var1;
     }
 
-    protected void jointZeroCheck(double[][] var1, double[] var2) {
+    protected void jointZeroCheck(double[][] var1, double[] yErrors) {
         int var3 = var1[0].length;
-        int var4 = var2.length;
+        int var4 = yErrors.length;
         int var5 = var1.length;
         boolean var6 = false;
         if (var4 != var3) {
@@ -2760,7 +2760,7 @@ public class Regression {
         } else {
             for(int var7 = 0; var7 < var3; ++var7) {
                 int var9 = 0;
-                if (var2[var7] == 0.0D) {
+                if (yErrors[var7] == 0.0D) {
                     ++var9;
                 }
 
@@ -5272,13 +5272,13 @@ public class Regression {
     }
 
     public void removeConstraints() {
-        int var1;
-        int var2;
+        int length;
+        int i;
         if (!this.penalties.isEmpty()) {
-            var1 = this.penalties.size();
+            length = this.penalties.size();
 
-            for(var2 = var1 - 1; var2 >= 0; --var2) {
-                this.penalties.remove(var2);
+            for(i = length - 1; i >= 0; --i) {
+                this.penalties.remove(i);
             }
         }
 
@@ -5286,10 +5286,10 @@ public class Regression {
         this.nConstraints = 0;
         this.constrainedSingle.clear();
         if (!this.sumPenalties.isEmpty()) {
-            var1 = this.sumPenalties.size();
+            length = this.sumPenalties.size();
 
-            for(var2 = var1 - 1; var2 >= 0; --var2) {
-                this.sumPenalties.remove(var2);
+            for(i = length - 1; i >= 0; --i) {
+                this.sumPenalties.remove(i);
             }
         }
 

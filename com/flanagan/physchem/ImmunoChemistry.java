@@ -44,59 +44,59 @@ public class ImmunoChemistry {
         return 7.567646819769641E24D * var8 * var10 * (var0 + var2) * (var4 + var6) * 0.001D;
     }
 
-    public static double molecularRadius(double var0, double var2) {
-        double var4 = var0 / 6.0221419947E23D;
-        double var6 = var4 * 0.001D * var2;
+    public static double molecularRadius(double molWeight, double specVol) {
+        double var4 = molWeight / 6.0221419947E23D;
+        double var6 = var4 * 0.001D * specVol;
         return Math.pow(var6 * 3.0D / 12.566370614359172D, 0.3333333333333333D);
     }
 
-    public static double molecularRadius(double var0) {
-        return molecularRadius(var0, 7.4E-4D);
+    public static double molecularRadius(double molWeight) {
+        return molecularRadius(molWeight, 7.4E-4D);
     }
 
-    public static double effectiveRadius(double var0, double var2, double var4) {
-        double var6 = var4 - -273.15D;
-        double var8 = 18.84955592153876D * var2 * var0;
+    public static double effectiveRadius(double diffusionCoefficient, double viscosity, double temperature) {
+        double var6 = temperature - -273.15D;
+        double var8 = 18.84955592153876D * viscosity * diffusionCoefficient;
         return 1.380650324E-23D * var6 / var8;
     }
 
-    public static double surfaceNumberConcn(double var0) {
-        double var2 = 2.0D * var0 * Math.sqrt(3.0D);
+    public static double surfaceNumberConcn(double effectiveRadius) {
+        double var2 = 2.0D * effectiveRadius * Math.sqrt(3.0D);
         double var4 = 1.0D / var2;
         return var4;
     }
 
-    public static double surfaceNumberConcn(double var0, double var2) {
-        double var4 = var0 / 6.0221419947E23D;
-        double var6 = var4 * 0.001D * var2;
+    public static double surfaceNumberConcn(double molWeight, double specVolume) {
+        double var4 = molWeight / 6.0221419947E23D;
+        double var6 = var4 * 0.001D * specVolume;
         double var8 = Math.pow(var6 * 3.0D / 12.566370614359172D, 0.3333333333333333D);
         double var10 = 2.0D * var8 * Math.sqrt(3.0D);
         double var12 = 1.0D / var10;
         return var12;
     }
 
-    public static double surfaceMolarConcn(double var0) {
-        double var2 = surfaceNumberConcn(var0);
+    public static double surfaceMolarConcn(double effectiveRadius) {
+        double var2 = surfaceNumberConcn(effectiveRadius);
         return var2 / 6.0221419947E23D;
     }
 
-    public static double surfaceMolarConcn(double var0, double var2) {
-        double var4 = surfaceNumberConcn(var0, var2);
+    public static double surfaceMolarConcn(double molWeight, double specVolume) {
+        double var4 = surfaceNumberConcn(molWeight, specVolume);
         return var4 / 6.0221419947E23D;
     }
 
-    public static double convertSurfaceToVolumeConcn(double var0, double var2, double var4) {
-        return var0 * var2 * 0.001D / var4;
+    public static double convertSurfaceToVolumeConcn(double surfaceConcn, double area, double volume) {
+        return surfaceConcn * area * 0.001D / volume;
     }
 
-    public static double equivalentVolumeConcn(double var0, double var2, double var4) {
-        double var6 = surfaceMolarConcn(var0);
-        return var6 * var2 * 0.001D / var4;
+    public static double equivalentVolumeConcn(double effectiveRadius, double area, double volume) {
+        double var6 = surfaceMolarConcn(effectiveRadius);
+        return var6 * area * 0.001D / volume;
     }
 
-    public static double equivalentVolumeConcn(double var0, double var2, double var4, double var6) {
-        double var8 = surfaceMolarConcn(var0, var6);
-        return var8 * var2 * 0.001D / var4;
+    public static double equivalentVolumeConcn(double molWeight, double area, double volume, double specVolume) {
+        double var8 = surfaceMolarConcn(molWeight, specVolume);
+        return var8 * area * 0.001D / volume;
     }
 
     public static double getMolWeightIgG1() {

@@ -180,10 +180,10 @@ public class Plot extends Canvas implements Serializable {
         this.nmPoints = 0;
         boolean var2 = false;
 
-        int var3;
-        for(var3 = 0; var3 < 2 * this.nCurves; ++var3) {
+        int i;
+        for(i = 0; i < 2 * this.nCurves; ++i) {
             int var13;
-            if ((var13 = var1[var3].length) > this.nmPoints) {
+            if ((var13 = var1[i].length) > this.nmPoints) {
                 this.nmPoints = var13;
             }
         }
@@ -198,33 +198,33 @@ public class Plot extends Canvas implements Serializable {
         boolean var6 = true;
 
         int var15;
-        for(int var7 = 0; var7 < this.nCurves; ++var7) {
-            var3 = 2 * var7;
+        for(int j = 0; j < this.nCurves; ++j) {
+            i = 2 * j;
             var6 = true;
-            var15 = var1[var3].length;
-            int var16 = var1[var3 + 1].length;
+            var15 = var1[i].length;
+            int var16 = var1[i + 1].length;
             if (var15 != var16) {
                 throw new IllegalArgumentException("an x and y array length differ");
             }
 
-            this.nPoints[var7] = var15;
+            this.nPoints[j] = var15;
         }
 
-        var3 = 0;
+        i = 0;
         boolean var17 = true;
 
-        int var8;
-        for(var8 = 0; var8 < this.nCurves; ++var8) {
+        int k;
+        for(k = 0; k < this.nCurves; ++k) {
             var6 = true;
-            var15 = this.nPoints[var8];
+            var15 = this.nPoints[k];
 
             while(var6) {
                 if (var15 < 0) {
-                    throw new IllegalArgumentException("curve array index  " + var3 + ": blank array");
+                    throw new IllegalArgumentException("curve array index  " + i + ": blank array");
                 }
 
-                if (var1[var3][var15 - 1] != var1[var3][var15 - 1]) {
-                    if (var1[var3 + 1][var15 - 1] != var1[var3 + 1][var15 - 1]) {
+                if (var1[i][var15 - 1] != var1[i][var15 - 1]) {
+                    if (var1[i + 1][var15 - 1] != var1[i + 1][var15 - 1]) {
                         --var15;
                         var17 = false;
                     } else {
@@ -235,70 +235,70 @@ public class Plot extends Canvas implements Serializable {
                 }
             }
 
-            this.nPoints[var8] = var15;
-            var3 += 2;
+            this.nPoints[k] = var15;
+            i += 2;
         }
 
-        var3 = 0;
+        i = 0;
 
-        int var10;
-        for(var8 = 0; var8 < this.nCurves; ++var8) {
-            double[][] var9 = new double[2][this.nPoints[var8]];
+        int m;
+        for(k = 0; k < this.nCurves; ++k) {
+            double[][] var9 = new double[2][this.nPoints[k]];
 
-            for(var10 = 0; var10 < this.nPoints[var8]; ++var10) {
-                var9[0][var10] = var1[var3][var10];
-                var9[1][var10] = var1[var3 + 1][var10];
+            for(m = 0; m < this.nPoints[k]; ++m) {
+                var9[0][m] = var1[i][m];
+                var9[1][m] = var1[i + 1][m];
             }
 
             var9 = doubleSelectionSort(var9);
 
-            for(var10 = 0; var10 < this.nPoints[var8]; ++var10) {
-                var1[var3][var10] = var9[0][var10];
-                var1[var3 + 1][var10] = var9[1][var10];
+            for(m = 0; m < this.nPoints[k]; ++m) {
+                var1[i][m] = var9[0][m];
+                var1[i + 1][m] = var9[1][m];
             }
 
-            var3 += 2;
+            i += 2;
         }
 
-        var3 = 0;
-        var8 = 1;
+        i = 0;
+        k = 1;
 
         for(int var18 = 0; var18 < this.nCurves; ++var18) {
-            var10 = 1;
+            m = 1;
 
             int var11;
             for(var11 = 1; var11 < this.nPoints[var18]; ++var11) {
-                if (var1[var3][var11] < var1[var3][var11 - 1]) {
-                    ++var10;
+                if (var1[i][var11] < var1[i][var11 - 1]) {
+                    ++m;
                 }
             }
 
-            if (var10 == this.nPoints[var18]) {
+            if (m == this.nPoints[var18]) {
                 double[] var19 = new double[this.nPoints[var18]];
 
                 int var12;
                 for(var12 = 0; var12 < this.nPoints[var18]; ++var12) {
-                    var19[var12] = var1[var3][var12];
+                    var19[var12] = var1[i][var12];
                 }
 
                 for(var12 = 0; var12 < this.nPoints[var18]; ++var12) {
-                    var1[var3][var12] = var19[this.nPoints[var18] - var12 - 1];
+                    var1[i][var12] = var19[this.nPoints[var18] - var12 - 1];
                 }
 
                 for(var12 = 0; var12 < this.nPoints[var18]; ++var12) {
-                    var19[var12] = var1[var3 + 1][var12];
+                    var19[var12] = var1[i + 1][var12];
                 }
 
                 for(var12 = 0; var12 < this.nPoints[var18]; ++var12) {
-                    var1[var3 + 1][var12] = var19[this.nPoints[var18] - var12 - 1];
+                    var1[i + 1][var12] = var19[this.nPoints[var18] - var12 - 1];
                 }
             }
 
             for(var11 = 0; var11 < this.nPoints[var18]; ++var11) {
-                this.data[var3][var11] = var1[var3][var11];
-                this.data[var3 + 1][var11] = var1[var3 + 1][var11];
-                this.copy[var3][var11] = var1[var3][var11];
-                this.copy[var3 + 1][var11] = var1[var3 + 1][var11];
+                this.data[i][var11] = var1[i][var11];
+                this.data[i + 1][var11] = var1[i + 1][var11];
+                this.copy[i][var11] = var1[i][var11];
+                this.copy[i + 1][var11] = var1[i + 1][var11];
             }
 
             this.lineOpt[var18] = 1;
@@ -311,11 +311,11 @@ public class Plot extends Canvas implements Serializable {
             this.minMaxOpt[var18] = true;
             this.pointSize[var18] = 6;
             this.errorBar[var18] = false;
-            this.pointOpt[var18] = var8;
-            var3 += 2;
-            ++var8;
-            if (var8 > this.npTypes) {
-                var8 = 1;
+            this.pointOpt[var18] = k;
+            i += 2;
+            ++k;
+            if (k > this.npTypes) {
+                k = 1;
             }
         }
 

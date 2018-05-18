@@ -21,8 +21,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 
 public class PanelNewCurve extends JPanel {
@@ -274,6 +272,18 @@ public class PanelNewCurve extends JPanel {
             public void editingCanceled(ChangeEvent e) {
             }
         });
+
+
+        //点击表头全选的单击事件
+        tblConcentration.getTableHeader().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int columnIndex = tblConcentration.getTableHeader().columnAtPoint(e.getPoint());
+                if (columnIndex == 0) {
+                    selectAll(tblConcentration);
+                }
+            }
+        });
     }   // END : private void initTableAddListener()
 
 
@@ -406,8 +416,8 @@ public class PanelNewCurve extends JPanel {
     }
 
 
+    //点击查看拟合按钮
     private void click_btnFit() {
-
         //获取被选中的行数，校验是否满足拟合数量要求
         int[] nowRows = tblConcentration.getSelectedRows();
         int minCount = 6;
@@ -419,15 +429,15 @@ public class PanelNewCurve extends JPanel {
             DefaultTableModel dm = (DefaultTableModel) tblConcentration.getModel();
             int index1 = dm.findColumn("浓度值");
             int index2 = dm.findColumn("反应值");
-            double[] key = new double[nowRows.length];
-            double[] value = new double[nowRows.length];
-            int count0=0;
+            double[] concentrations = new double[nowRows.length];
+            double[] values = new double[nowRows.length];
+            int count0 = 0;
             for(int i =0;i<nowRows.length;i++) {
-                key[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index1).toString());
-                if (key[i] == 0) {
+                concentrations[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index1).toString());
+                if (concentrations[i] == 0) {
                     count0++;
                 }
-                value[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index2).toString());
+                values[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index2).toString());
             }
 
             // 校验浓度为0的个数，最多只有1个
@@ -436,10 +446,11 @@ public class PanelNewCurve extends JPanel {
                         + count0 + "个，请检查。", "数据错误", JOptionPane.ERROR_MESSAGE);
             } else {
                 //将数组的浓度、反应值，写入免疫类
-                assay.enterAnalyteConcns(key);
-                assay.enterResponses(value);
-                assay.selectEquation();
+                assay.enterAnalyteConcns(concentrations);
+                assay.enterResponses(values);
+//                assay.selectEquation();
 
+                assay.fiveParameterLogisticFit();
             }
 
 
@@ -457,6 +468,17 @@ public class PanelNewCurve extends JPanel {
 
     }
 
+
+    //表格全选，并打钩
+    private void selectAll(MyTable myTable) {
+        int rowCount = myTable.getRowCount();
+        if (rowCount > 0) {
+            myTable.setRowSelectionInterval(0, rowCount - 1);
+            for (int i = 0; i < myTable.getRowCount(); i++) {
+                myTable.setValueAt(true, i, 0);
+            }
+        }
+    }
 
 
     // 用户查看所有拟合后，选定一个拟合，然后新面板调用本面板的receiveFitData()，接收数据。
