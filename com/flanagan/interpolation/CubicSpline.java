@@ -24,7 +24,7 @@ public class CubicSpline {
     private double ypn = 0.0D / 0.0;
     private boolean derivCalculated = false;
     private boolean checkPoints = false;
-    private static boolean supress = false;
+    private static boolean suppress = false;
     private static boolean averageIdenticalAbscissae = false;
     private static double potentialRoundingError = 5.0E-15D;
     private static boolean roundingCheck = true;
@@ -139,7 +139,7 @@ public class CubicSpline {
                     int[] var8;
                     int var9;
                     if (this.y[var3] == this.y[var5]) {
-                        if (!supress) {
+                        if (!suppress) {
                             System.out.print("CubicSpline: Two identical points, " + this.x[var3] + ", " + this.y[var3]);
                             System.out.println(", in data array at indices " + this.newAndOldIndices[var3] + " and " + this.newAndOldIndices[var5] + ", latter point removed");
                         }
@@ -165,7 +165,7 @@ public class CubicSpline {
                         this.y = Conv.copy(var7);
                         this.newAndOldIndices = Conv.copy(var8);
                     } else if (averageIdenticalAbscissae) {
-                        if (!supress) {
+                        if (!suppress) {
                             System.out.print("CubicSpline: Two identical points on the absicca (x-axis) with different ordinate (y-axis) values, " + this.x[var3] + ": " + this.y[var3] + ", " + this.y[var5]);
                             System.out.println(", average of the ordinates taken");
                         }
@@ -193,7 +193,7 @@ public class CubicSpline {
                         this.newAndOldIndices = Conv.copy(var8);
                     } else {
                         double var10 = this.range * 5.0E-4D;
-                        if (!supress) {
+                        if (!suppress) {
                             System.out.print("CubicSpline: Two identical points on the absicca (x-axis) with different ordinate (y-axis) values, " + this.x[var3] + ": " + this.y[var3] + ", " + this.y[var5]);
                         }
 
@@ -276,7 +276,7 @@ public class CubicSpline {
                             this.stay(var3, var5, var10);
                         }
 
-                        if (!supress) {
+                        if (!suppress) {
                             System.out.println(", the two abscissae have been separated by a distance " + var10);
                         }
 
@@ -324,13 +324,10 @@ public class CubicSpline {
         return true;
     }
 
-    public static void supress() {
-        supress = true;
+    public static void setSuppress(boolean b) {
+        suppress = b;
     }
 
-    public static void unsupress() {
-        supress = false;
-    }
 
     public static CubicSpline zero(int var0) {
         if (var0 < 3) {

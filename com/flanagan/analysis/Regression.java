@@ -5155,7 +5155,7 @@ public class Regression {
         return var6;
     }
 
-    public void addConstraint(int var1, int var2, double var3) {
+    public void addConstraint(int pIndex, int direction, double boundary) {
         this.penalty = true;
         if (this.penalties.isEmpty()) {
             this.penalties.add(new Integer(this.constraintMethod));
@@ -5169,28 +5169,28 @@ public class Regression {
             this.penalties.set(1, new Integer(var5));
         }
 
-        this.penalties.add(new Integer(var1));
-        this.constrainedSingle.add(new Integer(var1));
-        this.penalties.add(new Integer(var2));
+        this.penalties.add(new Integer(pIndex));
+        this.constrainedSingle.add(new Integer(pIndex));
+        this.penalties.add(new Integer(direction));
         String var6 = "";
-        switch(var2) {
+        switch(direction) {
             case -1:
-                var6 = "must be >= " + var3;
+                var6 = "must be >= " + boundary;
                 break;
             case 0:
-                var6 = "must = " + var3;
+                var6 = "must = " + boundary;
                 break;
             case 1:
-                var6 = "must be <= " + var3;
+                var6 = "must be <= " + boundary;
                 break;
             default:
-                throw new IllegalArgumentException("Constraint direction " + var2 + " not recognised");
+                throw new IllegalArgumentException("Constraint direction " + direction + " not recognised");
         }
 
         this.constrainedSingle.add(var6);
-        this.penalties.add(new Double(var3));
-        if (var1 > this.maxConstraintIndex) {
-            this.maxConstraintIndex = var1;
+        this.penalties.add(new Double(boundary));
+        if (pIndex > this.maxConstraintIndex) {
+            this.maxConstraintIndex = pIndex;
         }
 
     }
@@ -14319,14 +14319,14 @@ public class Regression {
     }
 
     public void fiveParameterLogistic() {
-        this.fitfiveParameterLogistic(0);
+        this.fitfiveParameterLogistic(false);
     }
 
     public void fiveParameterLogisticPlot() {
-        this.fitfiveParameterLogistic(1);
+        this.fitfiveParameterLogistic(true);
     }
 
-    protected void fitfiveParameterLogistic(int var1) {
+    protected void fitfiveParameterLogistic(boolean isPlot) {
         if (this.multipleY) {
             throw new IllegalArgumentException("This method cannot handle multiply dimensioned y arrays");
         } else {
@@ -14386,7 +14386,7 @@ public class Regression {
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
                     this.nelderMead(var11, (Object)null, var6, var7, this.fTol, this.nMax);
-                    if (var1 == 1) {
+                    if (isPlot == true) {
                         if (!this.suppressPrint) {
                             this.print();
                         }
@@ -14402,7 +14402,7 @@ public class Regression {
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = false;
                     this.nelderMead(var12, (Object)null, var6, var7, this.fTol, this.nMax);
-                    if (var1 == 1) {
+                    if (isPlot == true) {
                         if (!this.suppressPrint) {
                             this.print();
                         }
@@ -14418,17 +14418,17 @@ public class Regression {
         }
     }
 
-    public void fiveParameterLogistic(double var1, double var3) {
+    public void fiveParameterLogistic(double bottom, double top) {
         this.lastMethod = 42;
-        this.fitFiveParameterLogistic(var1, var3, 0);
+        this.fitFiveParameterLogistic(bottom, top, false);
     }
 
-    public void fiveParameterLogisticPlot(double var1, double var3) {
+    public void fiveParameterLogisticPlot(double bottom, double top) {
         this.lastMethod = 42;
-        this.fitFiveParameterLogistic(var1, var3, 1);
+        this.fitFiveParameterLogistic(bottom, top, true);
     }
 
-    protected void fitFiveParameterLogistic(double var1, double var3, int var5) {
+    protected void fitFiveParameterLogistic(double bottom, double top, boolean isPlot) {
         if (this.multipleY) {
             throw new IllegalArgumentException("This method cannot handle multiply dimensioned y arrays");
         } else {
@@ -14473,15 +14473,15 @@ public class Regression {
                 int var13;
                 if (this.xErrorsEntered) {
                     Logistic5FixedFunctionDual var14 = new Logistic5FixedFunctionDual();
-                    var14.setBottom(var1);
-                    var14.setTop(var3);
+                    var14.setBottom(bottom);
+                    var14.setTop(top);
                     var14.setXerrors(this.xErrors);
                     var14.setYerrors(this.yErrors);
                     this.simplexFlag = 3;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
                     this.nelderMead(var14, (Object)null, var9, var10, this.fTol, this.nMax);
-                    if (var5 == 1) {
+                    if (isPlot == true) {
                         if (!this.suppressPrint) {
                             this.print();
                         }
@@ -14493,13 +14493,13 @@ public class Regression {
                     }
                 } else {
                     Logistic5FixedFunction var15 = new Logistic5FixedFunction();
-                    var15.setBottom(var1);
-                    var15.setTop(var3);
+                    var15.setBottom(bottom);
+                    var15.setTop(top);
                     this.simplexFlag = 1;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = false;
                     this.nelderMead(var15, (Object)null, var9, var10, this.fTol, this.nMax);
-                    if (var5 == 1) {
+                    if (isPlot == true) {
                         if (!this.suppressPrint) {
                             this.print();
                         }

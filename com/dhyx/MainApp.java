@@ -20,6 +20,8 @@ public class MainApp extends JFrame{
     private JLabel lblTitle = new JLabel();
     public static MyDatabase myDB;
 
+
+
     private MainApp() {
         super();
         initApp();
@@ -40,7 +42,6 @@ public class MainApp extends JFrame{
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
         }
 //        UIManager.put("ScrollPane.foreground",Color.red);
-
 
         //显示框架，获取4个边的厚度，然后隐藏框架
         this.setVisible(true);
@@ -78,6 +79,8 @@ public class MainApp extends JFrame{
         panelMain.setLayout(null);
         panelMain.setBounds(panelMenu.getWidth(), 0, 1100, this.getHeight());
 
+
+
     }
 
     private void addComponent(){
@@ -85,7 +88,6 @@ public class MainApp extends JFrame{
         this.add(panelMain);
         panelMain.add(lblTitle);
         panelMain.add(new PanelWelcome());
-
     }
 
     private void addListener(){

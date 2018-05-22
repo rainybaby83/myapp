@@ -1019,7 +1019,7 @@ public class ImmunoAssay extends Regression {
                 this.plot();
             }
 
-            this.curveCheck(this.methodIndices[this.methodUsed]);
+//            this.curveCheck(this.methodIndices[this.methodUsed]);
         }
     }
 
@@ -1086,7 +1086,7 @@ public class ImmunoAssay extends Regression {
                 this.plot();
             }
 
-            this.curveCheck(this.methodIndices[this.methodUsed]);
+//            this.curveCheck(this.methodIndices[this.methodUsed]);
         }
     }
 
@@ -1453,7 +1453,7 @@ public class ImmunoAssay extends Regression {
 
         for(int i = 0; i < length; ++i) {
             if (data[i] == 0.0D) {
-                result[i] = 0.0D / 0.0;
+                result[i] = 0.0D;
                 --this.nPlot;
             } else {
                 result[i] = Math.log10(data[i]);
@@ -1537,111 +1537,116 @@ public class ImmunoAssay extends Regression {
             ArrayMaths arrayMaths = new ArrayMaths(this.analyteConcns);
             arrayMaths = arrayMaths.sort();
             int[] index = arrayMaths.originalIndices();
-            double[] var3 = new double[this.nAnalyteConcns];
-            var3 = Conv.copy(this.analyteConcns);
+            double[] tmp = new double[this.nAnalyteConcns];
+            tmp = Conv.copy(this.analyteConcns);
 
             int i;
             for(i = 0; i < this.nAnalyteConcns; ++i) {
-                this.analyteConcns[i] = var3[index[i]];
+                this.analyteConcns[i] = tmp[index[i]];
             }
 
-            var3 = Conv.copy(this.responses);
+            tmp = Conv.copy(this.responses);
 
             for(i = 0; i < this.nAnalyteConcns; ++i) {
-                this.responses[i] = var3[index[i]];
+                this.responses[i] = tmp[index[i]];
             }
 
             if (super.yErrorsEntered) {
-                var3 = Conv.copy(super.yErrors);
+                tmp = Conv.copy(super.yErrors);
 
                 for(i = 0; i < this.nAnalyteConcns; ++i) {
-                    super.yErrors[i] = var3[index[i]];
+                    super.yErrors[i] = tmp[index[i]];
                 }
             }
 
             if (super.xErrorsEntered) {
-                var3 = Conv.copy(super.xErrors[0]);
+                tmp = Conv.copy(super.xErrors[0]);
 
                 for(i = 0; i < this.nAnalyteConcns; ++i) {
-                    super.xErrors[0][i] = var3[index[i]];
+                    super.xErrors[0][i] = tmp[index[i]];
                 }
             }
 
             if (this.analyteConcnFlag == 1) {
-                var3 = Conv.copy(this.log10AnalyteConcns);
+                tmp = Conv.copy(this.log10AnalyteConcns);
 
                 for(i = 0; i < this.nAnalyteConcns; ++i) {
-                    this.log10AnalyteConcns[i] = var3[index[i]];
+                    this.log10AnalyteConcns[i] = tmp[index[i]];
                 }
             }
 
             if (this.analyteConcnFlag == 2) {
-                var3 = Conv.copy(this.logeAnalyteConcns);
+                tmp = Conv.copy(this.logeAnalyteConcns);
 
                 for(i = 0; i < this.nAnalyteConcns; ++i) {
-                    this.logeAnalyteConcns[i] = var3[index[i]];
+                    this.logeAnalyteConcns[i] = tmp[index[i]];
                 }
             }
 
             i = this.nAnalyteConcns;
 
-            int i1;
+            int j;
             int count;
-            for(i1 = 0; i1 < this.nAnalyteConcns - 1; ++i1) {
+            for(j = 0; j < this.nAnalyteConcns - 1; ++j) {
                 count = 1;
-                int var7 = 0;
-                new ArrayList();
+                int repeatIndex = 0;
+//                new ArrayList();
 
-                for(int i2 = i1 + 1; i2 < this.nAnalyteConcns; ++i2) {
-                    if (this.analyteConcns[i1] == this.analyteConcns[i2]) {
+                //从第1个浓度开始，判断后边的浓度是否跟它相同
+                for(int jNext = j + 1; jNext < this.nAnalyteConcns; ++jNext) {
+                    if (this.analyteConcns[j] == this.analyteConcns[jNext]) {
                         ++count;
-                        var7 = i1;
+                        repeatIndex = j;
                     }
                 }
 
                 if (count > 1) {
-                    double var18 = 0.0D;
+                    double sumValues = 0.0D;
                     double var11 = 0.0D;
                     double var13 = 0.0D;
 
-                    int i2;
-                    for(i2 = var7; i2 < var7 + count; ++i2) {
-                        var18 += this.responses[i2];
+                    //处理重复浓度数据，循环起点=重复浓度的index，循环结束=index+重复数量，求该浓度对应的反应值平均值
+                    int k;
+                    for(k = repeatIndex; k < repeatIndex + count; ++k) {
+
+                        sumValues += this.responses[k];
                         if (super.yErrorsEntered) {
-                            var11 += super.yErrors[i1] * super.yErrors[i1];
+                            var11 += super.yErrors[j] * super.yErrors[j];
                         }
 
                         if (super.xErrorsEntered) {
-                            var13 += super.xErrors[0][i1] * super.xErrors[0][i1];
+                            var13 += super.xErrors[0][j] * super.xErrors[0][j];
                         }
                     }
 
-                    this.responses[var7] = var18 / (double)count;
+                    this.responses[repeatIndex] = sumValues / (double)count;
                     if (super.yErrorsEntered) {
-                        super.yErrors[var7] = Math.sqrt(var11) / (double)count;
+                        super.yErrors[repeatIndex] = Math.sqrt(var11) / (double)count;
                     }
 
                     if (super.xErrorsEntered) {
-                        super.xErrors[0][var7] = Math.sqrt(var13) / (double)count;
+                        super.xErrors[0][repeatIndex] = Math.sqrt(var13) / (double)count;
                     }
 
-                    for(i2 = var7 + 1; i2 < this.nAnalyteConcns - count + 1; ++i2) {
-                        this.analyteConcns[i2] = this.analyteConcns[i2 + count - 1];
-                        this.responses[i2] = this.responses[i2 + count - 1];
+
+                    //删除重复浓度的数据，并将排序过的数据向前移
+                    for(k = repeatIndex + 1; k < this.nAnalyteConcns - count + 1; ++k) {
+                        this.analyteConcns[k] = this.analyteConcns[k + count - 1];
+                        this.responses[k] = this.responses[k + count - 1];
                         if (super.yErrorsEntered) {
-                            super.yErrors[i2] = super.yErrors[i2 + count - 1];
+                            super.yErrors[k] = super.yErrors[k + count - 1];
                         }
 
                         if (super.xErrorsEntered) {
-                            super.xErrors[0][i2] = super.xErrors[0][i2 + count - 1];
+                            super.xErrors[0][k] = super.xErrors[0][k + count - 1];
                         }
 
                         if (this.analyteConcnFlag == 1) {
-                            this.log10AnalyteConcns[i2] = this.log10AnalyteConcns[i2 + count - 1];
+                            this.log10AnalyteConcns[k] = this.log10AnalyteConcns[k + count - 1];
                         }
 
                         if (this.analyteConcnFlag == 2) {
-                            this.logeAnalyteConcns[i2] = this.logeAnalyteConcns[i2 + count - 1];
+                            this.logeAnalyteConcns[k] = this.logeAnalyteConcns[k + count - 1];
                         }
                     }
 
@@ -1715,23 +1720,23 @@ public class ImmunoAssay extends Regression {
                     break;
             }
 
-            i1 = 0;
+            count = 0;
             this.responsesPlot = true;
 
-            for(count = 0; count < this.nAnalyteConcns; ++count) {
-                if (this.responses[count] <= 0.0D) {
-                    ++i1;
+            for(int ii  = 0; ii < this.nAnalyteConcns; ii++) {
+                if (this.responses[ii] <= 0.0D) {
+                    count++;
                 }
             }
 
-            if (i1 == 1) {
+            if (count == 1) {
                 if (this.responses[0] <= 0.0D) {
                     --this.nPlot;
                     this.responsesPlot = true;
                 } else {
                     this.responsesPlot = false;
                 }
-            } else if (i1 > 1) {
+            } else if (count > 1) {
                 this.responsesPlot = false;
             }
 
@@ -1752,7 +1757,7 @@ public class ImmunoAssay extends Regression {
                 }
             }
 
-            CubicSpline.supress();
+            CubicSpline.setSuppress(true);
             double[][] var19 = new double[1][this.nResponses];
             var19[0] = this.analyteConcns;
             if (super.xErrorsEntered) {
@@ -1812,13 +1817,19 @@ public class ImmunoAssay extends Regression {
         }
     }
 
-    private void suppressPlot() {
-        this.suppressPlot = true;
+//    private void suppressPlot() {
+//        this.suppressPlot = true;
+//    }
+//
+//    private void unsuppressPlot() {
+//        this.suppressPlot = false;
+//    }
+
+    public void setPlotStatus(boolean status) {
+        this.suppressPlot = status;
     }
 
-    private void unsuppressPlot() {
-        this.suppressPlot = false;
-    }
+
 
     private int plot() {
         byte var1 = 1;
@@ -1834,8 +1845,8 @@ public class ImmunoAssay extends Regression {
                 var2[2] = this.interpolationConcns;
                 var2[3] = this.calculatedResponses;
                 plotGraph = new PlotGraph(var2);
-                plotGraph.setXaxisLegend("Analyte concentration (a)");
-                plotGraph.setYaxisLegend("Assay response (r) ");
+                plotGraph.setXaxisLegend("浓度");
+                plotGraph.setYaxisLegend("反应值");
                 break;
             case 1:
                 var4 = this.nAnalyteConcns;
@@ -2333,7 +2344,7 @@ public class ImmunoAssay extends Regression {
 
     public double getSampleConcn(double values) {
         this.sampleResponse = values;
-        double result = 0.0D / 0.0;
+        double result = 0.0D;
         boolean var5 = false;
         if (this.curveDirection) {
             if (values < this.interpResponseStart || values > this.interpResponseEnd) {
@@ -2360,7 +2371,7 @@ public class ImmunoAssay extends Regression {
             }
 
             this.sampleConcn = result;
-            this.sampleError = 0.0D / 0.0;
+            this.sampleError = 0.0D;
             if (this.sampleErrorFlag) {
                 double var6 = this.errorp.interpolate(values);
                 double var8 = values - var6;
@@ -3310,15 +3321,15 @@ public class ImmunoAssay extends Regression {
 
     public static ArrayList<Object> comparisonTest(int[] var0, double var1, int var3, int var4, double var5, int var7, int var8, double var9) {
         ArrayList arrayList = new ArrayList();
-        double var12 = 0.0D / 0.0;
-        double var14 = 0.0D / 0.0;
-        double var16 = 0.0D / 0.0;
+        double var12 = 0.0D;
+        double var14 = 0.0D;
+        double var16 = 0.0D;
         double[] var18 = new double[]{var1, var5};
         int[] var19 = new int[]{var3, var7};
         int[] var20 = new int[]{var4, var8};
         int[] var21 = new int[]{var4 - var3, var8 - var7};
         double[] var22 = new double[2];
-        double var23 = 0.0D / 0.0;
+        double var23 = 0.0D;
         boolean var25 = false;
         boolean var26 = false;
         byte var27 = -1;

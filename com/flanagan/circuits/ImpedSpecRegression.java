@@ -1424,8 +1424,8 @@ public class ImpedSpecRegression extends Regression {
             int[] var2 = null;
             double[] var3 = null;
             int var4;
-            int var6;
-            int var7;
+            int pIndex;
+            int direction;
             if (this.constraintsAdded) {
                 var11 = new int[this.numberOfAddedConstraints];
                 var2 = new int[this.numberOfAddedConstraints];
@@ -1433,16 +1433,16 @@ public class ImpedSpecRegression extends Regression {
                 var4 = 0;
 
                 for(int var5 = 0; var5 < this.numberOfAddedConstraints; ++var5) {
-                    var6 = (Integer)this.constraints.get(var4);
-                    var11[var5] = var6;
+                    pIndex = (Integer)this.constraints.get(var4);
+                    var11[var5] = pIndex;
                     ++var4;
-                    var7 = (Integer)this.constraints.get(var4);
-                    var2[var5] = var7;
+                    direction = (Integer)this.constraints.get(var4);
+                    var2[var5] = direction;
                     ++var4;
-                    double var8 = (Double)this.constraints.get(var4);
-                    var3[var5] = var8;
+                    double boundary = (Double)this.constraints.get(var4);
+                    var3[var5] = boundary;
                     ++var4;
-                    this.addConstraint(var6, var7, var8);
+                    this.addConstraint(pIndex, direction, boundary);
                 }
             }
 
@@ -1475,8 +1475,8 @@ public class ImpedSpecRegression extends Regression {
             double[] var13 = this.getCoeff();
             double[] var14 = new double[this.numberOfParameters];
 
-            for(var6 = 0; var6 < this.numberOfParameters; ++var6) {
-                var14[var6] = Math.abs(var13[var6]) * 0.1D;
+            for(pIndex = 0; pIndex < this.numberOfParameters; ++pIndex) {
+                var14[pIndex] = Math.abs(var13[pIndex]) * 0.1D;
             }
 
             this.simplex2(this.regressionFunction, var13, var14, this.tolerance, this.maximumIterations);
@@ -1490,16 +1490,16 @@ public class ImpedSpecRegression extends Regression {
             this.results.add(this.correlationCoefficients);
             double[][] var15 = new double[this.numberOfParameters][2];
             if (this.getGrad() == null) {
-                for(var7 = 0; var7 < this.numberOfParameters; ++var7) {
-                    this.preMinimumGradients[var7] = 0.0D / 0.0;
-                    this.postMinimumGradients[var7] = 0.0D / 0.0;
+                for(direction = 0; direction < this.numberOfParameters; ++direction) {
+                    this.preMinimumGradients[direction] = 0.0D / 0.0;
+                    this.postMinimumGradients[direction] = 0.0D / 0.0;
                 }
             } else {
                 var15 = this.getGrad();
 
-                for(var7 = 0; var7 < this.numberOfParameters; ++var7) {
-                    this.preMinimumGradients[var7] = var15[var7][0];
-                    this.postMinimumGradients[var7] = var15[var7][1];
+                for(direction = 0; direction < this.numberOfParameters; ++direction) {
+                    this.preMinimumGradients[direction] = var15[direction][0];
+                    this.postMinimumGradients[direction] = var15[direction][1];
                 }
             }
 

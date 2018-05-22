@@ -7,11 +7,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +27,7 @@ public class TableMethod {
         int i;
         DefaultTableModel defaultTableModel = null;
         ResultSet rs;
-        Vector<Vector> vector = new Vector<>();
+        Vector<Vector> vectorData = new Vector<>();
         Vector<String> vectorHead = new Vector<>();
         try {
             rs = conn.createStatement().executeQuery(sql);
@@ -42,9 +40,9 @@ public class TableMethod {
                 for (i = 1; i <= count; i++) {
                     vectorRow.add(rs.getString(i));
                 }
-                vector.addElement(vectorRow);
+                vectorData.addElement(vectorRow);
             }
-            defaultTableModel = new DefaultTableModel(vector, vectorHead);
+            defaultTableModel = new DefaultTableModel(vectorData, vectorHead);
             rs.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "数据获取失败，请截图后联系开发人员。\n"

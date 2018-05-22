@@ -11,7 +11,6 @@ import com.flanagan.complex.Complex;
 import com.flanagan.complex.ComplexErrorProp;
 import com.flanagan.complex.ComplexPoly;
 import com.flanagan.io.DialogueBox;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -1875,15 +1874,15 @@ public class Conv {
         return var2;
     }
 
-    public static double[] copy(double[] var0) {
-        if (var0 == null) {
+    public static double[] copy(double[] source) {
+        if (source == null) {
             return null;
         } else {
-            int var1 = var0.length;
-            double[] var2 = new double[var1];
+            int length = source.length;
+            double[] var2 = new double[length];
 
-            for(int var3 = 0; var3 < var1; ++var3) {
-                var2[var3] = var0[var3];
+            for(int i = 0; i < length; ++i) {
+                var2[i] = source[i];
             }
 
             return var2;

@@ -48,12 +48,15 @@ public class MyTable extends JTable{
         });
     }
 
+
     @Override
     public boolean isCellEditable(int row, int column) {
         return false;
     }
 
 
+
+    //初始化表格
     private void initTable(){
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.setSelectionBackground(Const.GREEN_ACTIVE);
@@ -69,6 +72,18 @@ public class MyTable extends JTable{
     }
 
 
+    /**
+     * 设置表头的默认属性
+     */
+    private void initTableHead() {
+        JTableHeader header = this.getTableHeader();
+        header.setUI(new BasicTableHeaderUI());
+        header.setBackground(new Color(200, 200, 200));
+        header.setOpaque(true);
+        header.setReorderingAllowed(false);
+    }
+
+
     private void initOther() {
 
         MyIconButton btnExcel = new MyIconButton(Const.ICON_EXCEL, Const.ICON_EXCEL_ENABLED, Const.ICON_EXCEL_ENABLED);
@@ -80,7 +95,6 @@ public class MyTable extends JTable{
         });
 
         jPopupMenu.add(btnExcel);
-//        jPopupMenu.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Const.GREEN));
         jPopupMenu.setBorder(BorderFactory.createEtchedBorder());
     }
 
@@ -98,16 +112,7 @@ public class MyTable extends JTable{
     }
 
 
-    /**
-     * 设置表头的默认属性
-     */
-    private void initTableHead() {
-        JTableHeader header = this.getTableHeader();
-        header.setUI(new BasicTableHeaderUI());
-        header.setBackground(new Color(200, 200, 200));
-        header.setOpaque(true);
-        header.setReorderingAllowed(false);
-    }
+
 
 
     /**
@@ -124,68 +129,10 @@ public class MyTable extends JTable{
         jScrollPane.getViewport().setOpaque(false);
     }
 
+
     /**
-     * 将当前表格内容导出到excel2003
+     * 将当前表格内容导出到excel
      */
-//    private void exportExcel(){
-//        JFileChooser jFileChooser = new JFileChooser(Const.DESKTOP_DIR);
-//        jFileChooser.setFileSelectionMode(FILES_ONLY);
-//        DateFormatUtils.format(new Date(), "yyyyMMdd-HHmmss");
-//
-//
-//        jFileChooser.setSelectedFile(new File( DateFormatUtils.format(new Date(), "yyyyMMdd-HHmmss") + ".xls"));
-//        int select = jFileChooser.showSaveDialog(getParent().getParent());
-//        if (select == APPROVE_OPTION) {
-//            File file = jFileChooser.getSelectedFile();
-//            try {
-//                OutputStream out = new FileOutputStream(file);
-//                TableModel model = this.getModel();
-//
-//                WritableWorkbook wwb = Workbook.createWorkbook(out);
-//                // 创建字表，并写入数据
-//                WritableSheet ws = wwb.createSheet("Sheet", 0);
-//
-//                // 添加标题
-//                int rowCount = model.getRowCount();
-//                int columnCount = model.getColumnCount();
-//                int row = 0, column = 0;
-//
-//                //添加第1行标题（row=0)
-//                jxl.write.Label[][] label = new jxl.write.Label[rowCount+1][columnCount+1];
-//                label[column][row] = new jxl.write.Label(column, row, "序号");
-//                for (column = 1; column < model.getColumnCount() + 1; column++) {
-//                    //getColumnName的参数，是从0开始
-//                    label[0][column] = new jxl.write.Label(column, 0, model.getColumnName(column - 1));
-//                }   // END : for
-//
-//
-//                // 从上到下按行添加
-//                for (row = 1; row < model.getRowCount() + 1; row++) {
-//                    //第一列label[row][0]，设置为序号，取row的值
-//                    label[row][0] = new jxl.write.Label(0, row, String.valueOf(row));
-//                    for (column = 1; column < model.getColumnCount() + 1; column++) {
-//                        //getValueAt的参数，是从0开始
-//                        label[row][column] = new jxl.write.Label(column, row, model.getValueAt(row -1, column-1).toString());
-//                    }
-//                }
-//
-//                for (row = 0; row < rowCount + 1; row++) {
-//                    for (column = 0; column < columnCount + 1; column++) {
-//                        ws.addCell(label[row][column]);
-//                    }
-//                }
-//                wwb.write();
-//                wwb.close();
-//                out.close();
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(null, "导出失败，错误原因请参考日志文件。");
-//                logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
-//            }
-//        }   // END : if (select == APPROVE_OPTION)
-
-//    }
-
-
     private void exportExcel(){
         JFileChooser jFileChooser = new JFileChooser(Const.DESKTOP_DIR);
         jFileChooser.setFileSelectionMode(FILES_ONLY);

@@ -3,7 +3,6 @@ package com.dhyx.panel;
 import com.dhyx.MainApp;
 import com.dhyx.dbclass.MyDatabase;
 import com.dhyx.myclass.*;
-import com.flanagan.physchem.ImmunoAssay;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -24,6 +23,7 @@ import java.util.Date;
 
 
 public class PanelNewCurve extends JPanel {
+    JDesktopPane jd = new JDesktopPane();
     private Logger logger = LogManager.getLogger();
     private MyDatabase db = MainApp.myDB;
     private PanelQuery panelQuery;
@@ -35,7 +35,6 @@ public class PanelNewCurve extends JPanel {
     private MyTable tblCurve,tblConcentration;
     private MyComboBox lstXType,lstYType ;
     private JLabel[] lRight = new JLabel[6];
-    public ImmunoAssay assay = new ImmunoAssay("123");
 
 
     public PanelNewCurve() {
@@ -445,28 +444,16 @@ public class PanelNewCurve extends JPanel {
                 JOptionPane.showMessageDialog(null, "浓度值为0的数据最多只能有1个，当前有"
                         + count0 + "个，请检查。", "数据错误", JOptionPane.ERROR_MESSAGE);
             } else {
-                //将数组的浓度、反应值，写入免疫类
-                assay.enterAnalyteConcns(concentrations);
-                assay.enterResponses(values);
-//                assay.selectEquation();
-
-                assay.fiveParameterLogisticFit();
+                //弹出窗口
+                PanelFit panelFit = new PanelFit(concentrations,values);
+                panelFit.setVisible(true);
             }
 
 
 
-
-
-
-            // 校验浓度为0的数据的个数，最多只有1个
-
-
         }
-
-
-
-
     }
+
 
 
     //表格全选，并打钩
