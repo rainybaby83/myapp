@@ -163,6 +163,13 @@ public class Const {
     public final static ImageIcon ICON_FIT_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/查看所有拟合-激活.png"));
     public final static ImageIcon ICON_FIT_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/查看所有拟合-禁用.png"));
 
+    public final static ImageIcon ICON_4PL = new ImageIcon(MainApp.class.getResource("/icon/公式四参数.png"));
+    public final static ImageIcon ICON_5PL = new ImageIcon(MainApp.class.getResource("/icon/公式五参数.png"));
+    public final static ImageIcon ICON_LINEAR = new ImageIcon(MainApp.class.getResource("/icon/公式直线.png"));
+
+    public final static ImageIcon ICON_VIEW_IMAGE = new ImageIcon(MainApp.class.getResource("/icon/查看图形.png"));
+    public final static ImageIcon ICON_VIEW_IMAGE_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/查看图形-选中.png"));
+
 
     //调用excel文件里的数据，模拟从设备端采集数据
     private static TestDataClass[] getArrayFromFile() {

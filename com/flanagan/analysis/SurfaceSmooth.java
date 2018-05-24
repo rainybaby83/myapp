@@ -393,7 +393,7 @@ public class SurfaceSmooth {
             }
 
             this.zData = this.transpose(this.zData);
-            System.out.println("zData transposed to match the dimensions of the xData and yData");
+            System.out.println("zData transposed to match the dimensions of the xDatas and yData");
         }
 
         if (!this.arbprec) {

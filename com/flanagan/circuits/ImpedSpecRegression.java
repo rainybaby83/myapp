@@ -1637,6 +1637,7 @@ public class ImpedSpecRegression extends Regression {
         }
     }
 
+
     public double[] getBestEstimates() {
         if (!this.regressionDone) {
             this.regression();

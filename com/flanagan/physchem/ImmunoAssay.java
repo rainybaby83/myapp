@@ -204,8 +204,8 @@ public class ImmunoAssay extends Regression {
         this.responses = Conv.copy(values);
         this.responsesFlag = 0;
         this.responsesEntered = true;
-        super.xErrorsEntered = false;
-        super.yErrorsEntered = false;
+        super.xWeightsEntered = false;
+        super.yWeightsEntered = false;
         super.suppressErrorMessages = true;
         super.trueErrors = false;
         this.methodList();
@@ -244,19 +244,19 @@ public class ImmunoAssay extends Regression {
         this.responsesFlag = 0;
         this.responsesEntered = true;
         this.nWeights = weights.length;
-        super.yErrors = super.checkForZeroWeights(weights);
+        super.yWeight = super.checkForZeroWeights(weights);
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.xErrorsEntered = false;
-        super.yErrorsEntered = true;
+        super.xWeightsEntered = false;
+        super.yWeightsEntered = true;
         super.suppressErrorMessages = true;
         super.trueErrors = false;
         this.methodList();
     }
 
-    public ImmunoAssay(double[] concentrations, double[] values, double[] xErrors, double[] yErrors) {
+    public ImmunoAssay(double[] concentrations, double[] values, double[] xWeights, double[] yWeights) {
         this.methodNames = new String[this.nMethods];
         this.methodIndices = new int[this.nMethods];
         this.methodUsed = 8;
@@ -288,18 +288,18 @@ public class ImmunoAssay extends Regression {
         this.responses = Conv.copy(values);
         this.responsesFlag = 0;
         this.responsesEntered = true;
-        this.nWeights = yErrors.length;
-        super.yErrors = yErrors;
-        double[][] xErrorsArray = new double[1][this.nWeights];
-        xErrorsArray[0] = xErrors;
-        super.xErrors = xErrorsArray;
-        super.jointZeroCheck(xErrorsArray, yErrors);
+        this.nWeights = yWeights.length;
+        super.yWeight = yWeights;
+        double[][] xWeightss = new double[1][this.nWeights];
+        xWeightss[0] = xWeights;
+        super.xWeights = xWeightss;
+        super.jointZeroCheck(xWeightss, yWeights);
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.xErrorsEntered = true;
-        super.yErrorsEntered = true;
+        super.xWeightsEntered = true;
+        super.yWeightsEntered = true;
         super.weightOpt = true;
         super.weightFlag = 1;
         super.suppressErrorMessages = true;
@@ -340,13 +340,13 @@ public class ImmunoAssay extends Regression {
         this.responsesFlag = 0;
         this.responsesEntered = true;
         this.nWeights = weights.length;
-        super.yErrors = super.checkForZeroWeights(weights);
+        super.yWeight = super.checkForZeroWeights(weights);
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.xErrorsEntered = false;
-        super.yErrorsEntered = true;
+        super.xWeightsEntered = false;
+        super.yWeightsEntered = true;
         super.suppressErrorMessages = true;
         super.trueErrors = false;
         this.methodList();
@@ -383,15 +383,15 @@ public class ImmunoAssay extends Regression {
         this.nResponses = values.length;
         this.responses = Conv.copy(values);
         this.responsesFlag = 0;
-        super.xErrorsEntered = false;
-        super.yErrorsEntered = false;
+        super.xWeightsEntered = false;
+        super.yWeightsEntered = false;
         this.responsesEntered = true;
         super.suppressErrorMessages = true;
         super.trueErrors = false;
         this.methodList();
     }
 
-    public ImmunoAssay(double[] concentrations, double[] values, double[] xErrors, double[] yErrors, String title) {
+    public ImmunoAssay(double[] concentrations, double[] values, double[] xErrors, double[] yWeights, String title) {
         this.methodNames = new String[this.nMethods];
         this.methodIndices = new int[this.nMethods];
         this.methodUsed = 8;
@@ -423,14 +423,14 @@ public class ImmunoAssay extends Regression {
         this.responses = Conv.copy(values);
         this.responsesFlag = 0;
         this.responsesEntered = true;
-        this.nWeights = yErrors.length;
-        super.yErrors = yErrors;
-        double[][] var6 = new double[1][this.nWeights];
-        var6[0] = xErrors;
-        super.xErrors = var6;
-        super.jointZeroCheck(var6, yErrors);
-        super.xErrorsEntered = true;
-        super.yErrorsEntered = true;
+        this.nWeights = yWeights.length;
+        super.yWeight = yWeights;
+        double[][] xWeights = new double[1][this.nWeights];
+        xWeights[0] = xErrors;
+        super.xWeights = xWeights;
+        super.jointZeroCheck(xWeights, yWeights);
+        super.xWeightsEntered = true;
+        super.yWeightsEntered = true;
         super.weightOpt = true;
         super.weightFlag = 1;
         super.suppressErrorMessages = true;
@@ -526,8 +526,8 @@ public class ImmunoAssay extends Regression {
     public void enterWeights(double[] weights) {
         this.setDataOneDone = false;
         this.nWeights = weights.length;
-        super.yErrors = super.checkForZeroWeights(weights);
-        super.yErrorsEntered = true;
+        super.yWeight = super.checkForZeroWeights(weights);
+        super.yWeightsEntered = true;
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
@@ -537,110 +537,110 @@ public class ImmunoAssay extends Regression {
     public void enterWeightsAslog10(double[] weights) {
         this.setDataOneDone = false;
         this.nWeights = weights.length;
-        super.yErrors = this.antiLog10(super.checkForZeroWeights(weights));
+        super.yWeight = this.antiLog10(super.checkForZeroWeights(weights));
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.yErrorsEntered = true;
+        super.yWeightsEntered = true;
     }
 
     public void enterWeightsAslogE(double[] weights) {
         this.setDataOneDone = false;
         this.nWeights = weights.length;
-        super.yErrors = this.antiLoge(super.checkForZeroWeights(weights));
+        super.yWeight = this.antiLoge(super.checkForZeroWeights(weights));
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.yErrorsEntered = true;
+        super.yWeightsEntered = true;
     }
 
     public void enterMultiplicativeWeights(double[] weights) {
         this.setDataOneDone = false;
         this.nWeights = weights.length;
-        super.yErrors = Conv.copy(super.checkForZeroWeights(weights));
+        super.yWeight = Conv.copy(super.checkForZeroWeights(weights));
 
         for(int var2 = 0; var2 < this.nWeights; ++var2) {
-            super.yErrors[var2] = 1.0D / Math.abs(super.yErrors[var2]);
+            super.yWeight[var2] = 1.0D / Math.abs(super.yWeight[var2]);
         }
 
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.yErrorsEntered = true;
+        super.yWeightsEntered = true;
     }
 
     public void enterMultiplicativeWeightsAsLog10(double[] weights) {
         this.setDataOneDone = false;
         this.nWeights = weights.length;
-        super.yErrors = this.antiLog10(super.checkForZeroWeights(Conv.copy(weights)));
+        super.yWeight = this.antiLog10(super.checkForZeroWeights(Conv.copy(weights)));
 
         for(int var2 = 0; var2 < this.nWeights; ++var2) {
-            super.yErrors[var2] = 1.0D / Math.abs(super.yErrors[var2]);
+            super.yWeight[var2] = 1.0D / Math.abs(super.yWeight[var2]);
         }
 
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.yErrorsEntered = true;
+        super.yWeightsEntered = true;
     }
 
     public void enterMultiplicativeWeightsAsLogE(double[] weights) {
         this.setDataOneDone = false;
         this.nWeights = weights.length;
-        super.yErrors = this.antiLoge(super.checkForZeroWeights(Conv.copy(weights)));
+        super.yWeight = this.antiLoge(super.checkForZeroWeights(Conv.copy(weights)));
 
         for(int var2 = 0; var2 < this.nWeights; ++var2) {
-            super.yErrors[var2] = 1.0D / Math.abs(super.yErrors[var2]);
+            super.yWeight[var2] = 1.0D / Math.abs(super.yWeight[var2]);
         }
 
         if (super.weightOpt) {
             super.weightFlag = 1;
         }
 
-        super.yErrorsEntered = true;
+        super.yWeightsEntered = true;
     }
 
     public void setWeightsAsResponses() {
-        super.yErrorsEntered = false;
+        super.yWeightsEntered = false;
         this.weightOption = 1;
         if (this.nResponses > 0) {
-            super.yErrors = new double[this.nResponses];
+            super.yWeight = new double[this.nResponses];
 
             for(int i = 0; i < this.nResponses; ++i) {
-                super.yErrors[i] = Math.abs(this.responses[i]);
-                super.yErrorsEntered = true;
+                super.yWeight[i] = Math.abs(this.responses[i]);
+                super.yWeightsEntered = true;
             }
 
-            super.yErrors = super.checkForZeroWeights(super.yErrors);
+            super.yWeight = super.checkForZeroWeights(super.yWeight);
             if (super.weightOpt) {
                 super.weightFlag = 1;
             }
 
-            super.yErrorsEntered = true;
+            super.yWeightsEntered = true;
         }
 
     }
 
     public void setWeightsAsSqrtResponses() {
-        super.yErrorsEntered = false;
+        super.yWeightsEntered = false;
         this.weightOption = 2;
         if (this.nResponses > 0) {
-            super.yErrors = new double[this.nResponses];
+            super.yWeight = new double[this.nResponses];
 
             for(int i = 0; i < this.nResponses; ++i) {
-                super.yErrors[i] = Math.sqrt(Math.abs(this.responses[i]));
+                super.yWeight[i] = Math.sqrt(Math.abs(this.responses[i]));
             }
 
-            super.yErrors = super.checkForZeroWeights(super.yErrors);
+            super.yWeight = super.checkForZeroWeights(super.yWeight);
             if (super.weightOpt) {
                 super.weightFlag = 1;
             }
 
-            super.yErrorsEntered = true;
+            super.yWeightsEntered = true;
         }
 
     }
@@ -696,7 +696,7 @@ public class ImmunoAssay extends Regression {
         this.nResponses = this.nAnalyteConcns;
         this.analyteConcns = new double[this.nAnalyteConcns];
         this.responses = new double[this.nAnalyteConcns];
-        super.yErrors = new double[this.nAnalyteConcns];
+        super.yWeight = new double[this.nAnalyteConcns];
         int count = 0;
         String readText = null;
         String subReadText = null;
@@ -739,8 +739,8 @@ public class ImmunoAssay extends Regression {
                         subReadText = readText.substring(0, pos3).trim();
                     }
 
-                    super.yErrors[i] = Double.parseDouble(subReadText);
-                    if (super.yErrors[i] == 1.0D) {
+                    super.yWeight[i] = Double.parseDouble(subReadText);
+                    if (super.yWeight[i] == 1.0D) {
                         ++count;
                     }
                 }
@@ -752,12 +752,12 @@ public class ImmunoAssay extends Regression {
         this.responsesEntered = true;
         if (count != this.nAnalyteConcns) {
             this.nWeights = this.nAnalyteConcns;
-            super.yErrors = super.checkForZeroWeights(super.yErrors);
+            super.yWeight = super.checkForZeroWeights(super.yWeight);
             if (super.weightOpt) {
                 super.weightFlag = 1;
             }
 
-            super.yErrorsEntered = true;
+            super.yWeightsEntered = true;
         }
 
         this.dataRead = true;
@@ -1265,10 +1265,10 @@ public class ImmunoAssay extends Regression {
             }
 
             double[] var16;
-            if (super.xErrorsEntered) {
+            if (super.xWeightsEntered) {
                 AmershamDual var18 = new AmershamDual();
-                var18.setYerrors(super.yErrors);
-                var18.setXerrors(super.xErrors);
+                var18.setYerrors(super.yWeight);
+                var18.setXerrors(super.xWeights);
                 super.simplex(var18, var2, var3);
                 super.removeConstraints();
 
@@ -1515,7 +1515,7 @@ public class ImmunoAssay extends Regression {
         } else if (this.nAnalyteConcns != this.nResponses) {
             throw new IllegalArgumentException("The number of analyte concentrations entered, " + this.nAnalyteConcns + ", must equal the number of standard curve responses entered, " + this.nResponses);
         } else {
-            if (super.yErrorsEntered) {
+            if (super.yWeightsEntered) {
                 if (this.nAnalyteConcns != this.nWeights) {
                     throw new IllegalArgumentException("The number of analyte concentrations entered, " + this.nAnalyteConcns + ", must equal the number of standard curve weights entered, " + this.nWeights);
                 }
@@ -1523,10 +1523,10 @@ public class ImmunoAssay extends Regression {
                 super.weightOpt = false;
                 super.weightFlag = 0;
                 this.nWeights = this.nResponses;
-                super.yErrors = new double[this.nWeights];
+                super.yWeight = new double[this.nWeights];
 
                 for(int i = 0; i < this.nWeights; ++i) {
-                    super.yErrors[i] = 1.0D;
+                    super.yWeight[i] = 1.0D;
                 }
             }
 
@@ -1551,19 +1551,19 @@ public class ImmunoAssay extends Regression {
                 this.responses[i] = tmp[index[i]];
             }
 
-            if (super.yErrorsEntered) {
-                tmp = Conv.copy(super.yErrors);
+            if (super.yWeightsEntered) {
+                tmp = Conv.copy(super.yWeight);
 
                 for(i = 0; i < this.nAnalyteConcns; ++i) {
-                    super.yErrors[i] = tmp[index[i]];
+                    super.yWeight[i] = tmp[index[i]];
                 }
             }
 
-            if (super.xErrorsEntered) {
-                tmp = Conv.copy(super.xErrors[0]);
+            if (super.xWeightsEntered) {
+                tmp = Conv.copy(super.xWeights[0]);
 
                 for(i = 0; i < this.nAnalyteConcns; ++i) {
-                    super.xErrors[0][i] = tmp[index[i]];
+                    super.xWeights[0][i] = tmp[index[i]];
                 }
             }
 
@@ -1610,22 +1610,22 @@ public class ImmunoAssay extends Regression {
                     for(k = repeatIndex; k < repeatIndex + count; ++k) {
 
                         sumValues += this.responses[k];
-                        if (super.yErrorsEntered) {
-                            var11 += super.yErrors[j] * super.yErrors[j];
+                        if (super.yWeightsEntered) {
+                            var11 += super.yWeight[j] * super.yWeight[j];
                         }
 
-                        if (super.xErrorsEntered) {
-                            var13 += super.xErrors[0][j] * super.xErrors[0][j];
+                        if (super.xWeightsEntered) {
+                            var13 += super.xWeights[0][j] * super.xWeights[0][j];
                         }
                     }
 
                     this.responses[repeatIndex] = sumValues / (double)count;
-                    if (super.yErrorsEntered) {
-                        super.yErrors[repeatIndex] = Math.sqrt(var11) / (double)count;
+                    if (super.yWeightsEntered) {
+                        super.yWeight[repeatIndex] = Math.sqrt(var11) / (double)count;
                     }
 
-                    if (super.xErrorsEntered) {
-                        super.xErrors[0][repeatIndex] = Math.sqrt(var13) / (double)count;
+                    if (super.xWeightsEntered) {
+                        super.xWeights[0][repeatIndex] = Math.sqrt(var13) / (double)count;
                     }
 
 
@@ -1633,12 +1633,12 @@ public class ImmunoAssay extends Regression {
                     for(k = repeatIndex + 1; k < this.nAnalyteConcns - count + 1; ++k) {
                         this.analyteConcns[k] = this.analyteConcns[k + count - 1];
                         this.responses[k] = this.responses[k + count - 1];
-                        if (super.yErrorsEntered) {
-                            super.yErrors[k] = super.yErrors[k + count - 1];
+                        if (super.yWeightsEntered) {
+                            super.yWeight[k] = super.yWeight[k + count - 1];
                         }
 
-                        if (super.xErrorsEntered) {
-                            super.xErrors[0][k] = super.xErrors[0][k + count - 1];
+                        if (super.xWeightsEntered) {
+                            super.xWeights[0][k] = super.xWeights[0][k + count - 1];
                         }
 
                         if (this.analyteConcnFlag == 1) {
@@ -1669,19 +1669,19 @@ public class ImmunoAssay extends Regression {
                     this.responses[count] = var17[count];
                 }
 
-                var17 = super.yErrors;
-                super.yErrors = new double[this.nAnalyteConcns];
+                var17 = super.yWeight;
+                super.yWeight = new double[this.nAnalyteConcns];
 
                 for(count = 0; count < this.nAnalyteConcns; ++count) {
                     this.weight[count] = var17[count];
                 }
 
-                if (super.xErrorsEntered) {
-                    var17 = super.xErrors[0];
-                    super.xErrors = new double[1][this.nAnalyteConcns];
+                if (super.xWeightsEntered) {
+                    var17 = super.xWeights[0];
+                    super.xWeights = new double[1][this.nAnalyteConcns];
 
                     for(count = 0; count < this.nAnalyteConcns; ++count) {
-                        super.xErrors[0][count] = var17[count];
+                        super.xWeights[0][count] = var17[count];
                     }
                 }
 
@@ -1760,10 +1760,10 @@ public class ImmunoAssay extends Regression {
             CubicSpline.setSuppress(true);
             double[][] var19 = new double[1][this.nResponses];
             var19[0] = this.analyteConcns;
-            if (super.xErrorsEntered) {
-                super.setDefaultValues(var19, this.responses, super.xErrors, super.yErrors);
+            if (super.xWeightsEntered) {
+                super.setDefaultValues(var19, this.responses, super.xWeights, super.yWeight);
             } else {
-                super.setDefaultValues(var19, this.responses, super.yErrors);
+                super.setDefaultValues(var19, this.responses, super.yWeight);
             }
 
             this.responsesMax = Fmath.maximum(this.responses);
@@ -1833,18 +1833,18 @@ public class ImmunoAssay extends Regression {
 
     private int plot() {
         byte var1 = 1;
-        double[][] var2 = new double[4][];
+        double[][] data = new double[4][];
         PlotGraph plotGraph = null;
         int var4;
         int var5;
         int i;
         switch(this.plotOptions) {
             case 0:
-                var2[0] = this.analyteConcns;
-                var2[1] = this.responses;
-                var2[2] = this.interpolationConcns;
-                var2[3] = this.calculatedResponses;
-                plotGraph = new PlotGraph(var2);
+                data[0] = this.analyteConcns;
+                data[1] = this.responses;
+                data[2] = this.interpolationConcns;
+                data[3] = this.calculatedResponses;
+                plotGraph = new PlotGraph(data);
                 plotGraph.setXaxisLegend("浓度");
                 plotGraph.setYaxisLegend("反应值");
                 break;
@@ -1856,32 +1856,32 @@ public class ImmunoAssay extends Regression {
                     var5 = this.nInterp - 1;
                 }
 
-                var2[0] = new double[var4];
-                var2[1] = new double[var4];
-                var2[2] = new double[var5];
-                var2[3] = new double[var5];
+                data[0] = new double[var4];
+                data[1] = new double[var4];
+                data[2] = new double[var5];
+                data[3] = new double[var5];
                 if (var4 == this.nAnalyteConcns) {
-                    var2[0] = this.log10AnalyteConcns;
-                    var2[1] = this.responses;
-                    var2[3] = this.calculatedResponses;
-                    var2[2] = new double[this.nInterp];
+                    data[0] = this.log10AnalyteConcns;
+                    data[1] = this.responses;
+                    data[3] = this.calculatedResponses;
+                    data[2] = new double[this.nInterp];
 
                     for(i = 0; i < this.nInterp; ++i) {
-                        var2[2][i] = Math.log10(this.interpolationConcns[i]);
+                        data[2][i] = Math.log10(this.interpolationConcns[i]);
                     }
                 } else {
                     for(i = 1; i < this.nAnalyteConcns; ++i) {
-                        var2[0][i - 1] = this.log10AnalyteConcns[i];
-                        var2[1][i - 1] = this.responses[i];
+                        data[0][i - 1] = this.log10AnalyteConcns[i];
+                        data[1][i - 1] = this.responses[i];
                     }
 
                     for(i = 1; i < this.nInterp; ++i) {
-                        var2[2][i - 1] = Math.log10(this.interpolationConcns[i]);
-                        var2[3][i - 1] = this.calculatedResponses[i];
+                        data[2][i - 1] = Math.log10(this.interpolationConcns[i]);
+                        data[3][i - 1] = this.calculatedResponses[i];
                     }
                 }
 
-                plotGraph = new PlotGraph(var2);
+                plotGraph = new PlotGraph(data);
                 plotGraph.setXaxisLegend("Log10[ Analyte concentration (a) ]");
                 plotGraph.setYaxisLegend("Assay response (r) ");
                 break;
@@ -1893,32 +1893,32 @@ public class ImmunoAssay extends Regression {
                     var5 = this.nInterp - 1;
                 }
 
-                var2[0] = new double[var4];
-                var2[1] = new double[var4];
-                var2[2] = new double[var5];
-                var2[3] = new double[var5];
+                data[0] = new double[var4];
+                data[1] = new double[var4];
+                data[2] = new double[var5];
+                data[3] = new double[var5];
                 if (var4 == this.nAnalyteConcns) {
-                    var2[0] = this.logeAnalyteConcns;
-                    var2[1] = this.responses;
-                    var2[3] = this.calculatedResponses;
-                    var2[2] = new double[this.nInterp];
+                    data[0] = this.logeAnalyteConcns;
+                    data[1] = this.responses;
+                    data[3] = this.calculatedResponses;
+                    data[2] = new double[this.nInterp];
 
                     for(i = 0; i < this.nInterp; ++i) {
-                        var2[2][i] = Math.log(this.interpolationConcns[i]);
+                        data[2][i] = Math.log(this.interpolationConcns[i]);
                     }
                 } else {
                     for(i = 1; i < this.nAnalyteConcns; ++i) {
-                        var2[0][i - 1] = this.logeAnalyteConcns[i];
-                        var2[1][i - 1] = this.responses[i];
+                        data[0][i - 1] = this.logeAnalyteConcns[i];
+                        data[1][i - 1] = this.responses[i];
                     }
 
                     for(i = 1; i < this.nInterp; ++i) {
-                        var2[2][i - 1] = Math.log(this.interpolationConcns[i]);
-                        var2[3][i - 1] = this.calculatedResponses[i];
+                        data[2][i - 1] = Math.log(this.interpolationConcns[i]);
+                        data[3][i - 1] = this.calculatedResponses[i];
                     }
                 }
 
-                plotGraph = new PlotGraph(var2);
+                plotGraph = new PlotGraph(data);
                 plotGraph.setXaxisLegend("Loge[ Analyte concentration (a) ]");
                 plotGraph.setYaxisLegend("Assay response (r) ");
                 break;
@@ -1935,33 +1935,33 @@ public class ImmunoAssay extends Regression {
                     var5 = this.nInterp - 1;
                 }
 
-                var2[0] = new double[var4];
-                var2[1] = new double[var4];
-                var2[2] = new double[var5];
-                var2[3] = new double[var5];
+                data[0] = new double[var4];
+                data[1] = new double[var4];
+                data[2] = new double[var5];
+                data[3] = new double[var5];
                 if (var4 == this.nAnalyteConcns) {
-                    var2[0] = this.log10AnalyteConcns;
-                    var2[1] = this.log10Responses;
-                    var2[2] = new double[this.nInterp];
-                    var2[3] = new double[this.nInterp];
+                    data[0] = this.log10AnalyteConcns;
+                    data[1] = this.log10Responses;
+                    data[2] = new double[this.nInterp];
+                    data[3] = new double[this.nInterp];
 
                     for(i = 0; i < this.nInterp; ++i) {
-                        var2[2][i] = Math.log10(this.interpolationConcns[i]);
-                        var2[3][i] = Math.log10(this.calculatedResponses[i]);
+                        data[2][i] = Math.log10(this.interpolationConcns[i]);
+                        data[3][i] = Math.log10(this.calculatedResponses[i]);
                     }
                 } else {
                     for(i = 1; i < this.nAnalyteConcns; ++i) {
-                        var2[0][i - 1] = this.log10AnalyteConcns[i];
-                        var2[1][i - 1] = this.log10Responses[i];
+                        data[0][i - 1] = this.log10AnalyteConcns[i];
+                        data[1][i - 1] = this.log10Responses[i];
                     }
 
                     for(i = 1; i < this.nInterp; ++i) {
-                        var2[2][i - 1] = Math.log10(this.interpolationConcns[i]);
-                        var2[3][i - 1] = Math.log10(this.calculatedResponses[i]);
+                        data[2][i - 1] = Math.log10(this.interpolationConcns[i]);
+                        data[3][i - 1] = Math.log10(this.calculatedResponses[i]);
                     }
                 }
 
-                plotGraph = new PlotGraph(var2);
+                plotGraph = new PlotGraph(data);
                 plotGraph.setXaxisLegend("Log10[ Analyte concentration (a) ]");
                 plotGraph.setYaxisLegend("Log10[ Assay response (r) ]");
                 break;
@@ -1978,33 +1978,33 @@ public class ImmunoAssay extends Regression {
                     var5 = this.nInterp - 1;
                 }
 
-                var2[0] = new double[var4];
-                var2[1] = new double[var4];
-                var2[2] = new double[var5];
-                var2[3] = new double[var5];
+                data[0] = new double[var4];
+                data[1] = new double[var4];
+                data[2] = new double[var5];
+                data[3] = new double[var5];
                 if (var4 == this.nAnalyteConcns) {
-                    var2[0] = this.logeAnalyteConcns;
-                    var2[1] = this.logeResponses;
-                    var2[2] = new double[this.nInterp];
-                    var2[3] = new double[this.nInterp];
+                    data[0] = this.logeAnalyteConcns;
+                    data[1] = this.logeResponses;
+                    data[2] = new double[this.nInterp];
+                    data[3] = new double[this.nInterp];
 
                     for(i = 0; i < this.nInterp; ++i) {
-                        var2[2][i] = Math.log(this.interpolationConcns[i]);
-                        var2[3][i] = Math.log(this.calculatedResponses[i]);
+                        data[2][i] = Math.log(this.interpolationConcns[i]);
+                        data[3][i] = Math.log(this.calculatedResponses[i]);
                     }
                 } else {
                     for(i = 1; i < this.nAnalyteConcns; ++i) {
-                        var2[0][i - 1] = this.logeAnalyteConcns[i];
-                        var2[1][i - 1] = this.logeResponses[i];
+                        data[0][i - 1] = this.logeAnalyteConcns[i];
+                        data[1][i - 1] = this.logeResponses[i];
                     }
 
                     for(i = 1; i < this.nInterp; ++i) {
-                        var2[2][i - 1] = Math.log(this.interpolationConcns[i]);
-                        var2[3][i - 1] = Math.log(this.calculatedResponses[i]);
+                        data[2][i - 1] = Math.log(this.interpolationConcns[i]);
+                        data[3][i - 1] = Math.log(this.calculatedResponses[i]);
                     }
                 }
 
-                plotGraph = new PlotGraph(var2);
+                plotGraph = new PlotGraph(data);
                 plotGraph.setXaxisLegend("Loge[ Analyte concentration (a) ]");
                 plotGraph.setYaxisLegend("Loge[ Assay response (r) ]");
                 break;
@@ -2197,7 +2197,7 @@ public class ImmunoAssay extends Regression {
             int i4;
             double var23;
             double[] var41;
-            if (!super.yErrorsEntered) {
+            if (!super.yWeightsEntered) {
                 for(i5 = 0; i5 < this.nWorking; ++i5) {
                     var31[i5] = var32;
                 }
@@ -2237,7 +2237,7 @@ public class ImmunoAssay extends Regression {
                 var20 = new double[var19];
 
                 for(i4 = 0; i4 < var19; ++i4) {
-                    var20[i4] = super.yErrors[i4 + var16];
+                    var20[i4] = super.yWeight[i4 + var16];
                 }
 
                 var33 = isMonotonic(var20);
@@ -2262,10 +2262,10 @@ public class ImmunoAssay extends Regression {
                 double var22 = var32 / this.weightsMean;
 
                 for(int var24 = 0; var24 < this.nAnalyteConcns; ++var24) {
-                    var41[var24] = super.yErrors[var24] * var22;
+                    var41[var24] = super.yWeight[var24] * var22;
                 }
 
-                if (super.yErrorsEntered && !var33) {
+                if (super.yWeightsEntered && !var33) {
                     LinearInterpolation var45 = new LinearInterpolation(this.analyteConcns, var41);
 
                     for(var25 = 0; var25 < this.nWorking; ++var25) {
@@ -2745,7 +2745,7 @@ public class ImmunoAssay extends Regression {
 
         int var6;
         for(var6 = 0; var6 < this.nAnalyteConcns; ++var6) {
-            fileOutput.printtab(Fmath.truncate(super.xData[0][var5], super.prec), super.field);
+            fileOutput.printtab(Fmath.truncate(super.xDatas[0][var5], super.prec), super.field);
             fileOutput.printtab(Fmath.truncate(super.yData[var5], super.prec), super.field);
             fileOutput.printtab(Fmath.truncate(super.yCalc[var5], super.prec), super.field);
             fileOutput.printtab(Fmath.truncate(super.weight[var5], super.prec), super.field);

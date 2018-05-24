@@ -25,12 +25,12 @@ public class Regression {
     protected int nYarrays = 1;
     protected int nParam = 0;
     protected int degreesOfFreedom = 0;
-    protected double[][] xData = (double[][])null;
-    protected double[][] xErrors = (double[][])null;
-    protected boolean xErrorsEntered = false;
+    protected double[][] xDatas = (double[][])null;
+    protected double[][] xWeights = (double[][])null;
+    protected boolean xWeightsEntered = false;
     protected double[] yData = null;
-    protected double[] yErrors = null;
-    protected boolean yErrorsEntered = false;
+    protected double[] yWeight = null;
+    protected boolean yWeightsEntered = false;
     protected boolean dualErrorsRequired = false;
     protected boolean trueErrors = true;
     protected double[] weight = null;
@@ -47,22 +47,22 @@ public class Regression {
     protected double[] pValues = null;
     protected double fixedInterceptL = 0.0D;
     protected double fixedInterceptP = 0.0D;
-    protected double yMean = 0.0D / 0.0;
-    protected double yWeightedMean = 0.0D / 0.0;
-    protected double chiSquare = 0.0D / 0.0;
-    protected double reducedChiSquare = 0.0D / 0.0;
-    protected double sumOfSquaresError = 0.0D / 0.0;
-    protected double sumOfSquaresTotal = 0.0D / 0.0;
-    protected double sumOfSquaresRegrn = 0.0D / 0.0;
+    protected double yMean = 0.0D;
+    protected double yWeightedMean = 0.0D;
+    protected double chiSquare = 0.0D;
+    protected double reducedChiSquare = 0.0D;
+    protected double sumOfSquaresError = 0.0D;
+    protected double sumOfSquaresTotal = 0.0D;
+    protected double sumOfSquaresRegrn = 0.0D;
     protected double lastSSnoConstraint = 0.0D;
     protected double[][] covar = (double[][])null;
     protected double[][] corrCoeff = (double[][])null;
-    protected double xyR = 0.0D / 0.0;
-    protected double yyR = 0.0D / 0.0;
-    protected double multR = 0.0D / 0.0;
-    protected double adjustedR = 0.0D / 0.0;
-    protected double multipleF = 0.0D / 0.0;
-    protected double multipleFprob = 0.0D / 0.0;
+    protected double xyR = 0.0D;
+    protected double yyR = 0.0D;
+    protected double multR = 0.0D;
+    protected double adjustedR = 0.0D;
+    protected double multipleF = 0.0D;
+    protected double multipleFprob = 0.0D;
     protected String[] paraName = null;
     protected int prec = 4;
     protected int field = 13;
@@ -286,7 +286,7 @@ public class Regression {
         this.obsnVariance = 0.0D;
     }
 
-    public Regression(double[][] var1, double[] var2, double[] var3) {
+    public Regression(double[][] xdatas, double[] ydata, double[] yWeight) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -393,16 +393,16 @@ public class Regression {
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
         this.simplexFlag = 1;
-        this.nData0 = var2.length;
-        var3 = this.checkForZeroWeights(var3);
+        this.nData0 = ydata.length;
+        yWeight = this.checkForZeroWeights(yWeight);
         if (this.weightOpt) {
             this.weightFlag = 1;
         }
 
-        this.setDefaultValues(Conv.copy(var1), Conv.copy(var2), Conv.copy(var3));
+        this.setDefaultValues(Conv.copy(xdatas), Conv.copy(ydata), Conv.copy(yWeight));
     }
 
-    public Regression(double[][] var1, double[] var2, double[][] var3, double[] var4) {
+    public Regression(double[][] xdatas, double[] ydata, double[][] xWeights, double[] yWeight) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -509,16 +509,16 @@ public class Regression {
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
         this.simplexFlag = 3;
-        this.nData0 = var2.length;
-        this.jointZeroCheck(var3, var4);
-        this.yErrorsEntered = true;
-        this.xErrorsEntered = true;
+        this.nData0 = ydata.length;
+        this.jointZeroCheck(xWeights, yWeight);
+        this.yWeightsEntered = true;
+        this.xWeightsEntered = true;
         this.weightOpt = true;
         this.weightFlag = 1;
-        this.setDefaultValues(Conv.copy(var1), Conv.copy(var2), Conv.copy(var3), Conv.copy(var4));
+        this.setDefaultValues(Conv.copy(xdatas), Conv.copy(ydata), Conv.copy(xWeights), Conv.copy(yWeight));
     }
 
-    public Regression(double[][] var1, double[][] var2, double[][] var3) {
+    public Regression(double[][] xdatas, double[][] ydatas, double[][] yWeights) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -626,33 +626,33 @@ public class Regression {
         this.obsnVariance = 0.0D;
         this.simplexFlag = 2;
         this.multipleY = true;
-        int var4 = var2.length;
+        int var4 = ydatas.length;
         this.nYarrays = var4;
-        int var5 = var2[0].length;
+        int var5 = ydatas[0].length;
         this.nData0 = var5;
-        int var6 = var1.length;
-        int var7 = var1[0].length;
+        int var6 = xdatas.length;
+        int var7 = xdatas[0].length;
         double[] var8 = new double[var4 * var5];
         double[] var9 = new double[var4 * var5];
         double[][] var10 = new double[var4 * var5][var6];
         int var11 = 0;
 
-        for(int var12 = 0; var12 < var4; ++var12) {
-            int var13 = var2[var12].length;
+        for(int var12 = 0; var12 < var4; var12++) {
+            int var13 = ydatas[var12].length;
             if (var13 != var5) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
             }
 
-            int var14 = var1[var12].length;
+            int var14 = xdatas[var12].length;
             if (var13 != var14) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length as the x array length");
             }
 
-            for(int var15 = 0; var15 < var5; ++var15) {
-                var8[var11] = var2[var12][var15];
-                var10[var11][var12] = var1[var12][var15];
-                var9[var11] = var3[var12][var15];
-                ++var11;
+            for(int var15 = 0; var15 < var5; var15++) {
+                var8[var11] = ydatas[var12][var15];
+                var10[var11][var12] = xdatas[var12][var15];
+                var9[var11] = yWeights[var12][var15];
+                var11++;
             }
         }
 
@@ -664,7 +664,7 @@ public class Regression {
         this.setDefaultValues(var10, var8, var9);
     }
 
-    public Regression(double[][] var1, double[][] var2, double[][] var3, double[][] var4) {
+    public Regression(double[][] xdatas, double[][] ydatas, double[][] xWeights, double[][] yWeights) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -772,48 +772,48 @@ public class Regression {
         this.obsnVariance = 0.0D;
         this.simplexFlag = 4;
         this.multipleY = true;
-        int var5 = var2.length;
+        int var5 = ydatas.length;
         this.nYarrays = var5;
-        int var6 = var2[0].length;
+        int var6 = ydatas[0].length;
         this.nData0 = var6;
-        int var7 = var1.length;
-        int var8 = var1[0].length;
+        int var7 = xdatas.length;
+        int var8 = xdatas[0].length;
         double[] var9 = new double[var5 * var6];
         double[] var10 = new double[var5 * var6];
         double[][] var11 = new double[var5 * var6][var7];
         double[][] var12 = new double[var5 * var6][var7];
         int var13 = 0;
 
-        for(int var14 = 0; var14 < var5; ++var14) {
-            int var15 = var2[var14].length;
+        for(int var14 = 0; var14 < var5; var14++) {
+            int var15 = ydatas[var14].length;
             if (var15 != var6) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
             }
 
-            int var16 = var1[var14].length;
+            int var16 = xdatas[var14].length;
             if (var15 != var16) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length as the x array length");
             }
 
-            for(int var17 = 0; var17 < var6; ++var17) {
-                var9[var13] = var2[var14][var17];
-                var11[var13][var14] = var1[var14][var17];
-                var10[var13] = var4[var14][var17];
-                var12[var13][var14] = var3[var14][var17];
-                ++var13;
+            for(int var17 = 0; var17 < var6; var17++) {
+                var9[var13] = ydatas[var14][var17];
+                var11[var13][var14] = xdatas[var14][var17];
+                var10[var13] = yWeights[var14][var17];
+                var12[var13][var14] = xWeights[var14][var17];
+                var13++;
             }
         }
 
         this.jointZeroCheck(var12, var10);
-        this.yErrorsEntered = true;
-        this.xErrorsEntered = true;
+        this.yWeightsEntered = true;
+        this.xWeightsEntered = true;
         this.weightOpt = true;
         this.weightFlag = 1;
         this.setDefaultValues(Conv.copy(var11), Conv.copy(var9), Conv.copy(var12), Conv.copy(var10));
         this.setDefaultValues(var11, var9, var10);
     }
 
-    public Regression(double[] var1, double[] var2, double[] var3) {
+    public Regression(double[] xdata, double[] ydata, double[] yWeight) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -920,24 +920,24 @@ public class Regression {
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
         this.simplexFlag = 1;
-        this.nData0 = var2.length;
-        int var4 = var1.length;
-        int var5 = var3.length;
+        this.nData0 = ydata.length;
+        int var4 = xdata.length;
+        int var5 = yWeight.length;
         double[][] var6 = new double[1][var4];
 
-        for(int var7 = 0; var7 < var4; ++var7) {
-            var6[0][var7] = var1[var7];
+        for(int i = 0; i < var4; i++) {
+            var6[0][i] = xdata[i];
         }
 
-        var3 = this.checkForZeroWeights(var3);
+        yWeight = this.checkForZeroWeights(yWeight);
         if (this.weightOpt) {
             this.weightFlag = 1;
         }
 
-        this.setDefaultValues(Conv.copy(var6), Conv.copy(var2), Conv.copy(var3));
+        this.setDefaultValues(Conv.copy(var6), Conv.copy(ydata), Conv.copy(yWeight));
     }
 
-    public Regression(double[] var1, double[] var2, double[] var3, double[] var4) {
+    public Regression(double[] xdata, double[] ydata, double[] xWeight, double[] yWeight) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -1044,26 +1044,26 @@ public class Regression {
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
         this.simplexFlag = 3;
-        this.nData0 = var2.length;
-        int var5 = var1.length;
-        int var6 = var4.length;
+        this.nData0 = ydata.length;
+        int var5 = xdata.length;
+        int var6 = yWeight.length;
         double[][] var7 = new double[1][var5];
         double[][] var8 = new double[1][var5];
 
         for(int var9 = 0; var9 < var5; ++var9) {
-            var7[0][var9] = var1[var9];
-            var8[0][var9] = var3[var9];
+            var7[0][var9] = xdata[var9];
+            var8[0][var9] = xWeight[var9];
         }
 
-        this.jointZeroCheck(var8, var4);
-        this.xErrorsEntered = true;
-        this.yErrorsEntered = true;
+        this.jointZeroCheck(var8, yWeight);
+        this.xWeightsEntered = true;
+        this.yWeightsEntered = true;
         this.weightOpt = true;
         this.weightFlag = 1;
-        this.setDefaultValues(Conv.copy(var7), Conv.copy(var2), Conv.copy(var8), Conv.copy(var4));
+        this.setDefaultValues(Conv.copy(var7), Conv.copy(ydata), Conv.copy(var8), Conv.copy(yWeight));
     }
 
-    public Regression(double[] var1, double[][] var2, double[][] var3) {
+    public Regression(double[] xdata, double[][] ydatas, double[][] xWeights) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -1171,9 +1171,9 @@ public class Regression {
         this.obsnVariance = 0.0D;
         this.simplexFlag = 1;
         this.multipleY = true;
-        int var4 = var2.length;
+        int var4 = ydatas.length;
         this.nYarrays = var4;
-        int var5 = var2[0].length;
+        int var5 = ydatas[0].length;
         this.nData0 = var5;
         double[] var6 = new double[var4 * var5];
         double[] var7 = new double[var4 * var5];
@@ -1182,28 +1182,28 @@ public class Regression {
         int var9;
         int var11;
         for(var9 = 0; var9 < var4; ++var9) {
-            int var10 = var2[var9].length;
+            int var10 = ydatas[var9].length;
             if (var10 != var5) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
             }
 
-            for(var11 = 0; var11 < var5; ++var11) {
-                var6[var8] = var2[var9][var11];
-                var7[var8] = var3[var9][var11];
+            for(var11 = 0; var11 < var5; var11++) {
+                var6[var8] = ydatas[var9][var11];
+                var7[var8] = xWeights[var9][var11];
                 ++var8;
             }
         }
 
-        var9 = var1.length;
+        var9 = xdata.length;
         if (var9 != var5) {
             throw new IllegalArgumentException("x and y data lengths must be the same");
         } else {
             double[][] var13 = new double[1][var4 * var9];
             var8 = 0;
 
-            for(var11 = 0; var11 < var4; ++var11) {
-                for(int var12 = 0; var12 < var9; ++var12) {
-                    var13[0][var8] = var1[var12];
+            for(var11 = 0; var11 < var4; var11++) {
+                for(int var12 = 0; var12 < var9; var12++) {
+                    var13[0][var8] = xdata[var12];
                     ++var8;
                 }
             }
@@ -1217,7 +1217,7 @@ public class Regression {
         }
     }
 
-    public Regression(double[] var1, double[][] var2, double[] var3, double[][] var4) {
+    public Regression(double[] xdata, double[][] ydatas, double[] xWeight, double[][] yWeights) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -1325,54 +1325,54 @@ public class Regression {
         this.obsnVariance = 0.0D;
         this.simplexFlag = 4;
         this.multipleY = true;
-        int var5 = var2.length;
-        this.nYarrays = var5;
-        int var6 = var2[0].length;
-        this.nData0 = var6;
-        double[] var7 = new double[var5 * var6];
-        double[] var8 = new double[var5 * var6];
-        int var9 = 0;
+        int yLength = ydatas.length;
+        this.nYarrays = yLength;
+        int y0Length = ydatas[0].length;
+        this.nData0 = y0Length;
+        double[] var7 = new double[yLength * y0Length];
+        double[] var8 = new double[yLength * y0Length];
+        int count = 0;
 
-        int var10;
-        for(var10 = 0; var10 < var5; ++var10) {
-            int var11 = var2[var10].length;
-            if (var11 != var6) {
+        int i, j;
+        for (i = 0; i < yLength; i++) {
+            int length = ydatas[i].length;
+            if (length != y0Length) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
             }
 
-            for(int var12 = 0; var12 < var6; ++var12) {
-                var7[var9] = var2[var10][var12];
-                var8[var9] = var4[var10][var12];
-                ++var9;
+            for (j = 0; j < y0Length; j++) {
+                var7[count] = ydatas[i][j];
+                var8[count] = yWeights[i][j];
+                count++;
             }
         }
 
-        var10 = var1.length;
-        if (var10 != var6) {
+        int xLength = xdata.length;
+        if (xLength != y0Length) {
             throw new IllegalArgumentException("x and y data lengths must be the same");
         } else {
-            double[][] var15 = new double[1][var5 * var10];
-            double[][] var16 = new double[1][var5 * var10];
-            var9 = 0;
+            double[][] var15 = new double[1][yLength * xLength];
+            double[][] var16 = new double[1][yLength * xLength];
+            count = 0;
 
-            for(int var13 = 0; var13 < var5; ++var13) {
-                for(int var14 = 0; var14 < var10; ++var14) {
-                    var15[0][var9] = var1[var14];
-                    var16[0][var9] = var3[var14];
-                    ++var9;
+            for(i = 0; i < yLength; i++) {
+                for(j = 0; j < xLength; ++j) {
+                    var15[0][count] = xdata[j];
+                    var16[0][count] = xWeight[j];
+                    ++count;
                 }
             }
 
             this.jointZeroCheck(var16, var8);
-            this.xErrorsEntered = true;
-            this.yErrorsEntered = true;
+            this.xWeightsEntered = true;
+            this.yWeightsEntered = true;
             this.weightOpt = true;
             this.weightFlag = 1;
             this.setDefaultValues(Conv.copy(var15), Conv.copy(var7), Conv.copy(var16), Conv.copy(var8));
         }
     }
 
-    public Regression(double[][] var1, double[] var2) {
+    public Regression(double[][] xdatas, double[] ydata) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -1478,8 +1478,8 @@ public class Regression {
         this.firstDerivs = (double[][])null;
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
-        this.nData0 = var2.length;
-        int var3 = var2.length;
+        this.nData0 = ydata.length;
+        int var3 = ydata.length;
         double[] var4 = new double[var3];
         this.weightOpt = false;
         this.weightFlag = 0;
@@ -1488,10 +1488,10 @@ public class Regression {
             var4[var5] = 1.0D;
         }
 
-        this.setDefaultValues(Conv.copy(var1), Conv.copy(var2), var4);
+        this.setDefaultValues(Conv.copy(xdatas), Conv.copy(ydata), var4);
     }
 
-    public Regression(double[][] var1, double[][] var2) {
+    public Regression(double[][] xdatas, double[][] ydatas) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -1599,14 +1599,14 @@ public class Regression {
         this.obsnVariance = 0.0D;
         this.multipleY = true;
         this.simplexFlag = 2;
-        int var3 = var2.length;
+        int var3 = ydatas.length;
         this.nYarrays = var3;
-        int var4 = var2[0].length;
+        int var4 = ydatas[0].length;
         this.nData0 = var4;
-        int var5 = var1.length;
+        int var5 = xdatas.length;
         double[] var6 = new double[var3 * var4];
         if (var3 != var5) {
-            throw new IllegalArgumentException("Multiple xData and yData arrays of different overall dimensions not supported");
+            throw new IllegalArgumentException("Multiple xDatas and yData arrays of different overall dimensions not supported");
         } else {
             double[][] var7 = new double[1][var3 * var4];
             int var8 = 0;
@@ -1614,19 +1614,19 @@ public class Regression {
             int var9;
             int var11;
             for(var9 = 0; var9 < var3; ++var9) {
-                int var10 = var2[var9].length;
+                int var10 = ydatas[var9].length;
                 if (var10 != var4) {
                     throw new IllegalArgumentException("multiple y arrays must be of the same length");
                 }
 
-                var11 = var1[var9].length;
+                var11 = xdatas[var9].length;
                 if (var10 != var11) {
                     throw new IllegalArgumentException("multiple y arrays must be of the same length as the x array length");
                 }
 
-                for(int var12 = 0; var12 < var4; ++var12) {
-                    var6[var8] = var2[var9][var12];
-                    var7[0][var8] = var1[var9][var12];
+                for(int var12 = 0; var12 < var4; var12++) {
+                    var6[var8] = ydatas[var9][var12];
+                    var7[0][var8] = xdatas[var9][var12];
                     ++var8;
                 }
             }
@@ -1635,7 +1635,7 @@ public class Regression {
             double[] var13 = new double[var9];
             this.weightOpt = false;
 
-            for(var11 = 0; var11 < var9; ++var11) {
+            for(var11 = 0; var11 < var9; var11++) {
                 var13[var11] = 1.0D;
             }
 
@@ -1644,7 +1644,7 @@ public class Regression {
         }
     }
 
-    public Regression(double[] var1, double[] var2) {
+    public Regression(double[] xdata, double[] ydata) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -1751,14 +1751,14 @@ public class Regression {
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
         this.simplexFlag = 1;
-        this.nData0 = var2.length;
-        int var3 = var1.length;
+        this.nData0 = ydata.length;
+        int var3 = xdata.length;
         double[][] var4 = new double[1][var3];
         double[] var5 = new double[var3];
 
         int var6;
         for(var6 = 0; var6 < var3; ++var6) {
-            var4[0][var6] = var1[var6];
+            var4[0][var6] = xdata[var6];
         }
 
         this.weightOpt = false;
@@ -1768,10 +1768,10 @@ public class Regression {
             var5[var6] = 1.0D;
         }
 
-        this.setDefaultValues(var4, Conv.copy(var2), var5);
+        this.setDefaultValues(var4, Conv.copy(ydata), var5);
     }
 
-    public Regression(double[] var1, double[][] var2) {
+    public Regression(double[] xdata, double[][] ydatas) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -1879,22 +1879,22 @@ public class Regression {
         this.obsnVariance = 0.0D;
         this.multipleY = true;
         this.simplexFlag = 2;
-        int var3 = var2.length;
+        int var3 = ydatas.length;
         this.nYarrays = var3;
-        int var4 = var2[0].length;
+        int var4 = ydatas[0].length;
         this.nData0 = var4;
         double[] var5 = new double[var3 * var4];
         int var6 = 0;
 
         int var9;
         for(int var7 = 0; var7 < var3; ++var7) {
-            int var8 = var2[var7].length;
+            int var8 = ydatas[var7].length;
             if (var8 != var4) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
             }
 
             for(var9 = 0; var9 < var4; ++var9) {
-                var5[var6] = var2[var7][var9];
+                var5[var6] = ydatas[var7][var9];
                 ++var6;
             }
         }
@@ -1902,11 +1902,11 @@ public class Regression {
         double[][] var12 = new double[1][var3 * var4];
         double[] var13 = new double[var3 * var4];
         var6 = 0;
-        var9 = var1.length;
+        var9 = xdata.length;
 
-        for(int var10 = 0; var10 < var3; ++var10) {
-            for(int var11 = 0; var11 < var9; ++var11) {
-                var12[0][var6] = var1[var11];
+        for(int var10 = 0; var10 < var3; var10++) {
+            for(int var11 = 0; var11 < var9; var11++) {
+                var12[0][var6] = xdata[var11];
                 var13[var6] = 1.0D;
                 ++var6;
             }
@@ -1917,7 +1917,7 @@ public class Regression {
         this.setDefaultValues(var12, var5, var13);
     }
 
-    public Regression(double[] var1, double var2, double var4) {
+    public Regression(double[] xdata, double binWidth, double binZero) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -2024,14 +2024,14 @@ public class Regression {
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
         this.simplexFlag = 1;
-        double[][] var6 = histogramBins(Conv.copy(var1), var2, var4);
+        double[][] var6 = histogramBins(Conv.copy(xdata), binWidth, binZero);
         int var7 = var6[0].length;
         this.nData0 = var7;
         double[][] var8 = new double[1][var7];
         double[] var9 = new double[var7];
         double[] var10 = new double[var7];
 
-        for(int var11 = 0; var11 < var7; ++var11) {
+        for(int var11 = 0; var11 < var7; var11++) {
             var8[0][var11] = var6[0][var11];
             var9[var11] = var6[1][var11];
         }
@@ -2050,7 +2050,7 @@ public class Regression {
         this.setDefaultValues(var8, var9, var10);
     }
 
-    public Regression(double[] var1, double var2) {
+    public Regression(double[] xdata, double binWidth) {
         this.nSpecDual = this.dualMethods.length;
         this.bestPolyFlag = false;
         this.bestPolynomialDegree = 0;
@@ -2157,7 +2157,7 @@ public class Regression {
         this.analyticalDerivative = false;
         this.obsnVariance = 0.0D;
         this.simplexFlag = 1;
-        double[][] var4 = histogramBins(Conv.copy(var1), var2);
+        double[][] var4 = histogramBins(Conv.copy(xdata), binWidth);
         int var5 = var4[0].length;
         this.nData0 = var5;
         double[][] var6 = new double[1][var5];
@@ -2198,8 +2198,8 @@ public class Regression {
         this.simplexFlag = 3;
         this.nData0 = var2.length;
         this.jointZeroCheck(var3, var4);
-        this.yErrorsEntered = true;
-        this.xErrorsEntered = true;
+        this.yWeightsEntered = true;
+        this.xWeightsEntered = true;
         this.weightOpt = true;
         this.weightFlag = 1;
         this.setDefaultValues(Conv.copy(var1), Conv.copy(var2), Conv.copy(var3), Conv.copy(var4));
@@ -2219,7 +2219,7 @@ public class Regression {
         double[][] var10 = new double[var4 * var5][var6];
         int var11 = 0;
 
-        for(int var12 = 0; var12 < var4; ++var12) {
+        for(int var12 = 0; var12 < var4; var12++) {
             int var13 = var2[var12].length;
             if (var13 != var5) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
@@ -2230,11 +2230,11 @@ public class Regression {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length as the x array length");
             }
 
-            for(int var15 = 0; var15 < var5; ++var15) {
+            for(int var15 = 0; var15 < var5; var15++) {
                 var8[var11] = var2[var12][var15];
                 var10[var11][var12] = var1[var12][var15];
                 var9[var11] = var3[var12][var15];
-                ++var11;
+                var11++;
             }
         }
 
@@ -2261,7 +2261,7 @@ public class Regression {
         double[][] var12 = new double[var5 * var6][var7];
         int var13 = 0;
 
-        for(int var14 = 0; var14 < var5; ++var14) {
+        for(int var14 = 0; var14 < var5; var14++) {
             int var15 = var2[var14].length;
             if (var15 != var6) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
@@ -2272,18 +2272,18 @@ public class Regression {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length as the x array length");
             }
 
-            for(int var17 = 0; var17 < var6; ++var17) {
+            for(int var17 = 0; var17 < var6; var17++) {
                 var9[var13] = var2[var14][var17];
                 var11[var13][var14] = var1[var14][var17];
                 var10[var13] = var4[var14][var17];
                 var12[var13][var14] = var3[var14][var17];
-                ++var13;
+                var13++;
             }
         }
 
         this.jointZeroCheck(var12, var10);
-        this.yErrorsEntered = true;
-        this.xErrorsEntered = true;
+        this.yWeightsEntered = true;
+        this.xWeightsEntered = true;
         this.weightOpt = true;
         this.weightFlag = 1;
         this.setDefaultValues(Conv.copy(var11), Conv.copy(var9), Conv.copy(var12), Conv.copy(var10));
@@ -2323,8 +2323,8 @@ public class Regression {
         }
 
         this.jointZeroCheck(var8, var4);
-        this.xErrorsEntered = true;
-        this.yErrorsEntered = true;
+        this.xWeightsEntered = true;
+        this.yWeightsEntered = true;
         this.weightOpt = true;
         this.weightFlag = 1;
         this.setDefaultValues(Conv.copy(var7), Conv.copy(var2), Conv.copy(var8), Conv.copy(var4));
@@ -2349,7 +2349,7 @@ public class Regression {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
             }
 
-            for(var11 = 0; var11 < var5; ++var11) {
+            for(var11 = 0; var11 < var5; var11++) {
                 var6[var8] = var2[var9][var11];
                 var7[var8] = var3[var9][var11];
                 ++var8;
@@ -2363,8 +2363,8 @@ public class Regression {
             double[][] var13 = new double[1][var4 * var9];
             var8 = 0;
 
-            for(var11 = 0; var11 < var4; ++var11) {
-                for(int var12 = 0; var12 < var9; ++var12) {
+            for(var11 = 0; var11 < var4; var11++) {
+                for(int var12 = 0; var12 < var9; var12++) {
                     var13[0][var8] = var1[var12];
                     ++var8;
                 }
@@ -2391,13 +2391,13 @@ public class Regression {
         int var9 = 0;
 
         int var10;
-        for(var10 = 0; var10 < var5; ++var10) {
+        for(var10 = 0; var10 < var5; var10++) {
             int var11 = var2[var10].length;
             if (var11 != var6) {
                 throw new IllegalArgumentException("multiple y arrays must be of the same length");
             }
 
-            for(int var12 = 0; var12 < var6; ++var12) {
+            for(int var12 = 0; var12 < var6; var12++) {
                 var7[var9] = var2[var10][var12];
                 var8[var9] = var4[var10][var12];
                 ++var9;
@@ -2412,8 +2412,8 @@ public class Regression {
             double[][] var16 = new double[1][var5 * var10];
             var9 = 0;
 
-            for(int var13 = 0; var13 < var5; ++var13) {
-                for(int var14 = 0; var14 < var10; ++var14) {
+            for(int var13 = 0; var13 < var5; var13++) {
+                for(int var14 = 0; var14 < var10; var14++) {
                     var15[0][var9] = var1[var14];
                     var16[0][var9] = var3[var14];
                     ++var9;
@@ -2421,8 +2421,8 @@ public class Regression {
             }
 
             this.jointZeroCheck(var16, var8);
-            this.xErrorsEntered = true;
-            this.yErrorsEntered = true;
+            this.xWeightsEntered = true;
+            this.yWeightsEntered = true;
             this.weightOpt = true;
             this.weightFlag = 1;
             this.setDefaultValues(Conv.copy(var15), Conv.copy(var7), Conv.copy(var16), Conv.copy(var8));
@@ -2453,7 +2453,7 @@ public class Regression {
         int var5 = var1.length;
         double[] var6 = new double[var3 * var4];
         if (var3 != var5) {
-            throw new IllegalArgumentException("Multiple xData and yData arrays of different overall dimensions not supported");
+            throw new IllegalArgumentException("Multiple xDatas and yData arrays of different overall dimensions not supported");
         } else {
             double[][] var7 = new double[1][var3 * var4];
             int var8 = 0;
@@ -2471,7 +2471,7 @@ public class Regression {
                     throw new IllegalArgumentException("multiple y arrays must be of the same length as the x array length");
                 }
 
-                for(int var12 = 0; var12 < var4; ++var12) {
+                for(int var12 = 0; var12 < var4; var12++) {
                     var6[var8] = var2[var9][var12];
                     var7[0][var8] = var1[var9][var12];
                     ++var8;
@@ -2482,7 +2482,7 @@ public class Regression {
             double[] var13 = new double[var9];
             this.weightOpt = false;
 
-            for(var11 = 0; var11 < var9; ++var11) {
+            for(var11 = 0; var11 < var9; var11++) {
                 var13[var11] = 1.0D;
             }
 
@@ -2541,8 +2541,8 @@ public class Regression {
         var6 = 0;
         var9 = var1.length;
 
-        for(int var10 = 0; var10 < var3; ++var10) {
-            for(int var11 = 0; var11 < var9; ++var11) {
+        for(int var10 = 0; var10 < var3; var10++) {
+            for(int var11 = 0; var11 < var9; var11++) {
                 var12[0][var6] = var1[var11];
                 var13[var6] = 1.0D;
                 ++var6;
@@ -2563,7 +2563,7 @@ public class Regression {
         double[] var9 = new double[var7];
         double[] var10 = new double[var7];
 
-        for(int var11 = 0; var11 < var7; ++var11) {
+        for(int var11 = 0; var11 < var7; var11++) {
             var8[0][var11] = var6[0][var11];
             var9[var11] = var6[1][var11];
         }
@@ -2616,7 +2616,7 @@ public class Regression {
         this.weightOpt = false;
         var1 = this.checkForZeroWeightsCommon(var1, var1.length, 0, var2);
         if (this.weightOpt) {
-            this.yErrorsEntered = true;
+            this.yWeightsEntered = true;
         }
 
         if (var3) {
@@ -2669,7 +2669,7 @@ public class Regression {
 
                                 var11 = false;
                             } else {
-                                ++var10;
+                                var10++;
                             }
                         }
                     }
@@ -2721,7 +2721,7 @@ public class Regression {
                                 var12 = var1[var14];
                                 var15 = false;
                             } else {
-                                ++var14;
+                                var14++;
                                 if (var14 == var6 - 1) {
                                     var15 = false;
                                 }
@@ -2750,28 +2750,28 @@ public class Regression {
         return var1;
     }
 
-    protected void jointZeroCheck(double[][] var1, double[] yErrors) {
-        int var3 = var1[0].length;
-        int var4 = yErrors.length;
-        int var5 = var1.length;
+    protected void jointZeroCheck(double[][] xWeights, double[] yWeights) {
+        int x0WeightsLength = xWeights[0].length;
+        int yWeightsLength = yWeights.length;
+        int xWeightsLength = xWeights.length;
         boolean var6 = false;
-        if (var4 != var3) {
-            throw new IllegalArgumentException("The number of x weightimg errors, " + var3 + ", does not match the number of y weighting errors. " + var4);
+        if (yWeightsLength != x0WeightsLength) {
+            throw new IllegalArgumentException("The number of x weightimg errors, " + x0WeightsLength + ", does not match the number of y weighting errors. " + yWeightsLength);
         } else {
-            for(int var7 = 0; var7 < var3; ++var7) {
-                int var9 = 0;
-                if (yErrors[var7] == 0.0D) {
-                    ++var9;
+            for(int i = 0; i < x0WeightsLength; i++) {
+                int WeghtZeroCount = 0;
+                if (yWeights[i] == 0.0D) {
+                    WeghtZeroCount++;
                 }
 
-                for(int var8 = 0; var8 < var5; ++var8) {
-                    if (var1[var8][var7] == 0.0D) {
-                        ++var9;
+                for(int j = 0; j < xWeightsLength; ++j) {
+                    if (xWeights[j][i] == 0.0D) {
+                        WeghtZeroCount++;
                     }
                 }
 
-                if (var9 == var5 + 1) {
-                    throw new IllegalArgumentException("Data point, index, " + var7 + ", has zero x and zero y weighting error values");
+                if (WeghtZeroCount == xWeightsLength + 1) {
+                    throw new IllegalArgumentException("Data point, index, " + i + ", has zero x and zero y weighting error values");
                 }
             }
 
@@ -2813,7 +2813,7 @@ public class Regression {
                     if (var13 >= var2) {
                         var12 = false;
                     } else if (var1[var13] == 0.0D) {
-                        ++var13;
+                        var13++;
                     } else {
                         var8 = var1[var13];
                         var12 = false;
@@ -2827,62 +2827,62 @@ public class Regression {
         return var3;
     }
 
-    protected void setDefaultValues(double[][] var1, double[] var2, double[] var3) {
-        this.setDefaultValues(var1, var2, (double[][])null, var3);
+    protected void setDefaultValues(double[][] xdatas, double[] ydata, double[] yWeight) {
+        this.setDefaultValues(xdatas, ydata, null, yWeight);
     }
 
-    protected void setDefaultValues(double[][] var1, double[] var2, double[][] var3, double[] var4) {
-        boolean var5 = true;
-        if (var3 == null) {
-            var5 = false;
+    protected void setDefaultValues(double[][] xdatas, double[] ydata, double[][] xWeights, double[] yWeight) {
+        boolean isXWeightsEntred = true;
+        if (xWeights == null) {
+            isXWeightsEntred = false;
         }
 
-        this.nData = var2.length;
-        this.nXarrays = var1.length;
+        this.nData = ydata.length;
+        this.nXarrays = xdatas.length;
         this.nParam = this.nXarrays;
         this.yData = new double[this.nData];
         this.yCalc = new double[this.nData];
-        this.yErrors = new double[this.nData];
+        this.yWeight = new double[this.nData];
         this.weight = new double[this.nData];
         this.residual = new double[this.nData];
         this.residualW = new double[this.nData];
-        this.xData = new double[this.nXarrays][this.nData];
-        if (var5) {
-            this.xErrors = new double[this.nXarrays][this.nData];
+        this.xDatas = new double[this.nXarrays][this.nData];
+        if (isXWeightsEntred) {
+            this.xWeights = new double[this.nXarrays][this.nData];
         }
 
-        int var6 = var4.length;
-        if (var6 != this.nData) {
+        int nWeightY = yWeight.length;
+        if (nWeightY != this.nData) {
             throw new IllegalArgumentException("The y error and the y data lengths do not agree");
         } else {
-            int var7;
-            for(var7 = 0; var7 < this.nData; ++var7) {
-                this.yData[var7] = var2[var7];
-                this.yErrors[var7] = var4[var7];
-                this.weight[var7] = this.yErrors[var7];
+            int i;
+            for(i = 0; i < this.nData; i++) {
+                this.yData[i] = ydata[i];
+                this.yWeight[i] = yWeight[i];
+                this.weight[i] = this.yWeight[i];
             }
 
-            for(var7 = 0; var7 < this.nXarrays; ++var7) {
-                var6 = var1[var7].length;
-                if (var6 != this.nData) {
-                    throw new IllegalArgumentException("An x [" + var7 + "] length " + var6 + " and the y data length, " + this.nData + ", do not agree");
+            for(i = 0; i < this.nXarrays; i++) {
+                nWeightY = xdatas[i].length;
+                if (nWeightY != this.nData) {
+                    throw new IllegalArgumentException("An x [" + i + "] length " + nWeightY + " and the y data length, " + this.nData + ", do not agree");
                 }
 
-                int var8;
-                if (var5) {
-                    var8 = var3[var7].length;
-                    if (var8 != this.nData) {
-                        throw new IllegalArgumentException("An x error [" + var7 + "] length " + var6 + " and the y data length, " + this.nData + ", do not agree");
+                int nWeightX;
+                if (isXWeightsEntred) {
+                    nWeightX = xWeights[i].length;
+                    if (nWeightX != this.nData) {
+                        throw new IllegalArgumentException("An x error [" + i + "] length " + nWeightY + " and the y data length, " + this.nData + ", do not agree");
                     }
                 }
 
-                for(var8 = 0; var8 < this.nData; ++var8) {
-                    this.xData[var7][var8] = var1[var7][var8];
+                for(nWeightX = 0; nWeightX < this.nData; nWeightX++) {
+                    this.xDatas[i][nWeightX] = xdatas[i][nWeightX];
                 }
 
-                if (var5) {
-                    for(var8 = 0; var8 < this.nData; ++var8) {
-                        this.xErrors[var7][var8] = var3[var7][var8];
+                if (isXWeightsEntred) {
+                    for(nWeightX = 0; nWeightX < this.nData; nWeightX++) {
+                        this.xWeights[i][nWeightX] = xWeights[i][nWeightX];
                     }
                 }
             }
@@ -2892,15 +2892,15 @@ public class Regression {
             this.maximumY = this.yData[0];
             this.maximumYindex = 0.0D;
 
-            for(var7 = 0; var7 < this.nData; ++var7) {
-                if (this.yData[var7] < this.minimumY) {
-                    this.minimumY = this.yData[var7];
-                    this.minimumYindex = (double)var7;
+            for(i = 0; i < this.nData; i++) {
+                if (this.yData[i] < this.minimumY) {
+                    this.minimumY = this.yData[i];
+                    this.minimumYindex = (double)i;
                 }
 
-                if (this.yData[var7] > this.maximumY) {
-                    this.maximumY = this.yData[var7];
-                    this.maximumYindex = (double)var7;
+                if (this.yData[i] > this.maximumY) {
+                    this.maximumY = this.yData[i];
+                    this.maximumYindex = (double)i;
                 }
             }
 
@@ -3128,9 +3128,9 @@ public class Regression {
         }
     }
 
-    public void constantPlot(String var1, String var2) {
-        this.xLegend = var1;
-        this.yLegend = var2;
+    public void constantPlot(String xLegend, String yLegend) {
+        this.xLegend = xLegend;
+        this.yLegend = yLegend;
         this.legendCheck = true;
         this.constant();
         if (!this.suppressPrint) {
@@ -3138,7 +3138,7 @@ public class Regression {
         }
 
         int var3 = 0;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             var3 = this.plotXY();
         }
 
@@ -3155,14 +3155,14 @@ public class Regression {
         }
 
         boolean var1 = false;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             int var2 = this.plotXY();
         }
 
     }
 
     public void linear() {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearDual();
         } else {
             this.linearMono();
@@ -3170,7 +3170,7 @@ public class Regression {
 
     }
 
-    public void linearMono() {
+    protected void linearMono() {
         if (this.multipleY) {
             throw new IllegalArgumentException("This method cannot handle multiply dimensioned y arrays");
         } else {
@@ -3191,7 +3191,7 @@ public class Regression {
 
                 for(var2 = 1; var2 < this.nParam; ++var2) {
                     for(int var3 = 0; var3 < this.nData; ++var3) {
-                        var1[var2][var3] = this.xData[var2 - 1][var3];
+                        var1[var2][var3] = this.xDatas[var2 - 1][var3];
                     }
                 }
 
@@ -3217,35 +3217,35 @@ public class Regression {
         } else {
             this.dualErrorsRequired = true;
             this.nonLinStatsNeeded = false;
-            Regression var1 = new Regression(this.xData, this.yData);
-            var1.linear();
-            double[] var2 = var1.getBestEstimates();
-            LinearXYDEfunction var3 = new LinearXYDEfunction();
-            var3.setNterms(this.nParam);
-            var3.setYerrors(this.yErrors);
-            var3.setXerrors(this.xErrors);
+            Regression regression = new Regression(this.xDatas, this.yData);
+            regression.linear();
+            double[] bestEstimates = regression.getBestEstimates();
+            LinearXYDEfunction linearXYDEfunction = new LinearXYDEfunction();
+            linearXYDEfunction.setNterms(this.nParam);
+            linearXYDEfunction.setYerrors(this.yWeight);
+            linearXYDEfunction.setXerrors(this.xWeights);
             this.linNonLin = false;
             double[] var4 = new double[this.nParam];
 
-            for(int var5 = 0; var5 < this.nParam; ++var5) {
-                var4[var5] = var2[var5] * 0.1D;
-                if (var4[var5] == 0.0D) {
-                    var4[var5] = Stat.mean(var2) * 0.1D;
+            for(int i = 0; i < this.nParam; i++) {
+                var4[i] = bestEstimates[i] * 0.1D;
+                if (var4[i] == 0.0D) {
+                    var4[i] = Stat.mean(bestEstimates) * 0.1D;
                 }
             }
 
-            this.nelderMead(var3, (Object)null, var2, var4, this.fTol, this.nMax);
+            this.nelderMead(linearXYDEfunction, (Object)null, bestEstimates, var4, this.fTol, this.nMax);
             double[][] var8 = new double[this.nParam][this.nData];
             this.linNonLin = true;
 
             int var6;
-            for(var6 = 0; var6 < this.nData; ++var6) {
+            for(var6 = 0; var6 < this.nData; var6++) {
                 var8[0][var6] = 1.0D;
             }
 
-            for(var6 = 1; var6 < this.nParam; ++var6) {
+            for(var6 = 1; var6 < this.nParam; var6++) {
                 for(int var7 = 0; var7 < this.nData; ++var7) {
-                    var8[var6][var7] = this.xData[var6 - 1][var7];
+                    var8[var6][var7] = this.xDatas[var6 - 1][var7];
                 }
             }
 
@@ -3258,7 +3258,7 @@ public class Regression {
     }
 
     public void linearPlot(String var1, String var2) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearPlotDual(var1, var2);
         } else {
             this.linearPlotMono(var1, var2);
@@ -3273,18 +3273,19 @@ public class Regression {
         this.dualErrorsRequired = false;
         this.nonLinStatsNeeded = false;
         this.linearMono();
-        if (!this.suppressPrint) {
-            this.print();
-        }
 
-        int var3 = 0;
-        if (this.xData.length < 2) {
-            var3 = this.plotXY();
-        }
-
-        if (var3 != -2 && !this.suppressYYplot) {
-            this.plotYY();
-        }
+//        if (!this.suppressPrint) {
+//            this.print();
+//        }
+//
+//        int var3 = 0;
+//        if (this.xDatas.length < 2) {
+//            var3 = this.plotXY();
+//        }
+//
+//        if (var3 != -2 && !this.suppressYYplot) {
+//            this.plotYY();
+//        }
 
     }
 
@@ -3298,7 +3299,7 @@ public class Regression {
         }
 
         int var3 = 0;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             var3 = this.plotXY();
         }
 
@@ -3309,7 +3310,7 @@ public class Regression {
     }
 
     public void linearPlot() {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearPlotDual();
         } else {
             this.linearPlotMono();
@@ -3324,7 +3325,7 @@ public class Regression {
         }
 
         int var1 = 0;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             var1 = this.plotXY();
         }
 
@@ -3341,9 +3342,9 @@ public class Regression {
         }
 
         int var1 = 0;
-        this.xErrorsEntered = false;
+        this.xWeightsEntered = false;
         this.simplexFlag = 1;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             var1 = this.plotXY();
         }
 
@@ -3351,11 +3352,11 @@ public class Regression {
             this.plotYY();
         }
 
-        this.xErrorsEntered = true;
+        this.xWeightsEntered = true;
     }
 
     public void linear(double var1) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearDual(var1);
         } else {
             this.linearMono(var1);
@@ -3385,7 +3386,7 @@ public class Regression {
 
                 for(var4 = 0; var4 < this.nParam; ++var4) {
                     for(int var5 = 0; var5 < this.nData; ++var5) {
-                        var3[var4][var5] = this.xData[var4][var5];
+                        var3[var4][var5] = this.xDatas[var4][var5];
                     }
                 }
 
@@ -3421,13 +3422,13 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                Regression var3 = new Regression(this.xData, this.yData);
+                Regression var3 = new Regression(this.xDatas, this.yData);
                 var3.linear(var1);
                 double[] var4 = var3.getBestEstimates();
                 LinearIXYDEfunction var5 = new LinearIXYDEfunction();
                 var5.setNparam(this.nParam);
-                var5.setYerrors(this.yErrors);
-                var5.setXerrors(this.xErrors);
+                var5.setYerrors(this.yWeight);
+                var5.setXerrors(this.xWeights);
                 var5.setIntercept(var1);
                 this.linNonLin = false;
                 double[] var6 = new double[this.nParam];
@@ -3450,7 +3451,7 @@ public class Regression {
 
                 for(var8 = 0; var8 < this.nParam; ++var8) {
                     for(int var9 = 0; var9 < this.nData; ++var9) {
-                        var10[var8][var9] = this.xData[var8][var9];
+                        var10[var8][var9] = this.xDatas[var8][var9];
                     }
                 }
 
@@ -3471,7 +3472,7 @@ public class Regression {
     }
 
     public void linearPlot(double var1, String var3, String var4) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearPlotDual(var1, var3, var4);
         } else {
             this.linearPlotMono(var1, var3, var4);
@@ -3489,7 +3490,7 @@ public class Regression {
         }
 
         int var5 = 0;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             var5 = this.plotXY();
         }
 
@@ -3504,13 +3505,13 @@ public class Regression {
         this.yLegend = var4;
         this.legendCheck = true;
         this.linearDual(var1);
-        this.xErrorsEntered = false;
+        this.xWeightsEntered = false;
         if (!this.suppressPrint) {
             this.print();
         }
 
         int var5 = 0;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             var5 = this.plotXY();
         }
 
@@ -3518,11 +3519,11 @@ public class Regression {
             this.plotYY();
         }
 
-        this.xErrorsEntered = true;
+        this.xWeightsEntered = true;
     }
 
     public void linearPlot(double var1) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearPlotDual(var1);
         } else {
             this.linearPlotMono(var1);
@@ -3537,7 +3538,7 @@ public class Regression {
         }
 
         int var3 = 0;
-        if (this.xData.length < 2) {
+        if (this.xDatas.length < 2) {
             var3 = this.plotXY();
         }
 
@@ -3548,7 +3549,7 @@ public class Regression {
     }
 
     public void linearPlotDual(double var1) {
-        this.xErrorsEntered = true;
+        this.xWeightsEntered = true;
         this.linearDual(var1);
         this.linNonLin = true;
         if (!this.suppressPrint) {
@@ -3556,8 +3557,8 @@ public class Regression {
         }
 
         int var3 = 0;
-        this.xErrorsEntered = false;
-        if (this.xData.length < 2) {
+        this.xWeightsEntered = false;
+        if (this.xDatas.length < 2) {
             var3 = this.plotXY();
         }
 
@@ -3565,11 +3566,11 @@ public class Regression {
             this.plotYY();
         }
 
-        this.xErrorsEntered = true;
+        this.xWeightsEntered = true;
     }
 
     public void polynomial(int var1) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.polynomialDual(var1);
         } else {
             this.polynomialMono(var1);
@@ -3601,12 +3602,12 @@ public class Regression {
                 }
 
                 for(var3 = 0; var3 < this.nData; ++var3) {
-                    var2[1][var3] = this.xData[0][var3];
+                    var2[1][var3] = this.xDatas[0][var3];
                 }
 
                 for(var3 = 2; var3 < this.nParam; ++var3) {
                     for(int var4 = 0; var4 < this.nData; ++var4) {
-                        var2[var3][var4] = Math.pow(this.xData[0][var4], (double)var3);
+                        var2[var3][var4] = Math.pow(this.xDatas[0][var4], (double)var3);
                     }
                 }
 
@@ -3637,13 +3638,13 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                Regression var2 = new Regression(this.xData, this.yData);
+                Regression var2 = new Regression(this.xDatas, this.yData);
                 var2.polynomial(var1);
                 double[] var3 = var2.getBestEstimates();
                 PolyXYDEfunction var4 = new PolyXYDEfunction();
                 var4.setDeg(var1);
-                var4.setYerrors(this.yErrors);
-                var4.setXerrors(this.xErrors);
+                var4.setYerrors(this.yWeight);
+                var4.setXerrors(this.xWeights);
                 this.linNonLin = false;
                 double[] var5 = new double[this.nParam];
 
@@ -3664,12 +3665,12 @@ public class Regression {
                 }
 
                 for(var7 = 0; var7 < this.nData; ++var7) {
-                    var9[1][var7] = this.xData[0][var7];
+                    var9[1][var7] = this.xDatas[0][var7];
                 }
 
                 for(var7 = 2; var7 < this.nParam; ++var7) {
                     for(int var8 = 0; var8 < this.nData; ++var8) {
-                        var9[var7][var8] = Math.pow(this.xData[0][var8], (double)var7);
+                        var9[var7][var8] = Math.pow(this.xDatas[0][var8], (double)var7);
                     }
                 }
 
@@ -3713,7 +3714,7 @@ public class Regression {
     }
 
     public void polynomial(int var1, double var2) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.polynomialDual(var1, var2);
         } else {
             this.polynomialMono(var1, var2);
@@ -3746,12 +3747,12 @@ public class Regression {
                 }
 
                 for(var5 = 0; var5 < this.nData; ++var5) {
-                    var4[0][var5] = this.xData[0][var5];
+                    var4[0][var5] = this.xDatas[0][var5];
                 }
 
                 for(var5 = 1; var5 < this.nParam; ++var5) {
                     for(int var6 = 0; var6 < this.nData; ++var6) {
-                        var4[var5][var6] = Math.pow(this.xData[0][var6], (double)(var5 + 1));
+                        var4[var5][var6] = Math.pow(this.xDatas[0][var6], (double)(var5 + 1));
                     }
                 }
 
@@ -3789,14 +3790,14 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                Regression var4 = new Regression(this.xData, this.yData);
+                Regression var4 = new Regression(this.xDatas, this.yData);
                 var4.polynomial(var1, var2);
                 double[] var5 = var4.getBestEstimates();
                 PolyIXYDEfunction var6 = new PolyIXYDEfunction();
                 var6.setDeg(var1);
                 var6.setIntercept(var2);
-                var6.setYerrors(this.yErrors);
-                var6.setXerrors(this.xErrors);
+                var6.setYerrors(this.yWeight);
+                var6.setXerrors(this.xWeights);
                 this.linNonLin = false;
                 double[] var7 = new double[this.nParam];
 
@@ -3817,12 +3818,12 @@ public class Regression {
                 }
 
                 for(var9 = 0; var9 < this.nData; ++var9) {
-                    var11[0][var9] = this.xData[0][var9];
+                    var11[0][var9] = this.xDatas[0][var9];
                 }
 
                 for(var9 = 1; var9 < this.nParam; ++var9) {
-                    for(int var10 = 0; var10 < this.nData; ++var10) {
-                        var11[var9][var10] = Math.pow(this.xData[0][var10], (double)(var9 + 1));
+                    for(int var10 = 0; var10 < this.nData; var10++) {
+                        var11[var9][var10] = Math.pow(this.xDatas[0][var10], (double)(var9 + 1));
                     }
                 }
 
@@ -3916,17 +3917,17 @@ public class Regression {
             new ArrayList();
             int var6 = this.nData - 2;
             int var7 = 0;
-            Regression var8 = null;
-            if (this.xErrorsEntered) {
-                var8 = new Regression(this.xData, this.yData, this.xErrors, this.yErrors);
+            Regression regression = null;
+            if (this.xWeightsEntered) {
+                regression = new Regression(this.xDatas, this.yData, this.xWeights, this.yWeight);
             } else if (this.weightOpt) {
-                var8 = new Regression(this.xData, this.yData, this.yErrors);
+                regression = new Regression(this.xDatas, this.yData, this.yWeight);
             } else {
-                var8 = new Regression(this.xData, this.yData);
+                regression = new Regression(this.xDatas, this.yData);
             }
 
-            var8.ignoreDofFcheck();
-            var8.suppressErrorMessages();
+            regression.ignoreDofFcheck();
+            regression.suppressErrorMessages();
             double[] var9 = new double[var6 + 1];
             double[] var10 = new double[var6 + 1];
             double[] var11 = new double[var6 + 1];
@@ -3934,7 +3935,7 @@ public class Regression {
             double var13 = 0.0D;
             if (var1 != 2 && var1 != 3) {
                 if (this.weightOpt) {
-                    var13 = Stat.mean(this.yData, this.yErrors);
+                    var13 = Stat.mean(this.yData, this.yWeight);
                 } else {
                     var13 = Stat.mean(this.yData);
                 }
@@ -3946,12 +3947,12 @@ public class Regression {
             int var17;
             double var18;
             if (this.weightOpt) {
-                for(var17 = 0; var17 < this.nData; ++var17) {
-                    var18 = (this.yData[var17] - var13) / this.yErrors[var17];
+                for(var17 = 0; var17 < this.nData; var17++) {
+                    var18 = (this.yData[var17] - var13) / this.yWeight[var17];
                     var15 += var18 * var18;
                 }
             } else {
-                for(var17 = 0; var17 < this.nData; ++var17) {
+                for(var17 = 0; var17 < this.nData; var17++) {
                     var18 = this.yData[var17] - var13;
                     var15 += var18 * var18;
                 }
@@ -3959,14 +3960,14 @@ public class Regression {
 
             var9[0] = var15;
 
-            for(var17 = 1; var17 <= var6; ++var17) {
+            for(var17 = 1; var17 <= var6; var17++) {
                 if (var1 != 2 && var1 != 3) {
-                    var8.polynomial(var17);
+                    regression.polynomial(var17);
                 } else {
-                    var8.polynomial(var17, var2);
+                    regression.polynomial(var17, var2);
                 }
 
-                var9[var17] = var8.getChiSquare();
+                var9[var17] = regression.getChiSquare();
                 var4 = testOfAdditionalTerms_ArrayList(var9[var17 - 1], var17 - 1, var9[var17], var17, this.nData, this.fProbSignificance);
                 var10[var17] = (Double)var4.get(0);
                 var11[var17] = (Double)var4.get(1);
@@ -4059,7 +4060,7 @@ public class Regression {
                 case 3:
                     switch(this.bestPolynomialDegree) {
                         case 0:
-                            double[][] var35 = new double[][]{this.xData[0], this.yData, this.xData[0], new double[this.nData]};
+                            double[][] var35 = new double[][]{this.xDatas[0], this.yData, this.xDatas[0], new double[this.nData]};
 
                             for(int var27 = 0; var27 < this.nData; ++var27) {
                                 var35[3][var27] = var13;
@@ -4157,7 +4158,7 @@ public class Regression {
     }
 
     protected void fitNonIntegerPolynomial(int var1, int var2) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.fitNonIntegerPolynomialDual(var1, var2);
         } else {
             this.fitNonIntegerPolynomialMono(var1, var2);
@@ -4182,8 +4183,8 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
-                Regression var4 = new Regression(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
+                Regression var4 = new Regression(this.xDatas[0], this.yData, this.weight);
                 var4.polynomial(var3);
                 double[] var5 = new double[this.nParam];
                 double[] var6 = new double[this.nParam];
@@ -4191,14 +4192,14 @@ public class Regression {
                 double var8 = 0.0D;
 
                 int var10;
-                for(var10 = 0; var10 < var1; ++var10) {
+                for(var10 = 0; var10 < var1; var10++) {
                     var5[var10] = var7[var10];
                     var8 += var5[var10];
                 }
 
                 var8 /= (double)var1;
 
-                for(var10 = 0; var10 < var1; ++var10) {
+                for(var10 = 0; var10 < var1; var10++) {
                     var6[var10] = var5[var10] * 0.1D;
                     if (var6[var10] == 0.0D) {
                         var6[var10] = 0.1D * var8;
@@ -4207,10 +4208,10 @@ public class Regression {
 
                 double var15 = 1.0D;
 
-                for(int var12 = var1; var12 < this.nParam; ++var12) {
+                for(int var12 = var1; var12 < this.nParam; var12++) {
                     var5[var12] = var15;
                     var6[var12] = var5[var12] * 0.1D;
-                    ++var15;
+                    var15++;
                 }
 
                 NonIntegerPolyFunction var16 = new NonIntegerPolyFunction();
@@ -4251,8 +4252,8 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
-                Regression var4 = new Regression(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
+                Regression var4 = new Regression(this.xDatas[0], this.yData, this.weight);
                 var4.polynomial(var3);
                 double[] var5 = new double[this.nParam];
                 double[] var6 = new double[this.nParam];
@@ -4260,14 +4261,14 @@ public class Regression {
                 double var8 = 0.0D;
 
                 int var10;
-                for(var10 = 0; var10 < var1; ++var10) {
+                for(var10 = 0; var10 < var1; var10++) {
                     var5[var10] = var7[var10];
                     var8 += var5[var10];
                 }
 
                 var8 /= (double)var1;
 
-                for(var10 = 0; var10 < var1; ++var10) {
+                for(var10 = 0; var10 < var1; var10++) {
                     var6[var10] = var5[var10] * 0.1D;
                     if (var6[var10] == 0.0D) {
                         var6[var10] = 0.1D * var8;
@@ -4276,16 +4277,16 @@ public class Regression {
 
                 double var15 = 1.0D;
 
-                for(int var12 = var1; var12 < this.nParam; ++var12) {
+                for(int var12 = var1; var12 < this.nParam; var12++) {
                     var5[var12] = var15;
                     var6[var12] = var5[var12] * 0.1D;
-                    ++var15;
+                    var15++;
                 }
 
                 NonIntegerPolyFunctionDual var16 = new NonIntegerPolyFunctionDual();
                 var16.setNterms(var1);
-                var16.setYerrors(this.yErrors);
-                var16.setXerrors(this.xErrors);
+                var16.setYerrors(this.yWeight);
+                var16.setXerrors(this.xWeights);
                 this.nelderMead(var16, (Object)null, var5, var6, this.fTol, this.nMax);
                 if (var2 == 1) {
                     if (!this.suppressPrint) {
@@ -4304,7 +4305,7 @@ public class Regression {
     }
 
     public void linearGeneral() {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearGeneralDual();
         } else {
             this.linearGeneralMono();
@@ -4327,8 +4328,8 @@ public class Regression {
                 this.bestSd = new double[this.nParam];
                 this.tValues = new double[this.nParam];
                 this.pValues = new double[this.nParam];
-                this.generalLinear(this.xData);
-                this.generalLinearStats(this.xData);
+                this.generalLinear(this.xDatas);
+                this.generalLinearStats(this.xDatas);
             }
         }
     }
@@ -4350,13 +4351,13 @@ public class Regression {
                 this.best = new double[this.nParam];
                 this.dualErrorsRequired = true;
                 this.nonLinStatsNeeded = false;
-                Regression var1 = new Regression(this.xData, this.yData);
+                Regression var1 = new Regression(this.xDatas, this.yData);
                 var1.linearGeneral();
                 double[] var2 = var1.getBestEstimates();
                 LinearGXYDEfunction var3 = new LinearGXYDEfunction();
                 var3.setNterms(this.nParam);
-                var3.setYerrors(this.yErrors);
-                var3.setXerrors(this.xErrors);
+                var3.setYerrors(this.yWeight);
+                var3.setXerrors(this.xWeights);
                 this.linNonLin = false;
                 double[] var4 = new double[this.nParam];
 
@@ -4372,7 +4373,7 @@ public class Regression {
                 this.bestSd = new double[this.nParam];
                 this.tValues = new double[this.nParam];
                 this.pValues = new double[this.nParam];
-                this.generalLinearStats(this.xData);
+                this.generalLinearStats(this.xDatas);
                 this.dualErrorsRequired = false;
                 this.nonLinStatsNeeded = true;
             }
@@ -4380,7 +4381,7 @@ public class Regression {
     }
 
     public void linearGeneralPlot(String var1, String var2) {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearGeneralPlotDual(var1, var2);
         } else {
             this.linearGeneralPlotMono(var1, var2);
@@ -4413,16 +4414,16 @@ public class Regression {
             this.print();
         }
 
-        this.xErrorsEntered = false;
+        this.xWeightsEntered = false;
         if (!this.suppressYYplot) {
             this.plotYY();
         }
 
-        this.xErrorsEntered = true;
+        this.xWeightsEntered = true;
     }
 
     public void linearGeneralPlot() {
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             this.linearGeneralPlotDual();
         } else {
             this.linearGeneralPlotMono();
@@ -4449,12 +4450,12 @@ public class Regression {
             this.print();
         }
 
-        this.xErrorsEntered = false;
+        this.xWeightsEntered = false;
         if (!this.suppressYYplot) {
             this.plotYY();
         }
 
-        this.xErrorsEntered = true;
+        this.xWeightsEntered = true;
     }
 
     protected void generalLinear(double[][] var1) {
@@ -4478,32 +4479,32 @@ public class Regression {
                 this.covar = new double[this.nParam][this.nParam];
                 this.corrCoeff = new double[this.nParam][this.nParam];
 
-                for(var12 = 0; var12 < this.nParam; ++var12) {
+                for(var12 = 0; var12 < this.nParam; var12++) {
                     this.bestSd[var12] = 0.0D / 0.0;
                     this.pseudoSd[var12] = 0.0D / 0.0;
 
-                    for(var13 = 0; var13 < this.nParam; ++var13) {
+                    for(var13 = 0; var13 < this.nParam; var13++) {
                         this.covar[var12][var13] = 0.0D / 0.0;
                         this.corrCoeff[var12][var13] = 0.0D / 0.0;
                     }
                 }
             }
 
-            for(var12 = 0; var12 < this.nParam; ++var12) {
+            for(var12 = 0; var12 < this.nParam; var12++) {
                 var4 = 0.0D;
 
-                for(var13 = 0; var13 < this.nData; ++var13) {
+                for(var13 = 0; var13 < this.nData; var13++) {
                     var4 += this.yData[var13] * var1[var12][var13] / Fmath.square(this.weight[var13]);
                 }
 
                 var10[var12] = var4;
             }
 
-            for(var12 = 0; var12 < this.nParam; ++var12) {
-                for(var13 = 0; var13 < this.nParam; ++var13) {
+            for(var12 = 0; var12 < this.nParam; var12++) {
+                for(var13 = 0; var13 < this.nParam; var13++) {
                     var4 = 0.0D;
 
-                    for(int var14 = 0; var14 < this.nData; ++var14) {
+                    for(int var14 = 0; var14 < this.nData; var14++) {
                         var4 += var1[var12][var14] * var1[var13][var14] / Fmath.square(this.weight[var14]);
                     }
 
@@ -4518,7 +4519,7 @@ public class Regression {
 
             var11 = var15.solveLinearSet(var10);
 
-            for(var13 = 0; var13 < this.nParam; ++var13) {
+            for(var13 = 0; var13 < this.nParam; var13++) {
                 this.best[var13] = var11[var13];
             }
 
@@ -4526,7 +4527,7 @@ public class Regression {
     }
 
     protected void nelderMead(Object var1, Object var2, double[] var3, double[] var4, double var5, int var7) {
-        if (this.xErrorsEntered && !this.dualErrorsRequired) {
+        if (this.xWeightsEntered && !this.dualErrorsRequired) {
             throw new IllegalArgumentException("The data fitting method called does not support independent variable errors - use a constructor that does not include x errors in its argument list");
         } else {
             int var8 = var3.length;
@@ -4547,7 +4548,7 @@ public class Regression {
                     throw new IllegalArgumentException("step array length " + var4.length + " and initial estimate array length " + var3.length + " are of different");
                 } else {
                     int var10;
-                    for(var10 = 0; var10 < var8; ++var10) {
+                    for(var10 = 0; var10 < var8; var10++) {
                         if (var4[var10] == 0.0D) {
                             throw new IllegalArgumentException("step " + var10 + " size is zero");
                         }
@@ -4565,11 +4566,11 @@ public class Regression {
                         this.covar = new double[this.nParam][this.nParam];
                         this.corrCoeff = new double[this.nParam][this.nParam];
 
-                        for(var10 = 0; var10 < this.nParam; ++var10) {
+                        for(var10 = 0; var10 < this.nParam; var10++) {
                             this.bestSd[var10] = 0.0D / 0.0;
                             this.pseudoSd[var10] = 0.0D / 0.0;
 
-                            for(int var11 = 0; var11 < this.nParam; ++var11) {
+                            for(int var11 = 0; var11 < this.nParam; var11++) {
                                 this.covar[var10][var11] = 0.0D / 0.0;
                                 this.corrCoeff[var10][var11] = 0.0D / 0.0;
                             }
@@ -4593,7 +4594,7 @@ public class Regression {
                     double var16 = 0.0D;
 
                     int var18;
-                    for(var18 = 0; var18 < this.nData; ++var18) {
+                    for(var18 = 0; var18 < this.nData; var18++) {
                         var16 += Math.abs(this.yData[var18]);
                     }
 
@@ -4614,13 +4615,13 @@ public class Regression {
                         for(var21 = 0; var21 < this.nConstraints; ++var21) {
                             var49 = (Integer)this.penalties.get(var20);
                             this.penaltyParam[var21] = var49;
-                            ++var20;
+                            var20++;
                             var49 = (Integer)this.penalties.get(var20);
                             this.penaltyCheck[var21] = var49;
-                            ++var20;
+                            var20++;
                             var19 = (Double)this.penalties.get(var20);
                             this.constraints[var21] = var19;
-                            ++var20;
+                            var20++;
                         }
                     }
 
@@ -4657,7 +4658,7 @@ public class Regression {
                         }
                     }
 
-                    for(var18 = 0; var18 < var8; ++var18) {
+                    for(var18 = 0; var18 < var8; var18++) {
                         var4[var18] = Math.abs(var4[var18]);
                         this.startH[var18] = var3[var18];
                         this.stepH[var18] = var4[var18];
@@ -4690,7 +4691,7 @@ public class Regression {
                                 }
 
                                 this.scale[var18] = 1.0D;
-                                ++var18;
+                                var18++;
                             }
                         case 1:
                             var18 = 0;
@@ -4703,7 +4704,7 @@ public class Regression {
                                 this.scale[var18] = 1.0D / var3[var18];
                                 var4[var18] /= var3[var18];
                                 var3[var18] = 1.0D;
-                                ++var18;
+                                var18++;
                             }
                         case 2:
                             var18 = 0;
@@ -4715,7 +4716,7 @@ public class Regression {
 
                                 var4[var18] *= this.scale[var18];
                                 var3[var18] *= this.scale[var18];
-                                ++var18;
+                                var18++;
                             }
                         default:
                             throw new IllegalArgumentException("Scaling factor option " + this.scaleOpt + " not recognised");
@@ -4725,7 +4726,7 @@ public class Regression {
                     this.nMax = var7;
                     this.nIter = 0;
 
-                    for(var18 = 0; var18 < var8; ++var18) {
+                    for(var18 = 0; var18 < var8; var18++) {
                         this.startSH[var18] = var3[var18];
                         this.stepSH[var18] = var4[var18];
                         this.scale[var18] = this.scale[var18];
@@ -4733,7 +4734,7 @@ public class Regression {
 
                     double var58 = 0.0D;
 
-                    for(var20 = 0; var20 < var8; ++var20) {
+                    for(var20 = 0; var20 < var8; var20++) {
                         var58 = var3[var20];
                         var14[var20] = var58;
                         var15[var20] = var58;
@@ -4785,13 +4786,13 @@ public class Regression {
 
                                     this.fMin = var56;
                                     this.kRestart = this.konvge - var20;
-                                    if (this.xErrorsEntered) {
+                                    if (this.xWeightsEntered) {
                                         double[] var62 = new double[this.nXarrays];
                                         double[] var61 = new double[2];
 
                                         for(int var45 = 0; var45 < this.nData; ++var45) {
                                             for(int var46 = 0; var46 < this.nXarrays; ++var46) {
-                                                var62[var46] = this.xData[var46][var45];
+                                                var62[var46] = this.xDatas[var46][var45];
                                             }
 
                                             var61 = ((RegressionFunction3)var1).function(this.best, var62, var45);
@@ -5036,7 +5037,7 @@ public class Regression {
         double[] var8 = new double[this.nParam];
         double[] var9 = new double[this.nXarrays];
 
-        for(int var10 = 0; var10 < this.nParam; ++var10) {
+        for(int var10 = 0; var10 < this.nParam; var10++) {
             var8[var10] = var2[var10] / this.scale[var10];
         }
 
@@ -5047,7 +5048,7 @@ public class Regression {
         if (this.penalty) {
             var13 = false;
 
-            for(int var14 = 0; var14 < this.nConstraints; ++var14) {
+            for(int var14 = 0; var14 < this.nConstraints; var14++) {
                 var21 = this.penaltyParam[var14];
                 switch(this.penaltyCheck[var14]) {
                     case -1:
@@ -5084,10 +5085,10 @@ public class Regression {
             var13 = false;
             double var23 = 0.0D;
 
-            for(var16 = 0; var16 < this.nSumConstraints; ++var16) {
+            for(var16 = 0; var16 < this.nSumConstraints; var16++) {
                 double var17 = 0.0D;
 
-                for(int var19 = 0; var19 < this.sumPenaltyNumber[var16]; ++var19) {
+                for(int var19 = 0; var19 < this.sumPenaltyNumber[var16]; var19++) {
                     var21 = this.sumPenaltyParam[var16][var19];
                     var23 = this.sumPlusOrMinus[var16][var19];
                     var17 += var8[var21] * var23;
@@ -5128,9 +5129,9 @@ public class Regression {
             double var22 = 0.0D;
             Object var15 = null;
 
-            for(var16 = 0; var16 < this.nData; ++var16) {
+            for(var16 = 0; var16 < this.nData; var16++) {
                 for(int var25 = 0; var25 < this.nXarrays; ++var25) {
-                    var9[var25] = this.xData[var25][var16];
+                    var9[var25] = this.xDatas[var25][var16];
                 }
 
                 switch(this.simplexFlag) {
@@ -5234,7 +5235,7 @@ public class Regression {
             String var10 = "";
 
             int var11;
-            for(var11 = 0; var11 < var1.length; ++var11) {
+            for(var11 = 0; var11 < var1.length; var11++) {
                 int var12 = var1[var11];
                 if (var2[var11] >= 0.0D) {
                     if (var11 > 0) {
@@ -5263,7 +5264,7 @@ public class Regression {
                     throw new IllegalArgumentException("Constraint direction " + var3 + " not recognised");
             }
 
-            for(var11 = 0; var11 < var1.length; ++var11) {
+            for(var11 = 0; var11 < var1.length; var11++) {
                 this.constrainedMultiple.add(new Integer(var1[var11]));
                 this.constrainedMultiple.add(var10);
             }
@@ -5314,17 +5315,17 @@ public class Regression {
         double[] var13 = new double[this.nParam];
 
         int var14;
-        for(var14 = 0; var14 < this.nParam; ++var14) {
+        for(var14 = 0; var14 < this.nParam; var14++) {
             var13[var14] = this.best[var14];
         }
 
         this.chiSquare = 0.0D;
         this.sumOfSquaresError = 0.0D;
 
-        for(var14 = 0; var14 < this.nData; ++var14) {
+        for(var14 = 0; var14 < this.nData; var14++) {
             var6 = 0.0D;
 
-            for(int var15 = 0; var15 < this.nParam; ++var15) {
+            for(int var15 = 0; var15 < this.nParam; var15++) {
                 var6 += var13[var15] * var1[var15][var14];
             }
 
@@ -5340,7 +5341,7 @@ public class Regression {
         if (this.weightOpt && !this.trueErrors) {
             double var18 = 0.0D;
 
-            for(var20 = 0; var20 < this.nData; ++var20) {
+            for(var20 = 0; var20 < this.nData; var20++) {
                 var18 = this.weight[var20] * this.weight[var20];
             }
 
@@ -5364,7 +5365,7 @@ public class Regression {
             for(var24 = 0; var24 < this.nParam; ++var24) {
                 var12[var24] = 0.0D;
 
-                for(var19 = 0; var19 < this.nParam; ++var19) {
+                for(var19 = 0; var19 < this.nParam; var19++) {
                     this.covar[var24][var19] = 0.0D;
                     if (var24 == var19) {
                         this.corrCoeff[var24][var19] = 1.0D;
@@ -5375,10 +5376,10 @@ public class Regression {
             }
         } else {
             for(var24 = 0; var24 < this.nParam; ++var24) {
-                for(var19 = 0; var19 < this.nParam; ++var19) {
+                for(var19 = 0; var19 < this.nParam; var19++) {
                     var4 = 0.0D;
 
-                    for(var20 = 0; var20 < this.nData; ++var20) {
+                    for(var20 = 0; var20 < this.nData; var20++) {
                         if (this.weightOpt) {
                             var2 = this.weight[var20];
                         } else {
@@ -5400,18 +5401,18 @@ public class Regression {
             var26 = var26.inverse();
             double[][] var10 = var26.getArrayCopy();
 
-            for(var19 = 0; var19 < this.nParam; ++var19) {
+            for(var19 = 0; var19 < this.nParam; var19++) {
                 var12[var19] = Math.sqrt(var10[var19][var19]);
             }
 
-            for(var19 = 0; var19 < this.nParam; ++var19) {
-                for(var20 = 0; var20 < this.nParam; ++var20) {
+            for(var19 = 0; var19 < this.nParam; var19++) {
+                for(var20 = 0; var20 < this.nParam; var20++) {
                     this.covar[var19][var20] = var10[var19][var20];
                 }
             }
 
-            for(var19 = 0; var19 < this.nParam; ++var19) {
-                for(var20 = 0; var20 < this.nParam; ++var20) {
+            for(var19 = 0; var19 < this.nParam; var19++) {
+                for(var20 = 0; var20 < this.nParam; var20++) {
                     if (var19 == var20) {
                         this.corrCoeff[var19][var20] = 1.0D;
                     } else {
@@ -5433,7 +5434,7 @@ public class Regression {
         }
 
         if (this.nXarrays == 1 && this.nYarrays == 1) {
-            this.xyR = Stat.corrCoeff(this.xData[0], this.yData, this.weight);
+            this.xyR = Stat.corrCoeff(this.xDatas[0], this.yData, this.weight);
         }
 
         this.yyR = Stat.corrCoeff(this.yCalc, this.yData, this.weight);
@@ -5484,9 +5485,9 @@ public class Regression {
         var10 = Conv.copy(this.best);
         double var15 = 0.0D;
 
-        for(int var17 = 0; var17 < this.nData; ++var17) {
-            for(int var18 = 0; var18 < this.nXarrays; ++var18) {
-                var12[var18] = this.xData[var18][var17];
+        for(int var17 = 0; var17 < this.nData; var17++) {
+            for(int var18 = 0; var18 < this.nXarrays; var18++) {
+                var12[var18] = this.xDatas[var18][var17];
             }
 
             switch(this.simplexFlag) {
@@ -5670,7 +5671,7 @@ public class Regression {
         }
 
         if (this.nXarrays == 1 && this.nYarrays == 1) {
-            this.xyR = Stat.corrCoeff(this.xData[0], this.yData, this.weight);
+            this.xyR = Stat.corrCoeff(this.xDatas[0], this.yData, this.weight);
         }
 
         this.yyR = Stat.corrCoeff(this.yCalc, this.yData, this.weight);
@@ -5746,7 +5747,7 @@ public class Regression {
 
             for(var23 = 0; var23 < this.nData; ++var23) {
                 for(var24 = 0; var24 < this.nXarrays; ++var24) {
-                    var15[var24] = this.xData[var24][var23];
+                    var15[var24] = this.xDatas[var24][var23];
                 }
 
                 switch(this.simplexFlag) {
@@ -5768,7 +5769,7 @@ public class Regression {
 
             for(var23 = 0; var23 < this.nData; ++var23) {
                 for(var24 = 0; var24 < this.nXarrays; ++var24) {
-                    var15[var24] = this.xData[var24][var23];
+                    var15[var24] = this.xDatas[var24][var23];
                 }
 
                 switch(this.simplexFlag) {
@@ -5875,7 +5876,7 @@ public class Regression {
 
         for(int var26 = 0; var26 < this.nData; ++var26) {
             for(int var27 = 0; var27 < this.nXarrays; ++var27) {
-                var15[var27] = this.xData[var27][var26];
+                var15[var27] = this.xDatas[var27][var26];
             }
 
             switch(this.simplexFlag) {
@@ -6019,7 +6020,7 @@ public class Regression {
         }
 
         if (this.nXarrays == 1 && this.nYarrays == 1) {
-            this.xyR = Stat.corrCoeff(this.xData[0], this.yData, this.weight);
+            this.xyR = Stat.corrCoeff(this.xDatas[0], this.yData, this.weight);
         }
 
         this.yyR = Stat.corrCoeff(this.yCalc, this.yData, this.weight);
@@ -6067,9 +6068,9 @@ public class Regression {
                 RegressionDerivativeFunction var10 = (RegressionDerivativeFunction)var2;
                 RegressionFunction var11 = (RegressionFunction)var1;
 
-                for(int var19 = 0; var19 < this.nData; ++var19) {
-                    for(int var20 = 0; var20 < this.nXarrays; ++var20) {
-                        var7[var20] = this.xData[var20][var19];
+                for(int var19 = 0; var19 < this.nData; var19++) {
+                    for(int var20 = 0; var20 < this.nXarrays; var20++) {
+                        var7[var20] = this.xDatas[var20][var19];
                     }
 
                     var18 = var10.function(var3, var7, var4, var5);
@@ -6086,7 +6087,7 @@ public class Regression {
 
                 for(int var22 = 0; var22 < this.nData; ++var22) {
                     for(int var23 = 0; var23 < this.nXarrays; ++var23) {
-                        var7[var23] = this.xData[var23][var22];
+                        var7[var23] = this.xDatas[var23][var22];
                     }
 
                     var18 = var12.function(var3, var7, var4, var5, var22);
@@ -6106,9 +6107,9 @@ public class Regression {
                     RegressionDerivativeFunction var14 = (RegressionDerivativeFunction)var2;
                     var15 = (RegressionFunction3)var1;
 
-                    for(var16 = 0; var16 < this.nData; ++var16) {
-                        for(var17 = 0; var17 < this.nXarrays; ++var17) {
-                            var7[var17] = this.xData[var17][var16];
+                    for(var16 = 0; var16 < this.nData; var16++) {
+                        for(var17 = 0; var17 < this.nXarrays; var17++) {
+                            var7[var17] = this.xDatas[var17][var16];
                         }
 
                         var18 = var14.function(var3, var7, var4, var5);
@@ -6121,9 +6122,9 @@ public class Regression {
                     RegressionDerivativeFunction2 var21 = (RegressionDerivativeFunction2)var2;
                     var15 = (RegressionFunction3)var1;
 
-                    for(var16 = 0; var16 < this.nData; ++var16) {
-                        for(var17 = 0; var17 < this.nXarrays; ++var17) {
-                            var7[var17] = this.xData[var17][var16];
+                    for(var16 = 0; var16 < this.nData; var16++) {
+                        for(var17 = 0; var17 < this.nXarrays; var17++) {
+                            var7[var17] = this.xDatas[var17][var16];
                         }
 
                         var18 = var21.function(var3, var7, var4, var5, var16);
@@ -6195,26 +6196,26 @@ public class Regression {
         this.obsnVariance = var3 * var5 / (var5 * var5 - (double)this.nParam * var7);
     }
 
-    public void simplex(RegressionFunction var1, double[] var2, double[] var3, double var4, int var6) {
+    public void simplex(RegressionFunction rf, double[] start, double[] step, double ftol, int nmax) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (double[])var2, var3, var4, var6);
+        this.simplex((Object)rf, (double[]) start, step, ftol, nmax);
     }
 
-    public void simplex(RegressionFunction2 var1, double[] var2, double[] var3, double var4, int var6) {
+    public void simplex(RegressionFunction2 rf, double[] start, double[] var3, double var4, int var6) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (double[])var2, var3, var4, var6);
+        this.simplex((Object) rf, (double[]) start, var3, var4, var6);
     }
 
-    public void simplex(RegressionFunction3 var1, double[] var2, double[] var3, double var4, int var6) {
+    public void simplex(RegressionFunction3 rf, double[] start, double[] var3, double var4, int var6) {
         this.simplexFlag = 3;
         if (this.multipleY) {
             this.simplexFlag = 4;
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (double[])var2, var3, var4, var6);
+        this.simplex((Object) rf, (double[]) start, var3, var4, var6);
     }
 
     public void simplex(Object var1, double[] var2, double[] var3, double var4, int var6) {
@@ -6227,21 +6228,21 @@ public class Regression {
         this.nelderMead(var1, (Object)null, var2, var3, var4, var6);
     }
 
-    public void simplex(RegressionFunction var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplex(RegressionFunction rf, RegressionDerivativeFunction rdf, double[] start, double[] step, double ftol, int nmax) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
         this.derivFlag = 1;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplex((Object) rf, (Object) rdf, start, step, ftol, nmax);
     }
 
-    public void simplex(RegressionFunction2 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplex(RegressionFunction2 rf, RegressionDerivativeFunction2 rdf, double[] start, double[] step, double ftol, int nmax) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
         this.derivFlag = 2;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplex((Object) rf, (Object) rdf, start, step, ftol, nmax);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction rdf, double[] start, double[] var4, double var5, int var7) {
         this.simplexFlag = 3;
         this.dualErrorsRequired = false;
         this.derivFlag = 1;
@@ -6249,10 +6250,10 @@ public class Regression {
             this.simplexFlag = 4;
         }
 
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplex((Object)rf, (Object) rdf, start, var4, var5, var7);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction2 var2, double[] start, double[] var4, double var5, int var7) {
         this.simplexFlag = 3;
         this.derivFlag = 2;
         if (this.multipleY) {
@@ -6260,7 +6261,7 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplex((Object) rf, (Object)var2, start, var4, var5, var7);
     }
 
     public void simplex(Object var1, Object var2, double[] var3, double[] var4, double var5, int var7) {
@@ -6273,26 +6274,26 @@ public class Regression {
         this.nelderMead(var1, var2, var3, var4, var5, var7);
     }
 
-    public void simplexPlot(RegressionFunction var1, double[] var2, double[] var3, double var4, int var6) {
+    public void simplexPlot(RegressionFunction rf, double[] start, double[] var3, double var4, int var6) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4, var6);
+        this.simplexPlot((Object) rf, (double[]) start, var3, var4, var6);
     }
 
-    public void simplexPlot(RegressionFunction2 var1, double[] var2, double[] var3, double var4, int var6) {
+    public void simplexPlot(RegressionFunction2 rf, double[] var2, double[] var3, double var4, int var6) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4, var6);
+        this.simplexPlot((Object) rf, (double[])var2, var3, var4, var6);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, double[] var2, double[] var3, double var4, int var6) {
+    public void simplexPlot(RegressionFunction3 rf, double[] var2, double[] var3, double var4, int var6) {
         this.simplexFlag = 3;
         this.dualErrorsRequired = true;
         if (this.multipleY) {
             this.simplexFlag = 4;
         }
 
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4, var6);
+        this.simplexPlot((Object) rf, (double[])var2, var3, var4, var6);
     }
 
     public void simplexPlot(Object var1, double[] var2, double[] var3, double var4, int var6) {
@@ -6309,31 +6310,31 @@ public class Regression {
         }
 
         int var7 = 0;
-        if (this.xData.length < 2 && !this.multipleY) {
+        if (this.xDatas.length < 2 && !this.multipleY) {
             var7 = this.plotXY(var1);
         }
 
-        if (var7 != -2 && !this.suppressYYplot) {
-            this.plotYY();
-        }
+//        if (var7 != -2 && !this.suppressYYplot) {
+//            this.plotYY();
+//        }
 
     }
 
-    public void simplexPlot(RegressionFunction var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplexPlot(RegressionFunction rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5, int var7) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
         this.derivFlag = 1;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5, var7);
     }
 
-    public void simplexPlot(RegressionFunction2 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplexPlot(RegressionFunction2 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5, int var7) {
         this.simplexFlag = 2;
         this.derivFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5, var7);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplexPlot(RegressionFunction3 rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5, int var7) {
         this.simplexFlag = 3;
         this.derivFlag = 1;
         this.dualErrorsRequired = true;
@@ -6341,10 +6342,10 @@ public class Regression {
             this.simplexFlag = 4;
         }
 
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5, var7);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5, int var7) {
+    public void simplexPlot(RegressionFunction3 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5, int var7) {
         this.simplexFlag = 3;
         this.derivFlag = 2;
         if (this.multipleY) {
@@ -6352,7 +6353,7 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5, var7);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5, var7);
     }
 
     public void simplexPlot(Object var1, Object var2, double[] var3, double[] var4, double var5, int var7) {
@@ -6368,7 +6369,7 @@ public class Regression {
         }
 
         int var8 = 0;
-        if (this.xData.length < 2 && !this.multipleY) {
+        if (this.xDatas.length < 2 && !this.multipleY) {
             var8 = this.plotXY(var1);
         }
 
@@ -6378,47 +6379,47 @@ public class Regression {
 
     }
 
-    public void simplex(RegressionFunction var1, double[] var2, double[] var3, double var4) {
+    public void simplex(RegressionFunction rf, double[] var2, double[] var3, double var4) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (double[])var2, var3, var4);
+        this.simplex((Object) rf, (double[])var2, var3, var4);
     }
 
-    public void simplex(RegressionFunction2 var1, double[] var2, double[] var3, double var4) {
+    public void simplex(RegressionFunction2 rf, double[] var2, double[] var3, double var4) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (double[])var2, var3, var4);
+        this.simplex((Object) rf, (double[])var2, var3, var4);
     }
 
-    public void simplex(RegressionFunction3 var1, double[] var2, double[] var3, double var4) {
+    public void simplex(RegressionFunction3 rf, double[] var2, double[] var3, double var4) {
         this.simplexFlag = 3;
         this.dualErrorsRequired = true;
         if (this.multipleY) {
             this.simplexFlag = 4;
         }
 
-        this.simplex((Object)var1, (double[])var2, var3, var4);
+        this.simplex((Object) rf, (double[])var2, var3, var4);
     }
 
     public void simplex(Object var1, double[] var2, double[] var3, double var4) {
         this.simplex(var1, var2, var3, var4, this.nMax);
     }
 
-    public void simplex(RegressionFunction var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
+    public void simplex(RegressionFunction rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 1;
         this.derivFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplex(RegressionFunction2 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
+    public void simplex(RegressionFunction2 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 2;
         this.derivFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 3;
         this.derivFlag = 1;
         this.dualErrorsRequired = true;
@@ -6426,10 +6427,10 @@ public class Regression {
             this.simplexFlag = 4;
         }
 
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 3;
         this.derivFlag = 2;
         if (this.multipleY) {
@@ -6437,54 +6438,54 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
     public void simplex(Object var1, Object var2, double[] var3, double[] var4, double var5) {
         this.simplex(var1, var2, var3, var4, var5, this.nMax);
     }
 
-    public void simplexPlot(RegressionFunction var1, double[] var2, double[] var3, double var4) {
+    public void simplexPlot(RegressionFunction rf, double[] var2, double[] var3, double var4) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4);
+        this.simplexPlot((Object) rf, (double[])var2, var3, var4);
     }
 
-    public void simplexPlot(RegressionFunction2 var1, double[] var2, double[] var3, double var4) {
+    public void simplexPlot(RegressionFunction2 rf, double[] var2, double[] var3, double var4) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4);
+        this.simplexPlot((Object) rf, (double[])var2, var3, var4);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, double[] var2, double[] var3, double var4) {
+    public void simplexPlot(RegressionFunction3 rf, double[] var2, double[] var3, double var4) {
         this.simplexFlag = 3;
         if (this.multipleY) {
             this.simplexFlag = 4;
         }
 
         this.dualErrorsRequired = true;
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4);
+        this.simplexPlot((Object) rf, (double[])var2, var3, var4);
     }
 
     public void simplexPlot(Object var1, double[] var2, double[] var3, double var4) {
         this.simplexPlot(var1, var2, var3, var4, this.nMax);
     }
 
-    public void simplexPlot(RegressionFunction var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
+    public void simplexPlot(RegressionFunction rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 1;
         this.derivFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplexPlot(RegressionFunction2 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
+    public void simplexPlot(RegressionFunction2 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 2;
         this.derivFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
+    public void simplexPlot(RegressionFunction3 rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 3;
         this.derivFlag = 1;
         if (this.multipleY) {
@@ -6492,10 +6493,10 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
+    public void simplexPlot(RegressionFunction3 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, double var5) {
         this.simplexFlag = 3;
         this.derivFlag = 2;
         if (this.multipleY) {
@@ -6503,54 +6504,55 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5);
     }
 
     public void simplexPlot(Object var1, Object var2, double[] var3, double[] var4, double var5) {
         this.simplexPlot(var1, var2, var3, var4, var5, this.nMax);
     }
 
-    public void simplex(RegressionFunction var1, double[] var2, double[] var3, int var4) {
+    public void simplex(RegressionFunction rf, double[] var2, double[] var3, int var4) {
+
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (double[])var2, var3, var4);
+        this.simplex((Object) rf, (double[]) var2, var3, var4);
     }
 
-    public void simplex(RegressionFunction2 var1, double[] var2, double[] var3, int var4) {
+    public void simplex(RegressionFunction2 rf, double[] var2, double[] var3, int var4) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (double[])var2, var3, var4);
+        this.simplex((Object) rf, (double[])var2, var3, var4);
     }
 
-    public void simplex(RegressionFunction3 var1, double[] var2, double[] var3, int var4) {
+    public void simplex(RegressionFunction3 rf, double[] var2, double[] var3, int var4) {
         this.simplexFlag = 3;
         if (this.multipleY) {
             this.simplexFlag = 4;
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (double[])var2, var3, var4);
+        this.simplex((Object) rf, (double[])var2, var3, var4);
     }
 
     public void simplex(Object var1, double[] var2, double[] var3, int var4) {
         this.simplex(var1, var2, var3, this.fTol, var4);
     }
 
-    public void simplex(RegressionFunction var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
+    public void simplex(RegressionFunction rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
         this.simplexFlag = 1;
         this.derivFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplex(RegressionFunction2 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, int var5) {
+    public void simplex(RegressionFunction2 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, int var5) {
         this.simplexFlag = 2;
         this.derivFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
         this.simplexFlag = 3;
         this.derivFlag = 1;
         if (this.multipleY) {
@@ -6558,10 +6560,10 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, int var5) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, int var5) {
         this.simplexFlag = 3;
         this.derivFlag = 2;
         if (this.multipleY) {
@@ -6569,23 +6571,23 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplex((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplex(Object var1, Object var2, double[] var3, double[] var4, int var5) {
-        this.simplex(var1, var2, var3, var4, this.fTol, var5);
+    public void simplex(Object var1, Object rf, double[] var3, double[] var4, int var5) {
+        this.simplex(var1, rf, var3, var4, this.fTol, var5);
     }
 
-    public void simplexPlot(RegressionFunction var1, double[] var2, double[] var3, int var4) {
+    public void simplexPlot(RegressionFunction rf, double[] var2, double[] var3, int var4) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4);
+        this.simplexPlot((Object) rf, (double[])var2, var3, var4);
     }
 
-    public void simplexPlot(RegressionFunction2 var1, double[] var2, double[] var3, int var4) {
+    public void simplexPlot(RegressionFunction2 rf, double[] var2, double[] var3, int var4) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (double[])var2, var3, var4);
+        this.simplexPlot((Object) rf, (double[])var2, var3, var4);
     }
 
     public void simplexPlot(RegressionFunction3 var1, double[] var2, double[] var3, int var4) {
@@ -6602,21 +6604,21 @@ public class Regression {
         this.simplexPlot(var1, var2, var3, this.fTol, var4);
     }
 
-    public void simplexPlot(RegressionFunction var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
+    public void simplexPlot(RegressionFunction rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
         this.simplexFlag = 1;
         this.derivFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplexPlot(RegressionFunction2 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, int var5) {
+    public void simplexPlot(RegressionFunction2 rf, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, int var5) {
         this.simplexFlag = 2;
         this.derivFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
+    public void simplexPlot(RegressionFunction3 rf, RegressionDerivativeFunction var2, double[] var3, double[] var4, int var5) {
         this.simplexFlag = 3;
         this.derivFlag = 1;
         this.dualErrorsRequired = true;
@@ -6624,7 +6626,7 @@ public class Regression {
             this.simplexFlag = 4;
         }
 
-        this.simplexPlot((Object)var1, (Object)var2, var3, var4, var5);
+        this.simplexPlot((Object) rf, (Object)var2, var3, var4, var5);
     }
 
     public void simplexPlot(RegressionFunction3 var1, RegressionDerivativeFunction2 var2, double[] var3, double[] var4, int var5) {
@@ -6708,10 +6710,10 @@ public class Regression {
         this.simplex(var1, var2, var3, var4, this.fTol, this.nMax);
     }
 
-    public void simplexPlot(RegressionFunction var1, double[] var2, double[] var3) {
+    public void simplexPlot(RegressionFunction rf, double[] start, double[] step) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, (double[])var2, var3);
+        this.simplexPlot((Object) rf, (double[])start, step);
     }
 
     public void simplexPlot(RegressionFunction2 var1, double[] var2, double[] var3) {
@@ -7287,21 +7289,21 @@ public class Regression {
         this.simplex(var1, var2, var4, this.fTol, this.nMax);
     }
 
-    public void simplex(RegressionFunction var1, RegressionDerivativeFunction var2, double[] var3) {
+    public void simplex(RegressionFunction rf, RegressionDerivativeFunction var2, double[] var3) {
         this.simplexFlag = 1;
         this.derivFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (Object)var2, var3);
+        this.simplex((Object) rf, (Object)var2, var3);
     }
 
-    public void simplex(RegressionFunction2 var1, RegressionDerivativeFunction2 var2, double[] var3) {
+    public void simplex(RegressionFunction2 rf, RegressionDerivativeFunction2 var2, double[] var3) {
         this.simplexFlag = 2;
         this.derivFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplex((Object)var1, (Object)var2, var3);
+        this.simplex((Object) rf, (Object)var2, var3);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction var2, double[] var3) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction var2, double[] var3) {
         this.simplexFlag = 3;
         this.derivFlag = 1;
         if (this.multipleY) {
@@ -7309,10 +7311,10 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (Object)var2, var3);
+        this.simplex((Object) rf, (Object)var2, var3);
     }
 
-    public void simplex(RegressionFunction3 var1, RegressionDerivativeFunction2 var2, double[] var3) {
+    public void simplex(RegressionFunction3 rf, RegressionDerivativeFunction2 var2, double[] var3) {
         this.simplexFlag = 3;
         this.derivFlag = 2;
         if (this.multipleY) {
@@ -7320,7 +7322,7 @@ public class Regression {
         }
 
         this.dualErrorsRequired = true;
-        this.simplex((Object)var1, (Object)var2, var3);
+        this.simplex((Object) rf, (Object)var2, var3);
     }
 
     public void simplex(Object var1, Object var2, double[] var3) {
@@ -7334,26 +7336,26 @@ public class Regression {
         this.simplex(var1, var2, var3, var5, this.fTol, this.nMax);
     }
 
-    public void simplexPlot(RegressionFunction var1, double[] var2) {
+    public void simplexPlot(RegressionFunction rf, double[] var2) {
         this.simplexFlag = 1;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, var2);
+        this.simplexPlot((Object) rf, var2);
     }
 
-    public void simplexPlot(RegressionFunction2 var1, double[] var2) {
+    public void simplexPlot(RegressionFunction2 rf, double[] var2) {
         this.simplexFlag = 2;
         this.dualErrorsRequired = false;
-        this.simplexPlot((Object)var1, var2);
+        this.simplexPlot((Object) rf, var2);
     }
 
-    public void simplexPlot(RegressionFunction3 var1, double[] var2) {
+    public void simplexPlot(RegressionFunction3 rf, double[] var2) {
         this.simplexFlag = 3;
         if (this.multipleY) {
             this.simplexFlag = 4;
         }
 
         this.dualErrorsRequired = true;
-        this.simplexPlot((Object)var1, var2);
+        this.simplexPlot((Object) rf, var2);
     }
 
     public void simplexPlot(Object var1, double[] var2) {
@@ -7431,14 +7433,14 @@ public class Regression {
         this.print(var2);
     }
 
-    public void print(String var1) {
-        if (var1.indexOf(46) == -1) {
-            var1 = var1 + ".txt";
+    public void print(String filename) {
+        if (filename.indexOf(46) == -1) {
+            filename = filename + ".txt";
         }
 
-        FileOutput var2 = new FileOutput(var1, 'n');
-        var2.dateAndTimeln(var1);
-        var2.println(this.graphTitle);
+        FileOutput fileOutput = new FileOutput(filename, 'n');
+        fileOutput.dateAndTimeln(filename);
+        fileOutput.println(this.graphTitle);
         this.paraName = new String[this.nParam];
         this.constraintString = new String[this.nParam];
 
@@ -7475,169 +7477,169 @@ public class Regression {
 
         if (this.bestPolyFlag) {
             if (this.bestPolyTooFewN) {
-                var2.println("WARNING!!");
-                var2.println("This is the best fit polynomial returned by the bestPolynomial method");
-                var2.println("However the degree is two less than the number of points, i.e. the highest statistically valid polynomial that the data allows.");
-                var2.println("It may not be the best fit polynomial.  More data points may reveal a higher degree polynomial to be a better fit.");
-                var2.println(" ");
+                fileOutput.println("WARNING!!");
+                fileOutput.println("This is the best fit polynomial returned by the bestPolynomial method");
+                fileOutput.println("However the degree is two less than the number of points, i.e. the highest statistically valid polynomial that the data allows.");
+                fileOutput.println("It may not be the best fit polynomial.  More data points may reveal a higher degree polynomial to be a better fit.");
+                fileOutput.println(" ");
             } else {
-                var2.println("This is the best fit found by the method bestPolynomial");
+                fileOutput.println("This is the best fit found by the method bestPolynomial");
             }
         }
 
         if (this.weightOpt) {
-            var2.println("Weighted Least Squares Minimisation");
+            fileOutput.println("Weighted Least Squares Minimisation");
         } else {
-            var2.println("Unweighted Least Squares Minimisation");
+            fileOutput.println("Unweighted Least Squares Minimisation");
         }
 
         switch(this.lastMethod) {
             case 0:
-                var2.println("Linear Regression with intercept");
-                var2.println("y = c[0] + c[1]*x1 + c[2]*x2 +c[3]*x3 + . . .");
+                fileOutput.println("Linear Regression with intercept");
+                fileOutput.println("y = c[0] + c[1]*x1 + c[2]*x2 +c[3]*x3 + . . .");
 
                 for(var5 = 0; var5 < this.nParam; ++var5) {
                     this.paraName[var5] = "c[" + var5 + "]";
                 }
 
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 1:
-                var2.println("Polynomial (with degree = " + (this.nParam - 1) + "), Fitting: Linear Regression");
-                var2.println("y = c[0] + c[1]*x + c[2]*x^2 +c[3]*x^3 + . . .");
+                fileOutput.println("Polynomial (with degree = " + (this.nParam - 1) + "), Fitting: Linear Regression");
+                fileOutput.println("y = c[0] + c[1]*x + c[2]*x^2 +c[3]*x^3 + . . .");
 
                 for(var5 = 0; var5 < this.nParam; ++var5) {
                     this.paraName[var5] = "c[" + var5 + "]";
                 }
 
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 2:
-                var2.println("Generalised linear regression");
-                var2.println("y = c[0]*f1(x) + c[1]*f2(x) + c[2]*f3(x) + . . .");
+                fileOutput.println("Generalised linear regression");
+                fileOutput.println("y = c[0]*f1(x) + c[1]*f2(x) + c[2]*f3(x) + . . .");
 
                 for(var5 = 0; var5 < this.nParam; ++var5) {
                     this.paraName[var5] = "c[" + var5 + "]";
                 }
 
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 3:
-                var2.println("Nelder and Mead Simplex Non-linear Regression");
-                var2.println("y = f(x1, x2, x3 . . ., c[0], c[1], c[2] . . .");
-                var2.println("y is non-linear with respect to the c[i]");
+                fileOutput.println("Nelder and Mead Simplex Non-linear Regression");
+                fileOutput.println("y = f(x1, x2, x3 . . ., c[0], c[1], c[2] . . .");
+                fileOutput.println("y is non-linear with respect to the c[i]");
 
                 for(var5 = 0; var5 < this.nParam; ++var5) {
                     this.paraName[var5] = "c[" + var5 + "]";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 4:
-                var2.println("Fitting to a Normal (Gaussian) distribution");
-                var2.println("y = (yscale/(sd.sqrt(2.pi)).exp(0.5.square((x-mean)/sd))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Normal (Gaussian) distribution");
+                fileOutput.println("y = (yscale/(sd.sqrt(2.pi)).exp(0.5.square((x-mean)/sd))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mean";
                 this.paraName[1] = "sd";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 5:
-                var2.println("Fitting to a Lorentzian distribution");
-                var2.println("y = (yscale/pi).(gamma/2)/((x-mean)^2+(gamma/2)^2)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Lorentzian distribution");
+                fileOutput.println("y = (yscale/pi).(gamma/2)/((x-mean)^2+(gamma/2)^2)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mean";
                 this.paraName[1] = "gamma";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 6:
-                var2.println("Fitting to a Poisson distribution");
-                var2.println("y = yscale.mu^k.exp(-mu)/mu!");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Poisson distribution");
+                fileOutput.println("y = yscale.mu^k.exp(-mu)/mu!");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mean";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 7:
-                var2.println("Fitting to a Two Parameter Minimum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
-                var2.println("y = (yscale/sigma)*exp((x - mu)/sigma))*exp(-exp((x-mu)/sigma))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Two Parameter Minimum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
+                fileOutput.println("y = (yscale/sigma)*exp((x - mu)/sigma))*exp(-exp((x-mu)/sigma))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 8:
-                var2.println("Fitting to a Two Parameter Maximum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
-                var2.println("y = (yscale/sigma)*exp(-(x - mu)/sigma))*exp(-exp(-(x-mu)/sigma))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Two Parameter Maximum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
+                fileOutput.println("y = (yscale/sigma)*exp(-(x - mu)/sigma))*exp(-exp(-(x-mu)/sigma))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 9:
-                var2.println("Fitting to a One Parameter Minimum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
-                var2.println("y = (yscale)*exp(x/sigma))*exp(-exp(x/sigma))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a One Parameter Minimum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
+                fileOutput.println("y = (yscale)*exp(x/sigma))*exp(-exp(x/sigma))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 10:
-                var2.println("Fitting to a One Parameter Maximum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
-                var2.println("y = (yscale)*exp(-x/sigma))*exp(-exp(-x/sigma))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a One Parameter Maximum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
+                fileOutput.println("y = (yscale)*exp(-x/sigma))*exp(-exp(-x/sigma))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 11:
-                var2.println("Fitting to a Standard Minimum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
-                var2.println("y = (yscale)*exp(x))*exp(-exp(x))");
-                var2.println("Linear regression used to fit y = yscale*z where z = exp(x))*exp(-exp(x)))");
+                fileOutput.println("Fitting to a Standard Minimum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
+                fileOutput.println("y = (yscale)*exp(x))*exp(-exp(x))");
+                fileOutput.println("Linear regression used to fit y = yscale*z where z = exp(x))*exp(-exp(x)))");
                 if (this.scaleFlag) {
                     this.paraName[0] = "y scale";
                 }
 
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 12:
-                var2.println("Fitting to a Standard Maximum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
-                var2.println("y = (yscale)*exp(-x))*exp(-exp(-x))");
-                var2.println("Linear regression used to fit y = yscale*z where z = exp(-x))*exp(-exp(-x)))");
+                fileOutput.println("Fitting to a Standard Maximum Order Statistic Gumbel [Type 1 Extreme Value] Distribution");
+                fileOutput.println("y = (yscale)*exp(-x))*exp(-exp(-x))");
+                fileOutput.println("Linear regression used to fit y = yscale*z where z = exp(-x))*exp(-exp(-x)))");
                 if (this.scaleFlag) {
                     this.paraName[0] = "y scale";
                 }
 
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 13:
-                var2.println("Fitting to a Three Parameter Frechet [Type 2 Extreme Value] Distribution");
-                var2.println("y = yscale.(gamma/sigma)*((x - mu)/sigma)^(-gamma-1)*exp(-((x-mu)/sigma)^-gamma");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Three Parameter Frechet [Type 2 Extreme Value] Distribution");
+                fileOutput.println("y = yscale.(gamma/sigma)*((x - mu)/sigma)^(-gamma-1)*exp(-((x-mu)/sigma)^-gamma");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "sigma";
                 this.paraName[2] = "gamma";
@@ -7645,35 +7647,35 @@ public class Regression {
                     this.paraName[3] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 14:
-                var2.println("Fitting to a Two parameter Frechet [Type2  Extreme Value] Distribution");
-                var2.println("y = yscale.(gamma/sigma)*(x/sigma)^(-gamma-1)*exp(-(x/sigma)^-gamma");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Two parameter Frechet [Type2  Extreme Value] Distribution");
+                fileOutput.println("y = yscale.(gamma/sigma)*(x/sigma)^(-gamma-1)*exp(-(x/sigma)^-gamma");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "sigma";
                 this.paraName[1] = "gamma";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 15:
-                var2.println("Fitting to a Standard Frechet [Type 2 Extreme Value] Distribution");
-                var2.println("y = yscale.gamma*(x)^(-gamma-1)*exp(-(x)^-gamma");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Standard Frechet [Type 2 Extreme Value] Distribution");
+                fileOutput.println("y = yscale.gamma*(x)^(-gamma-1)*exp(-(x)^-gamma");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "gamma";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 16:
-                var2.println("Fitting to a Three parameter Weibull [Type 3 Extreme Value] Distribution");
-                var2.println("y = yscale.(gamma/sigma)*((x - mu)/sigma)^(gamma-1)*exp(-((x-mu)/sigma)^gamma");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Three parameter Weibull [Type 3 Extreme Value] Distribution");
+                fileOutput.println("y = yscale.(gamma/sigma)*((x - mu)/sigma)^(gamma-1)*exp(-((x-mu)/sigma)^gamma");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "sigma";
                 this.paraName[2] = "gamma";
@@ -7681,148 +7683,148 @@ public class Regression {
                     this.paraName[3] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 17:
-                var2.println("Fitting to a Two parameter Weibull [Type 3 Extreme Value] Distribution");
-                var2.println("y = yscale.(gamma/sigma)*(x/sigma)^(gamma-1)*exp(-(x/sigma)^gamma");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Two parameter Weibull [Type 3 Extreme Value] Distribution");
+                fileOutput.println("y = yscale.(gamma/sigma)*(x/sigma)^(gamma-1)*exp(-(x/sigma)^gamma");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "sigma";
                 this.paraName[1] = "gamma";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 18:
-                var2.println("Fitting to a Standard Weibull [Type 3 Extreme Value] Distribution");
-                var2.println("y = yscale.gamma*(x)^(gamma-1)*exp(-(x)^gamma");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Standard Weibull [Type 3 Extreme Value] Distribution");
+                fileOutput.println("y = yscale.gamma*(x)^(gamma-1)*exp(-(x)^gamma");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "gamma";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 19:
-                var2.println("Fitting to a Two parameter Exponential Distribution");
-                var2.println("y = (yscale/sigma)*exp(-(x-mu)/sigma)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Two parameter Exponential Distribution");
+                fileOutput.println("y = (yscale/sigma)*exp(-(x-mu)/sigma)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 20:
-                var2.println("Fitting to a One parameter Exponential Distribution");
-                var2.println("y = (yscale/sigma)*exp(-x/sigma)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a One parameter Exponential Distribution");
+                fileOutput.println("y = (yscale/sigma)*exp(-x/sigma)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 21:
-                var2.println("Fitting to a Standard Exponential Distribution");
-                var2.println("y = yscale*exp(-x)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Standard Exponential Distribution");
+                fileOutput.println("y = yscale*exp(-x)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 if (this.scaleFlag) {
                     this.paraName[0] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 22:
-                var2.println("Fitting to a Rayleigh Distribution");
-                var2.println("y = (yscale/sigma)*(x/sigma)*exp(-0.5*(x/sigma)^2)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Rayleigh Distribution");
+                fileOutput.println("y = (yscale/sigma)*(x/sigma)*exp(-0.5*(x/sigma)^2)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 23:
-                var2.println("Fitting to a Two Parameter Pareto Distribution");
-                var2.println("y = yscale*(alpha*beta^alpha)/(x^(alpha+1))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Two Parameter Pareto Distribution");
+                fileOutput.println("y = yscale*(alpha*beta^alpha)/(x^(alpha+1))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "alpha";
                 this.paraName[1] = "beta";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 24:
-                var2.println("Fitting to a One Parameter Pareto Distribution");
-                var2.println("y = yscale*(alpha)/(x^(alpha+1))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a One Parameter Pareto Distribution");
+                fileOutput.println("y = yscale*(alpha)/(x^(alpha+1))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "alpha";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 25:
-                var2.println("Fitting to a Sigmoidal Threshold Function");
-                var2.println("y = yscale/(1 + exp(-slopeTerm(x - theta)))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Sigmoidal Threshold Function");
+                fileOutput.println("y = yscale/(1 + exp(-slopeTerm(x - theta)))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "slope term";
                 this.paraName[1] = "theta";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 26:
-                var2.println("Fitting to a Rectangular Hyperbola");
-                var2.println("y = yscale.x/(theta + x)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Rectangular Hyperbola");
+                fileOutput.println("y = yscale.x/(theta + x)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "theta";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 27:
-                var2.println("Fitting to a Scaled Heaviside Step Function");
-                var2.println("y = yscale.H(x - theta)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Scaled Heaviside Step Function");
+                fileOutput.println("y = yscale.H(x - theta)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "theta";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 28:
-                var2.println("Fitting to a Hill/Sips Sigmoid");
-                var2.println("y = yscale.x^n/(theta^n + x^n)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Hill/Sips Sigmoid");
+                fileOutput.println("y = yscale.x^n/(theta^n + x^n)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "theta";
                 this.paraName[1] = "n";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 29:
-                var2.println("Fitting to a Shifted Pareto Distribution");
-                var2.println("y = yscale*(alpha*beta^alpha)/((x-theta)^(alpha+1))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Shifted Pareto Distribution");
+                fileOutput.println("y = yscale*(alpha*beta^alpha)/((x-theta)^(alpha+1))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "alpha";
                 this.paraName[1] = "beta";
                 this.paraName[2] = "theta";
@@ -7830,36 +7832,36 @@ public class Regression {
                     this.paraName[3] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 30:
-                var2.println("Fitting to a Logistic distribution");
-                var2.println("y = yscale*exp(-(x-mu)/beta)/(beta*(1 + exp(-(x-mu)/beta))^2");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Logistic distribution");
+                fileOutput.println("y = yscale*exp(-(x-mu)/beta)/(beta*(1 + exp(-(x-mu)/beta))^2");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "beta";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 31:
-                var2.println("Fitting to a Beta distribution - [0, 1] interval");
-                var2.println("y = yscale*x^(alpha-1)*(1-x)^(beta-1)/B(alpha, beta)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Beta distribution - [0, 1] interval");
+                fileOutput.println("y = yscale*x^(alpha-1)*(1-x)^(beta-1)/B(alpha, beta)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "alpha";
                 this.paraName[1] = "beta";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 32:
-                var2.println("Fitting to a Beta distribution - [min, max] interval");
-                var2.println("y = yscale*(x-min)^(alpha-1)*(max-x)^(beta-1)/(B(alpha, beta)*(max-min)^(alpha+beta-1)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Beta distribution - [min, max] interval");
+                fileOutput.println("y = yscale*(x-min)^(alpha-1)*(max-x)^(beta-1)/(B(alpha, beta)*(max-min)^(alpha+beta-1)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "alpha";
                 this.paraName[1] = "beta";
                 this.paraName[2] = "min";
@@ -7868,12 +7870,12 @@ public class Regression {
                     this.paraName[4] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 33:
-                var2.println("Fitting to a Three Parameter Gamma distribution");
-                var2.println("y = yscale*((x-mu)/beta)^(gamma-1)*exp(-(x-mu)/beta)/(beta*Gamma(gamma))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Three Parameter Gamma distribution");
+                fileOutput.println("y = yscale*((x-mu)/beta)^(gamma-1)*exp(-(x-mu)/beta)/(beta*Gamma(gamma))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "beta";
                 this.paraName[2] = "gamma";
@@ -7881,46 +7883,46 @@ public class Regression {
                     this.paraName[3] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 34:
-                var2.println("Fitting to a Standard Gamma distribution");
-                var2.println("y = yscale*x^(gamma-1)*exp(-x)/Gamma(gamma)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Standard Gamma distribution");
+                fileOutput.println("y = yscale*x^(gamma-1)*exp(-x)/Gamma(gamma)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "gamma";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 35:
-                var2.println("Fitting to an Erang distribution");
-                var2.println("y = yscale*lambda^k*x^(k-1)*exp(-x*lambda)/(k-1)!");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to an Erang distribution");
+                fileOutput.println("y = yscale*lambda^k*x^(k-1)*exp(-x*lambda)/(k-1)!");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "lambda";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 36:
-                var2.println("Fitting to a two parameter log-normal distribution");
-                var2.println("y = (yscale/(x.sigma.sqrt(2.pi)).exp(0.5.square((log(x)-muu)/sigma))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a two parameter log-normal distribution");
+                fileOutput.println("y = (yscale/(x.sigma.sqrt(2.pi)).exp(0.5.square((log(x)-muu)/sigma))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mu";
                 this.paraName[1] = "sigma";
                 if (this.scaleFlag) {
                     this.paraName[2] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 37:
-                var2.println("Fitting to a three parameter log-normal distribution");
-                var2.println("y = (yscale/((x-alpha).beta.sqrt(2.pi)).exp(0.5.square((log(x-alpha)/gamma)/beta))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a three parameter log-normal distribution");
+                fileOutput.println("y = (yscale/((x-alpha).beta.sqrt(2.pi)).exp(0.5.square((log(x-alpha)/gamma)/beta))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "alpha";
                 this.paraName[1] = "beta";
                 this.paraName[2] = "gamma";
@@ -7928,75 +7930,75 @@ public class Regression {
                     this.paraName[3] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 38:
-                var2.println("Fitting to a Normal (Gaussian) distribution with fixed parameters");
-                var2.println("y = (yscale/(sd.sqrt(2.pi)).exp(0.5.square((x-mean)/sd))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Normal (Gaussian) distribution with fixed parameters");
+                fileOutput.println("y = (yscale/(sd.sqrt(2.pi)).exp(0.5.square((x-mean)/sd))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "mean";
                 this.paraName[1] = "sd";
                 this.paraName[2] = "y scale";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 39:
-                var2.println("Fitting to a EC50 dose response curve (four parameter logistic)");
-                var2.println("y = top + (bottom - top)/(1 + (x/EC50)^HillSlope)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a EC50 dose response curve (four parameter logistic)");
+                fileOutput.println("y = top + (bottom - top)/(1 + (x/EC50)^HillSlope)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "top";
                 this.paraName[1] = "bottom";
                 this.paraName[2] = "EC50";
                 this.paraName[3] = "Hill Slope";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 40:
-                var2.println("Fitting to a EC50 dose response curve (four parameter logistic)");
-                var2.println("y = top + (bottom - top)/(1 + (x/EC50)^HillSlope) [top and bottom fixed]");
-                var2.println("bottom = " + this.bottom);
-                var2.println("top =    " + this.top);
-                var2.println();
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a EC50 dose response curve (four parameter logistic)");
+                fileOutput.println("y = top + (bottom - top)/(1 + (x/EC50)^HillSlope) [top and bottom fixed]");
+                fileOutput.println("bottom = " + this.bottom);
+                fileOutput.println("top =    " + this.top);
+                fileOutput.println();
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "EC50";
                 this.paraName[1] = "Hill Slope";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 41:
-                var2.println("Fitting to a EC50 dose response curve - bottom constrained to be zero or positive");
-                var2.println("y = top + (bottom - top)/(1 + (x/EC50)^HillSlope)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a EC50 dose response curve - bottom constrained to be zero or positive");
+                fileOutput.println("y = top + (bottom - top)/(1 + (x/EC50)^HillSlope)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "top";
                 this.paraName[1] = "bottom";
                 this.paraName[2] = "EC50";
                 this.paraName[3] = "Hill Slope";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 42:
-                var2.println("Fitting to a five parameter logistic");
-                var2.println("y = top + (bottom - top)/(1 + (x/C50)^HillSlope)^asymm [top and bottom fixed]");
-                var2.println("bottom = " + this.bottom);
-                var2.println("top =    " + this.top);
-                var2.println();
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a five parameter logistic");
+                fileOutput.println("y = top + (bottom - top)/(1 + (x/C50)^HillSlope)^asymm [top and bottom fixed]");
+                fileOutput.println("bottom = " + this.bottom);
+                fileOutput.println("top =    " + this.top);
+                fileOutput.println();
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "C50";
                 this.paraName[1] = "HillSlope";
                 this.paraName[2] = "asymm";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 43:
-                var2.println("Fitting to an exponential");
-                var2.println("y = yscale.exp(A.x)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to an exponential");
+                fileOutput.println("y = yscale.exp(A.x)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "A";
                 if (this.scaleFlag) {
                     this.paraName[1] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 44:
-                var2.println("Fitting to multiple exponentials");
-                var2.println("y = Sum[Ai.exp(Bi.x)], i=1 to n");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to multiple exponentials");
+                fileOutput.println("y = Sum[Ai.exp(Bi.x)], i=1 to n");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 var5 = 1;
 
                 for(var6 = 0; var6 < this.nParam; var6 += 2) {
@@ -8004,47 +8006,47 @@ public class Regression {
                     this.paraName[var6 + 1] = "B[" + var5++ + "]";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 45:
-                var2.println("Fitting to one minus an exponential");
-                var2.println("y = A(1 - exp(B.x)");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to one minus an exponential");
+                fileOutput.println("y = A(1 - exp(B.x)");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "A";
                 this.paraName[1] = "B";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 46:
-                var2.println("Fitting to a constant");
-                var2.println("y = a");
-                var2.println("Stat weighted mean used to fit the data");
+                fileOutput.println("Fitting to a constant");
+                fileOutput.println("y = a");
+                fileOutput.println("Stat weighted mean used to fit the data");
                 this.paraName[0] = "a";
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 47:
-                var2.println("Linear Regression with fixed intercept");
-                var2.println("y = fixed intercept + c[0]*x1 + c[1]*x2 +c[2]*x3 + . . .     ");
+                fileOutput.println("Linear Regression with fixed intercept");
+                fileOutput.println("y = fixed intercept + c[0]*x1 + c[1]*x2 +c[2]*x3 + . . .     ");
 
                 for(var6 = 0; var6 < this.nParam; ++var6) {
                     this.paraName[var6] = "c[" + var6 + "]";
                 }
 
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 48:
-                var2.println("Polynomial (with degree = " + this.nParam + ") and fixed intercept, Fitting: Linear Regression");
-                var2.println("y = fixed intercept + c[0]*x + c[1]*x^2 +c[2]*x^3 + . . .");
+                fileOutput.println("Polynomial (with degree = " + this.nParam + ") and fixed intercept, Fitting: Linear Regression");
+                fileOutput.println("y = fixed intercept + c[0]*x + c[1]*x^2 +c[2]*x^3 + . . .");
 
                 for(var6 = 0; var6 < this.nParam; ++var6) {
                     this.paraName[var6] = "c[" + var6 + "]";
                 }
 
-                this.linearPrint(var2);
+                this.linearPrint(fileOutput);
                 break;
             case 49:
-                var2.println("Fitting multiple Gaussian distributions");
-                var2.println("y = Sum(A[i]/(sd[i].sqrt(2.pi)).exp(0.5.square((x-mean[i])/sd[i])) = yscale.Sum(f[i]/(sd[i].sqrt(2.pi)).exp(0.5.square((x-mean[i])/sd[i]))");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting multiple Gaussian distributions");
+                fileOutput.println("y = Sum(A[i]/(sd[i].sqrt(2.pi)).exp(0.5.square((x-mean[i])/sd[i])) = yscale.Sum(f[i]/(sd[i].sqrt(2.pi)).exp(0.5.square((x-mean[i])/sd[i]))");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
 
                 for(var6 = 0; var6 < this.nGaussians; ++var6) {
                     this.paraName[3 * var6] = "mean[" + var6 + "]";
@@ -8056,54 +8058,54 @@ public class Regression {
                     this.paraName[3 * this.nGaussians] = "y scale";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 50:
-                var2.println("Fitting to a non-integer polynomial");
-                var2.println("y = c[0] + c[1]*x + c[2]*x^c[3]");
+                fileOutput.println("Fitting to a non-integer polynomial");
+                fileOutput.println("y = c[0] + c[1]*x + c[2]*x^c[3]");
 
                 for(var6 = 0; var6 < this.nParam; ++var6) {
                     this.paraName[var6] = "c[" + var6 + "]";
                 }
 
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 51:
-                var2.println("Five parameter logistic function");
-                var2.println("y = top + (bottom - top)/((1 + (x/y50)^HillSlope)^asymm");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Five parameter logistic function");
+                fileOutput.println("y = top + (bottom - top)/((1 + (x/y50)^HillSlope)^asymm");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "top";
                 this.paraName[1] = "bottom";
                 this.paraName[2] = "y50";
                 this.paraName[3] = "HillSlope";
                 this.paraName[4] = "asymm";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             case 52:
-                var2.println("Fitting to a Shifted Rectangular Hyperbola");
-                var2.println("y = A.x/(theta + x) + alpha");
-                var2.println("Nelder and Mead Simplex used to fit the data");
+                fileOutput.println("Fitting to a Shifted Rectangular Hyperbola");
+                fileOutput.println("y = A.x/(theta + x) + alpha");
+                fileOutput.println("Nelder and Mead Simplex used to fit the data");
                 this.paraName[0] = "theta";
                 this.paraName[1] = "alpha";
                 this.paraName[2] = "A";
-                this.nonLinearPrint(var2);
+                this.nonLinearPrint(fileOutput);
                 break;
             default:
                 throw new IllegalArgumentException("Method number (this.lastMethod) not found");
         }
 
-        var2.close();
+        fileOutput.close();
     }
 
-    public void print() {
-        String var1 = null;
+    public void  print() {
+        String filename = null;
         if (this.bestPolyFlag) {
-            var1 = "BestPolynomialOutput.txt";
+            filename = "BestPolynomialOutput.txt";
         } else {
-            var1 = "RegressOutput.txt";
+            filename = "RegressOutput.txt";
         }
 
-        this.print(var1);
+        this.print(filename);
     }
 
     protected void linearPrint(FileOutput var1) {
@@ -8157,7 +8159,7 @@ public class Regression {
 
         var1.printtab("y(expl)", this.field);
         var1.printtab("y(calc)", this.field);
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             for(var3 = 0; var3 < this.nXarrays; ++var3) {
                 var1.printtab("x error", this.field);
             }
@@ -8175,7 +8177,7 @@ public class Regression {
 
         var1.printtab(" ", this.field);
         var1.printtab(" ", this.field);
-        if (this.xErrorsEntered) {
+        if (this.xWeightsEntered) {
             for(var3 = 0; var3 < this.nXarrays; ++var3) {
                 var1.printtab("x" + String.valueOf(var3 + var12), this.field);
             }
@@ -8190,17 +8192,17 @@ public class Regression {
         int var4;
         for(var3 = 0; var3 < this.nData; ++var3) {
             for(var4 = 0; var4 < this.nXarrays; ++var4) {
-                var1.printtab(Fmath.truncate(this.xData[var4][var3], this.prec), this.field);
+                var1.printtab(Fmath.truncate(this.xDatas[var4][var3], this.prec), this.field);
             }
 
             var1.printtab(Fmath.truncate(this.yData[var3], this.prec), this.field);
             var1.printtab(Fmath.truncate(this.yCalc[var3], this.prec), this.field);
-            if (this.xErrorsEntered) {
+            if (this.xWeightsEntered) {
                 for(var4 = 0; var4 < this.nXarrays; ++var4) {
-                    var1.printtab(Fmath.truncate(this.xErrors[var4][var3], this.prec), this.field);
+                    var1.printtab(Fmath.truncate(this.xWeights[var4][var3], this.prec), this.field);
                 }
 
-                var1.printtab(Fmath.truncate(this.yErrors[var3], this.prec), this.field);
+                var1.printtab(Fmath.truncate(this.yWeight[var3], this.prec), this.field);
             }
 
             var1.printtab(Fmath.truncate(this.weight[var3], this.prec), this.field);
@@ -8303,7 +8305,7 @@ public class Regression {
             double[] var9 = (double[])((double[])this.bestPolyArray.get(7));
             double[] var10 = (double[])((double[])this.bestPolyArray.get(8));
 
-            for(int var11 = 0; var11 < var3; ++var11) {
+            for(int var11 = 0; var11 < var3; var11++) {
                 var1.print(var13[var11], this.field);
                 var1.print(var5[var11], this.field);
                 var1.print(Fmath.truncate(var6[var11], this.prec), this.field);
@@ -8458,7 +8460,7 @@ public class Regression {
             var9 = 3;
             var10 = 0;
 
-            for(var11 = 0; var11 < var9; ++var11) {
+            for(var11 = 0; var11 < var9; var11++) {
                 var1.printtab(this.paraName[var11], this.field);
                 if (this.fixed[var11]) {
                     var1.printtab(this.values[var11]);
@@ -8474,7 +8476,7 @@ public class Regression {
                         var1.println(Fmath.truncate(this.best[var10], this.prec));
                     }
 
-                    ++var10;
+                    var10++;
                 }
             }
         } else {
@@ -8513,7 +8515,7 @@ public class Regression {
             var9 = 3;
             var10 = 0;
 
-            for(var11 = 0; var11 < var9; ++var11) {
+            for(var11 = 0; var11 < var9; var11++) {
                 var1.printtab(this.paraName[var11], this.field);
                 if (this.fixed[var11]) {
                     var1.printtab(this.values[var11]);
@@ -8526,7 +8528,7 @@ public class Regression {
                     var1.printtab(Fmath.truncate(this.stepH[var10], this.prec), this.field);
                     var1.printtab(Fmath.truncate(this.scale[var10], this.prec), this.field);
                     var1.println(this.constraintString[var10]);
-                    ++var10;
+                    var10++;
                 }
             }
         } else {
@@ -8619,7 +8621,7 @@ public class Regression {
                 var1.println("   ");
             }
 
-            for(var11 = 0; var11 < this.nGaussians; ++var11) {
+            for(var11 = 0; var11 < this.nGaussians; var11++) {
                 if (this.invertFlag) {
                     var1.printtab("f[" + var11 + "]", this.field);
                     var1.printtab(Fmath.truncate(this.multGaussFract[var11], this.prec), this.field);
@@ -8650,7 +8652,7 @@ public class Regression {
         var11 = 0;
 
         int var16;
-        for(var16 = 0; var16 < this.nYarrays; ++var16) {
+        for(var16 = 0; var16 < this.nYarrays; var16++) {
             if (this.multipleY) {
                 var1.println("Y array " + var16);
             }
@@ -8661,7 +8663,7 @@ public class Regression {
 
             var1.printtab("y(expl)", this.field);
             var1.printtab("y(calc)", this.field);
-            if (this.xErrorsEntered) {
+            if (this.xWeightsEntered) {
                 for(var6 = 0; var6 < this.nXarrays; ++var6) {
                     var1.printtab("x errors", this.field);
                 }
@@ -8679,7 +8681,7 @@ public class Regression {
 
             var1.printtab(" ", this.field);
             var1.printtab(" ", this.field);
-            if (this.xErrorsEntered) {
+            if (this.xWeightsEntered) {
                 for(var6 = 0; var6 < this.nXarrays; ++var6) {
                     var1.printtab("x" + String.valueOf(var6), this.field);
                 }
@@ -8693,23 +8695,23 @@ public class Regression {
 
             for(var6 = 0; var6 < this.nData0; ++var6) {
                 for(var7 = 0; var7 < this.nXarrays; ++var7) {
-                    var1.printtab(Fmath.truncate(this.xData[var7][var11], this.prec), this.field);
+                    var1.printtab(Fmath.truncate(this.xDatas[var7][var11], this.prec), this.field);
                 }
 
                 var1.printtab(Fmath.truncate(this.yData[var11], this.prec), this.field);
                 var1.printtab(Fmath.truncate(this.yCalc[var11], this.prec), this.field);
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     for(var7 = 0; var7 < this.nXarrays; ++var7) {
-                        var1.printtab(Fmath.truncate(this.xErrors[var7][var11], this.prec), this.field);
+                        var1.printtab(Fmath.truncate(this.xWeights[var7][var11], this.prec), this.field);
                     }
 
-                    var1.printtab(Fmath.truncate(this.yErrors[var11], this.prec), this.field);
+                    var1.printtab(Fmath.truncate(this.yWeight[var11], this.prec), this.field);
                 }
 
                 var1.printtab(Fmath.truncate(this.weight[var11], this.prec), this.field);
                 var1.printtab(Fmath.truncate(this.residual[var11], this.prec), this.field);
                 var1.println(Fmath.truncate(this.residualW[var11], this.prec));
-                ++var11;
+                var11++;
             }
 
             var1.println();
@@ -8763,13 +8765,13 @@ public class Regression {
             var1.println("Parameter - parameter correlation coefficients");
             var1.printtab(" ", this.field);
 
-            for(var16 = 0; var16 < this.nParam; ++var16) {
+            for(var16 = 0; var16 < this.nParam; var16++) {
                 var1.printtab(this.paraName[var16], this.field);
             }
 
             var1.println();
 
-            for(var16 = 0; var16 < this.nParam; ++var16) {
+            for(var16 = 0; var16 < this.nParam; var16++) {
                 var1.printtab(this.paraName[var16], this.field);
 
                 for(var6 = 0; var6 < this.nParam; ++var6) {
@@ -9152,21 +9154,21 @@ public class Regression {
             }
 
             double[][] var5 = PlotGraph.data(var3, var4);
-            double var6 = Fmath.minimum(this.xData[0]);
-            double var8 = Fmath.maximum(this.xData[0]);
+            double var6 = Fmath.minimum(this.xDatas[0]);
+            double var8 = Fmath.maximum(this.xDatas[0]);
             double var10 = (var8 - var6) / (double)(var4 - 1);
             String var12 = " ";
             String var13 = " ";
 
             int var14;
-            for(var14 = 0; var14 < this.nData0; ++var14) {
-                var5[0][var14] = this.xData[0][var14];
+            for(var14 = 0; var14 < this.nData0; var14++) {
+                var5[0][var14] = this.xDatas[0][var14];
                 var5[1][var14] = this.yData[var14];
             }
 
             var5[2][0] = var6;
 
-            for(var14 = 1; var14 < var4; ++var14) {
+            for(var14 = 1; var14 < var4; var14++) {
                 var5[2][var14] = var5[2][var14 - 1] + var10;
             }
 
@@ -9188,7 +9190,7 @@ public class Regression {
                             }
 
                             var5[3][var14] = this.yCalc[var14];
-                            ++var14;
+                            var14++;
                         }
                     case 12:
                         var12 = "No regression:  Maximum Order Statistic Standard Gumbel (y = exp(-x)exp(-exp(-x))): " + this.graphTitle;
@@ -9205,7 +9207,7 @@ public class Regression {
                             }
 
                             var5[3][var14] = this.yCalc[var14];
-                            ++var14;
+                            var14++;
                         }
                     case 21:
                         var12 = "No regression:  Standard Exponential (y = exp(-x)): " + this.graphTitle;
@@ -9214,7 +9216,7 @@ public class Regression {
                             var13 = var13 + ";   error bars - weighting factors";
                         }
 
-                        for(var14 = 0; var14 < var4; ++var14) {
+                        for(var14 = 0; var14 < var4; var14++) {
                             var5[3][var14] = this.yCalc[var14];
                         }
                 }
@@ -9238,7 +9240,7 @@ public class Regression {
                             }
 
                             var5[3][var14] = this.best[0] + this.best[1] * var5[2][var14];
-                            ++var14;
+                            var14++;
                         }
                     case 1:
                         var12 = "Linear (polynomial with degree = " + (this.nParam - 1) + ") regression: " + this.graphTitle;
@@ -9256,12 +9258,12 @@ public class Regression {
 
                             var15 = this.best[0];
 
-                            for(var17 = 1; var17 < this.nParam; ++var17) {
+                            for(var17 = 1; var17 < this.nParam; var17++) {
                                 var15 += this.best[var17] * Math.pow(var5[2][var14], (double)var17);
                             }
 
                             var5[3][var14] = var15;
-                            ++var14;
+                            var14++;
                         }
                     case 2:
                         var12 = "Linear regression  (y = a.x): " + this.graphTitle;
@@ -9279,7 +9281,7 @@ public class Regression {
                                 }
 
                                 var5[3][var14] = this.best[0] * var5[2][var14];
-                                ++var14;
+                                var14++;
                             }
                         } else {
                             System.out.println("Regression.plotXY(linear): lastMethod, " + this.lastMethod + ",cannot be plotted in two dimensions");
@@ -9302,7 +9304,7 @@ public class Regression {
                             }
 
                             var5[3][var14] = this.best[0] * Math.exp(var5[2][var14]) * Math.exp(-Math.exp(var5[2][var14]));
-                            ++var14;
+                            var14++;
                         }
                     case 12:
                         var12 = "Linear regression:  Maximum Order Statistic Standard Gumbel (y = a.z where z=exp(-x)exp(-exp(-x))): " + this.graphTitle;
@@ -9319,7 +9321,7 @@ public class Regression {
                             }
 
                             var5[3][var14] = this.best[0] * Math.exp(-var5[2][var14]) * Math.exp(-Math.exp(-var5[2][var14]));
-                            ++var14;
+                            var14++;
                         }
                     case 46:
                         var12 = "Linear regression:  Fit to a constant (y = a): " + this.graphTitle;
@@ -9336,7 +9338,7 @@ public class Regression {
                             }
 
                             var5[3][var14] = this.best[0];
-                            ++var14;
+                            var14++;
                         }
                     case 47:
                         var12 = "Linear regression  (y = fixed intercept + b.x): " + this.graphTitle;
@@ -9353,7 +9355,7 @@ public class Regression {
                             }
 
                             var5[3][var14] = this.fixedInterceptL + this.best[0] * var5[2][var14];
-                            ++var14;
+                            var14++;
                         }
                     case 48:
                         var12 = "Linear (polynomial with degree = " + this.nParam + ") regression: " + this.graphTitle;
@@ -9371,12 +9373,12 @@ public class Regression {
 
                             var15 = this.fixedInterceptP;
 
-                            for(var17 = 0; var17 < this.nParam; ++var17) {
+                            for(var17 = 0; var17 < this.nParam; var17++) {
                                 var15 += this.best[var17] * Math.pow(var5[2][var14], (double)(var17 + 1));
                             }
 
                             var5[3][var14] = var15;
-                            ++var14;
+                            var14++;
                         }
                     default:
                         System.out.println("Regression.plotXY(linear): lastMethod, " + this.lastMethod + ", either not recognised or cannot be plotted in two dimensions");
@@ -9452,26 +9454,26 @@ public class Regression {
 
                 double[][] var11 = PlotGraph.data(var7, var8);
 
-                for(int var12 = 0; var12 < this.nData0; ++var12) {
-                    var11[0][var12] = this.xData[0][var12];
+                for(int var12 = 0; var12 < this.nData0; var12++) {
+                    var11[0][var12] = this.xDatas[0][var12];
                     var11[1][var12] = this.yData[var12];
                 }
 
                 if (this.lastMethod == 6) {
                     double[] var24 = new double[this.nXarrays];
 
-                    for(int var13 = 0; var13 < var8; ++var13) {
+                    for(int var13 = 0; var13 < var8; var13++) {
                         var11[2][var13] = var11[0][var13];
                         var24[0] = var11[2][var13];
                         var11[3][var13] = var3.function(this.best, var24);
                     }
                 } else {
-                    double var23 = Fmath.minimum(this.xData[0]);
-                    double var14 = Fmath.maximum(this.xData[0]);
+                    double var23 = Fmath.minimum(this.xDatas[0]);
+                    double var14 = Fmath.maximum(this.xDatas[0]);
                     double var16 = (var14 - var23) / (double)(var8 - 1);
                     var11[2][0] = var23;
 
-                    for(int var18 = 1; var18 < var8; ++var18) {
+                    for(int var18 = 1; var18 < var8; var18++) {
                         var11[2][var18] = var11[2][var18 - 1] + var16;
                     }
 
@@ -9492,7 +9494,7 @@ public class Regression {
                                 ++var29;
                             }
                         case 2:
-                            CubicSpline var19 = new CubicSpline(this.xData[0], this.yCalc);
+                            CubicSpline var19 = new CubicSpline(this.xDatas[0], this.yCalc);
                             int var30 = 0;
 
                             while(true) {
@@ -9520,7 +9522,7 @@ public class Regression {
                                     var11[3][var21] = var5.function(this.best, var28, -1)[0];
                                 }
                             } else {
-                                CubicSpline var31 = new CubicSpline(this.xData[0], this.yCalc);
+                                CubicSpline var31 = new CubicSpline(this.xDatas[0], this.yCalc);
 
                                 for(int var22 = 0; var22 < var8; ++var22) {
                                     var11[3][var22] = var31.interpolate(var11[2][var22]);
@@ -9608,26 +9610,26 @@ public class Regression {
 
                 double[][] var11 = PlotGraph.data(var7, var8);
 
-                for(int var12 = 0; var12 < this.nData0; ++var12) {
-                    var11[0][var12] = this.xData[0][var12];
+                for(int var12 = 0; var12 < this.nData0; var12++) {
+                    var11[0][var12] = this.xDatas[0][var12];
                     var11[1][var12] = this.yData[var12];
                 }
 
                 if (this.lastMethod == 6) {
                     double[] var24 = new double[this.nXarrays];
 
-                    for(int var13 = 0; var13 < var8; ++var13) {
+                    for(int var13 = 0; var13 < var8; var13++) {
                         var11[2][var13] = var11[0][var13];
                         var24[0] = var11[2][var13];
                         var11[3][var13] = var4.function(this.values, var24);
                     }
                 } else {
-                    double var23 = Fmath.minimum(this.xData[0]);
-                    double var14 = Fmath.maximum(this.xData[0]);
+                    double var23 = Fmath.minimum(this.xDatas[0]);
+                    double var14 = Fmath.maximum(this.xDatas[0]);
                     double var16 = (var14 - var23) / (double)(var8 - 1);
                     var11[2][0] = var23;
 
-                    for(int var18 = 1; var18 < var8; ++var18) {
+                    for(int var18 = 1; var18 < var8; var18++) {
                         var11[2][var18] = var11[2][var18 - 1] + var16;
                     }
 
@@ -9647,7 +9649,7 @@ public class Regression {
                                 ++var29;
                             }
                         case 2:
-                            CubicSpline var19 = new CubicSpline(this.xData[0], this.yCalc);
+                            CubicSpline var19 = new CubicSpline(this.xDatas[0], this.yCalc);
                             int var30 = 0;
 
                             while(true) {
@@ -9675,7 +9677,7 @@ public class Regression {
                                     var11[3][var21] = var6.function(this.best, var28, -1)[0];
                                 }
                             } else {
-                                CubicSpline var31 = new CubicSpline(this.xData[0], this.yCalc);
+                                CubicSpline var31 = new CubicSpline(this.xDatas[0], this.yCalc);
 
                                 for(int var22 = 0; var22 < var8; ++var22) {
                                     var11[3][var22] = var31.interpolate(var11[2][var22]);
@@ -9836,7 +9838,7 @@ public class Regression {
     }
 
     public double[][] getXdata() {
-        return Conv.copy(this.xData);
+        return Conv.copy(this.xDatas);
     }
 
     public double[] getYdata() {
@@ -10161,7 +10163,7 @@ public class Regression {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
                 for(int var2 = 0; var2 < this.nData; ++var2) {
-                    if (this.xData[0][var2] - Math.floor(this.xData[0][var2]) != 0.0D) {
+                    if (this.xDatas[0][var2] - Math.floor(this.xDatas[0][var2]) != 0.0D) {
                         throw new IllegalArgumentException("all abscissae must be, mathematically, integer values");
                     }
                 }
@@ -10171,7 +10173,7 @@ public class Regression {
                 Integer var4 = null;
                 var4 = (Integer)var16.get(5);
                 int var5 = var4;
-                double var6 = this.xData[0][var5];
+                double var6 = this.xDatas[0][var5];
                 var3 = (Double)var16.get(4);
                 double var8 = var3;
                 double[] var10 = new double[this.nParam];
@@ -10183,7 +10185,7 @@ public class Regression {
 
                 var11[0] = 0.1D * var10[0];
                 if (var11[0] == 0.0D) {
-                    ArrayList var12 = dataSign(this.xData[0]);
+                    ArrayList var12 = dataSign(this.xDatas[0]);
                     Double var13 = null;
                     var13 = (Double)var12.get(2);
                     double var14 = var13;
@@ -10259,7 +10261,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var2 = null;
                 ArrayList var3 = dataSign(this.yData);
                 var2 = (Double)var3.get(4);
@@ -10281,8 +10283,8 @@ public class Regression {
                 Integer var8 = null;
                 var8 = (Integer)var22.get(5);
                 int var9 = var8;
-                double var10 = this.xData[0][var9];
-                double var12 = Math.sqrt(2.0D) * halfWidth(this.xData[0], this.yData);
+                double var10 = this.xDatas[0][var9];
+                double var12 = Math.sqrt(2.0D) * halfWidth(this.xDatas[0], this.yData);
                 var2 = (Double)var22.get(4);
                 double var14 = var2;
                 var14 = var14 * var12 * Math.sqrt(6.283185307179586D);
@@ -10297,7 +10299,7 @@ public class Regression {
                 var17[0] = 0.1D * var12;
                 var17[1] = 0.1D * var16[1];
                 if (var17[1] == 0.0D) {
-                    ArrayList var18 = dataSign(this.xData[0]);
+                    ArrayList var18 = dataSign(this.xDatas[0]);
                     Double var19 = null;
                     var19 = (Double)var18.get(2);
                     double var20 = var19;
@@ -10378,7 +10380,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var4 = null;
                 ArrayList var5 = dataSign(this.yData);
                 var4 = (Double)var5.get(4);
@@ -10401,7 +10403,7 @@ public class Regression {
                 var23.setParam(var1);
                 int var10 = this.nParam;
 
-                for(int var11 = 0; var11 < this.nParam; ++var11) {
+                for(int var11 = 0; var11 < this.nParam; var11++) {
                     if (var2[var11]) {
                         --var10;
                     }
@@ -10418,8 +10420,8 @@ public class Regression {
                 double[] var24 = new double[var10];
                 double[] var12 = new double[var10];
                 boolean[] var13 = new boolean[var10];
-                double var14 = Fmath.minimum(this.xData[0]);
-                double var16 = Fmath.maximum(this.xData[0]);
+                double var14 = Fmath.minimum(this.xDatas[0]);
+                double var16 = Fmath.maximum(this.xDatas[0]);
                 double var18 = Fmath.maximum(this.yData);
                 if (var1[2] == 0.0D) {
                     if (var2[2]) {
@@ -10445,7 +10447,7 @@ public class Regression {
                             var13[var20] = true;
                         }
 
-                        ++var20;
+                        var20++;
                     }
                 }
 
@@ -10533,7 +10535,7 @@ public class Regression {
                     this.nMax = 10000;
                 }
 
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var8 = null;
                 ArrayList var9 = dataSign(this.yData);
                 var8 = (Double)var9.get(4);
@@ -10543,7 +10545,7 @@ public class Regression {
                     System.out.println("Regression.fitGaussian(): This implementation of the Gaussian distribution takes only positive y values\n(noise taking low values below zero are allowed)");
                     System.out.println("All y values have been multiplied by -1 before fitting");
 
-                    for(int var13 = 0; var13 < this.nData; ++var13) {
+                    for(int var13 = 0; var13 < this.nData; var13++) {
                         this.yData[var13] = -this.yData[var13];
                     }
 
@@ -10555,8 +10557,8 @@ public class Regression {
                 Integer var14 = null;
                 var14 = (Integer)var36.get(5);
                 int var15 = var14;
-                double var16 = this.xData[0][var15];
-                double var10000 = Math.sqrt(2.0D) * halfWidth(this.xData[0], this.yData);
+                double var16 = this.xDatas[0][var15];
+                double var10000 = Math.sqrt(2.0D) * halfWidth(this.xDatas[0], this.yData);
                 var8 = (Double)var36.get(4);
                 double var20 = var8;
                 double[] var22 = new double[this.nParam];
@@ -10569,7 +10571,7 @@ public class Regression {
                     var22[var24 + 1] = var3[var25];
                     var23[var24 + 1] = Math.abs(0.1D * var22[var24 + 1]);
                     if (var23[var24 + 1] == 0.0D) {
-                        ArrayList var26 = dataSign(this.xData[0]);
+                        ArrayList var26 = dataSign(this.xDatas[0]);
                         Double var27 = null;
                         var27 = (Double)var26.get(2);
                         double var28 = var27;
@@ -10736,7 +10738,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var2 = null;
                 ArrayList var3 = dataSign(this.yData);
                 var2 = (Double)var3.get(4);
@@ -10758,18 +10760,18 @@ public class Regression {
                 Integer var8 = null;
                 var8 = (Integer)var24.get(5);
                 int var9 = var8;
-                double var10 = this.xData[0][var9];
+                double var10 = this.xDatas[0][var9];
                 double var12 = 0.0D;
 
-                for(int var14 = 0; var14 < this.nData; ++var14) {
-                    var12 += Math.log(this.xData[0][var14]);
+                for(int var14 = 0; var14 < this.nData; var14++) {
+                    var12 += Math.log(this.xDatas[0][var14]);
                 }
 
                 var12 /= (double)this.nData;
                 double var25 = 0.0D;
 
-                for(int var16 = 0; var16 < this.nData; ++var16) {
-                    var25 += Fmath.square(Math.log(this.xData[0][var16]) - var12);
+                for(int var16 = 0; var16 < this.nData; var16++) {
+                    var25 += Fmath.square(Math.log(this.xDatas[0][var16]) - var12);
                 }
 
                 var25 = Math.sqrt(var25 / (double)this.nData);
@@ -10790,7 +10792,7 @@ public class Regression {
                 Double var21;
                 double var22;
                 if (var19[0] == 0.0D) {
-                    var20 = dataSign(this.xData[0]);
+                    var20 = dataSign(this.xDatas[0]);
                     var21 = null;
                     var21 = (Double)var20.get(2);
                     var22 = var21;
@@ -10803,7 +10805,7 @@ public class Regression {
                 }
 
                 if (var19[0] == 0.0D) {
-                    var20 = dataSign(this.xData[0]);
+                    var20 = dataSign(this.xDatas[0]);
                     var21 = null;
                     var21 = (Double)var20.get(2);
                     var22 = var21;
@@ -10874,7 +10876,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var2 = null;
                 ArrayList var3 = dataSign(this.yData);
                 var2 = (Double)var3.get(4);
@@ -10896,22 +10898,22 @@ public class Regression {
                 Integer var8 = null;
                 var8 = (Integer)var31.get(5);
                 int var9 = var8;
-                double var10 = this.xData[0][var9];
+                double var10 = this.xDatas[0][var9];
                 double var12 = 0.0D;
 
-                for(int var14 = 0; var14 < this.nData; ++var14) {
-                    var12 += this.xData[0][var14];
+                for(int var14 = 0; var14 < this.nData; var14++) {
+                    var12 += this.xDatas[0][var14];
                 }
 
                 var12 /= (double)this.nData;
                 double var32 = 0.0D;
 
-                for(int var16 = 0; var16 < this.nData; ++var16) {
-                    var32 += Fmath.square(Math.log(this.xData[0][var16]) - Math.log(var12));
+                for(int var16 = 0; var16 < this.nData; var16++) {
+                    var32 += Fmath.square(Math.log(this.xDatas[0][var16]) - Math.log(var12));
                 }
 
                 var32 = Math.sqrt(var32 / (double)this.nData);
-                ArrayList var33 = dataSign(this.xData[0]);
+                ArrayList var33 = dataSign(this.xDatas[0]);
                 Double var17 = null;
                 var17 = (Double)var33.get(0);
                 double var18 = var17;
@@ -11005,7 +11007,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var2 = null;
                 ArrayList var3 = dataSign(this.yData);
                 var2 = (Double)var3.get(4);
@@ -11027,8 +11029,8 @@ public class Regression {
                 Integer var8 = null;
                 var8 = (Integer)var22.get(5);
                 int var9 = var8;
-                double var10 = this.xData[0][var9];
-                double var12 = halfWidth(this.xData[0], this.yData);
+                double var10 = this.xDatas[0][var9];
+                double var12 = halfWidth(this.xDatas[0], this.yData);
                 var2 = (Double)var22.get(4);
                 double var14 = var2;
                 var14 = var14 * var12 * 3.141592653589793D / 2.0D;
@@ -11042,7 +11044,7 @@ public class Regression {
 
                 var17[0] = 0.2D * var12;
                 if (var17[0] == 0.0D) {
-                    ArrayList var18 = dataSign(this.xData[0]);
+                    ArrayList var18 = dataSign(this.xDatas[0]);
                     Double var19 = null;
                     var19 = (Double)var18.get(2);
                     double var20 = var19;
@@ -11427,7 +11429,7 @@ public class Regression {
         int var18 = 0;
         int var19 = 0;
 
-        for(int var20 = 0; var20 < var2; ++var20) {
+        for(int var20 = 0; var20 < var2; var20++) {
             var15 = var0[var20];
             if (var0[var20] > var3) {
                 var3 = var0[var20];
@@ -11440,15 +11442,15 @@ public class Regression {
             }
 
             if (var0[var20] == 0.0D) {
-                ++var17;
+                var17++;
             }
 
             if (var0[var20] > 0.0D) {
-                ++var19;
+                var19++;
             }
 
             if (var0[var20] < 0.0D) {
-                ++var18;
+                var18++;
             }
         }
 
@@ -11551,7 +11553,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var3 = null;
                 ArrayList var4 = dataSign(this.yData);
                 var3 = (Double)var4.get(4);
@@ -11603,19 +11605,19 @@ public class Regression {
                     var5 = 1.0D;
                 }
 
-                ArrayList var19 = dataSign(this.xData[0]);
+                ArrayList var19 = dataSign(this.xDatas[0]);
                 var3 = (Double)var19.get(0);
                 double var20 = var3;
                 var3 = (Double)var19.get(2);
                 double var22 = var3;
-                double var24 = this.xData[0][var8];
-                double var26 = Math.log(2.0D) * halfWidth(this.xData[0], this.yData);
+                double var24 = this.xDatas[0][var8];
+                double var26 = Math.log(2.0D) * halfWidth(this.xDatas[0], this.yData);
                 double[] var28 = new double[this.nData];
                 double[] var29 = new double[this.nData];
                 double[] var30 = new double[this.nData];
 
                 for(int var31 = 0; var31 < this.nData; ++var31) {
-                    var28[var31] = this.xData[0][var31];
+                    var28[var31] = this.xDatas[0][var31];
                     var29[var31] = this.yData[var31];
                     var30[var31] = this.weight[var31];
                 }
@@ -11646,7 +11648,7 @@ public class Regression {
                 }
 
                 for(var37 = 0; var37 < this.nData; ++var37) {
-                    this.xData[0][var37] = var49[var37];
+                    this.xDatas[0][var37] = var49[var37];
                     this.yData[var37] = var32[var37];
                     this.weight[var37] = var33[var37];
                 }
@@ -11672,7 +11674,7 @@ public class Regression {
                         var39[2] = 4.0D;
                         var40[0] = 0.2D * var39[0];
                         if (var40[0] == 0.0D) {
-                            ArrayList var44 = dataSign(this.xData[0]);
+                            ArrayList var44 = dataSign(this.xDatas[0]);
                             Double var45 = null;
                             var45 = (Double)var44.get(2);
                             double var46 = var45;
@@ -11726,7 +11728,7 @@ public class Regression {
 
                 int var55;
                 for(var55 = 0; var55 < this.nData; ++var55) {
-                    this.xData[0][var55] = var28[var55];
+                    this.xDatas[0][var55] = var28[var55];
                     this.yData[var55] = var29[var55];
                     this.weight[var55] = var30[var55];
                 }
@@ -11742,7 +11744,7 @@ public class Regression {
 
                         var40[0] = 0.1D * var39[0];
                         if (var40[0] == 0.0D) {
-                            ArrayList var56 = dataSign(this.xData[0]);
+                            ArrayList var56 = dataSign(this.xDatas[0]);
                             Double var58 = null;
                             var58 = (Double)var56.get(2);
                             double var47 = var58;
@@ -11854,7 +11856,7 @@ public class Regression {
                 var5 = var3 - 1;
             }
 
-            this.xData[0][var3] = this.xData[0][var5];
+            this.xDatas[0][var3] = this.xDatas[0][var5];
             this.yData[var3] = this.yData[var5];
             this.weight[var3] = this.weight[var5];
             System.out.println("An infinty has been removed at point " + var3);
@@ -11894,16 +11896,16 @@ public class Regression {
     }
 
     public double calculateCumulativeValues(double[] var1, double[] var2, double[] var3, ErrorProp[] var4, int var5, double var6, double var8, String var10) {
-        var1[0] = this.xData[0][0];
+        var1[0] = this.xDatas[0][0];
 
-        for(int var11 = 1; var11 < this.nData; ++var11) {
-            var1[var11] = this.xData[0][var11];
+        for(int var11 = 1; var11 < this.nData; var11++) {
+            var1[var11] = this.xDatas[0][var11];
         }
 
         ErrorProp[] var18 = ErrorProp.oneDarray(this.nData);
 
         int var12;
-        for(var12 = 0; var12 < this.nData; ++var12) {
+        for(var12 = 0; var12 < this.nData; var12++) {
             var18[var12].reset(this.yData[var12], this.weight[var12]);
         }
 
@@ -11916,11 +11918,11 @@ public class Regression {
 
             if (this.yData[0] < this.yData[1] * 0.5D && this.yData[0] > var8 * 0.02D) {
                 new ErrorProp(0.0D, 0.0D);
-                var19 = var18[0].times(this.xData[0][1] - this.xData[0][0]);
+                var19 = var18[0].times(this.xDatas[0][1] - this.xDatas[0][0]);
                 var19 = var19.over(var18[1].minus(var18[0]));
-                var19 = ErrorProp.minus(this.xData[0][0], var19);
+                var19 = ErrorProp.minus(this.xDatas[0][0], var19);
                 if (this.yData[0] >= 0.9D * var6) {
-                    var19 = var19.plus(this.xData[0][0]).over(2.0D);
+                    var19 = var19.plus(this.xDatas[0][0]).over(2.0D);
                 }
 
                 if (var19.getValue() < 0.0D) {
@@ -11928,7 +11930,7 @@ public class Regression {
                 }
 
                 var4[0] = var18[0].over(2.0D);
-                var4[0] = var4[0].times(ErrorProp.minus(this.xData[0][0], var19));
+                var4[0] = var4[0].times(ErrorProp.minus(this.xDatas[0][0], var19));
             } else {
                 var4[0].reset(0.0D, this.weight[0]);
             }
@@ -11936,10 +11938,10 @@ public class Regression {
             var4[0].reset(0.0D, this.weight[0]);
         }
 
-        for(var12 = 1; var12 < this.nData; ++var12) {
+        for(var12 = 1; var12 < this.nData; var12++) {
             var4[var12] = var18[var12].plus(var18[var12 - 1]);
             var4[var12] = var4[var12].over(2.0D);
-            var4[var12] = var4[var12].times(this.xData[0][var12] - this.xData[0][var12 - 1]);
+            var4[var12] = var4[var12].times(this.xDatas[0][var12] - this.xDatas[0][var12 - 1]);
             var4[var12] = var4[var12].plus(var4[var12 - 1]);
         }
 
@@ -11948,17 +11950,17 @@ public class Regression {
             var19 = var19.times(2.0D);
         } else if (this.yData[this.nData - 1] < this.yData[this.nData - 2] * 0.5D && this.yData[this.nData - 1] > var8 * 0.02D) {
             new ErrorProp();
-            ErrorProp var13 = var18[this.nData - 1].times(this.xData[0][this.nData - 2] - this.xData[0][this.nData - 1]);
+            ErrorProp var13 = var18[this.nData - 1].times(this.xDatas[0][this.nData - 2] - this.xDatas[0][this.nData - 1]);
             var13 = var13.over(var18[this.nData - 2].minus(var18[this.nData - 1]));
-            var13 = ErrorProp.minus(this.xData[0][this.nData - 1], var13);
+            var13 = ErrorProp.minus(this.xDatas[0][this.nData - 1], var13);
             if (this.yData[0] >= 0.9D * var6) {
-                var13 = var13.plus(this.xData[0][this.nData - 1]).over(2.0D);
+                var13 = var13.plus(this.xDatas[0][this.nData - 1]).over(2.0D);
             }
 
-            var19 = var19.plus(ErrorProp.times(0.5D, var18[this.nData - 1].times(var13.minus(this.xData[0][this.nData - 1]))));
+            var19 = var19.plus(ErrorProp.times(0.5D, var18[this.nData - 1].times(var13.minus(this.xDatas[0][this.nData - 1]))));
         }
 
-        for(int var20 = 0; var20 < this.nData; ++var20) {
+        for(int var20 = 0; var20 < this.nData; var20++) {
             var2[var20] = var4[var20].getValue();
             var3[var20] = var4[var20].getError();
         }
@@ -11966,7 +11968,7 @@ public class Regression {
         double var21 = 1.0D / var19.getValue();
 
         int var15;
-        for(var15 = 0; var15 < this.nData; ++var15) {
+        for(var15 = 0; var15 < this.nData; var15++) {
             var4[var15] = var4[var15].over(var19);
         }
 
@@ -11974,14 +11976,14 @@ public class Regression {
         boolean var16 = true;
 
         int var17;
-        for(var17 = 0; var17 < this.nData; ++var17) {
+        for(var17 = 0; var17 < this.nData; var17++) {
             if (var4[var17].getValue() <= 0.0D) {
                 if (var17 <= var15) {
                     var16 = true;
                     var15 = var17;
 
                     while(var16) {
-                        ++var15;
+                        var15++;
                         if (var15 >= this.nData) {
                             throw new ArithmeticException("all zero cumulative data!!");
                         }
@@ -12160,7 +12162,7 @@ public class Regression {
                         break label66;
                     }
 
-                    this.yCalc[var5] = Math.exp(this.xData[0][var5]) * Math.exp(-Math.exp(this.xData[0][var5]));
+                    this.yCalc[var5] = Math.exp(this.xDatas[0][var5]) * Math.exp(-Math.exp(this.xDatas[0][var5]));
                     ++var5;
                 }
             case 12:
@@ -12172,14 +12174,14 @@ public class Regression {
                         break label66;
                     }
 
-                    this.yCalc[var5] = Math.exp(-this.xData[0][var5]) * Math.exp(-Math.exp(-this.xData[0][var5]));
+                    this.yCalc[var5] = Math.exp(-this.xDatas[0][var5]) * Math.exp(-Math.exp(-this.xDatas[0][var5]));
                     ++var5;
                 }
             case 21:
                 var4.println("Standard Exponential p(x) = exp(-x)");
 
                 for(var5 = 0; var5 < this.nData; ++var5) {
-                    this.yCalc[var5] = Math.exp(-this.xData[0][var5]);
+                    this.yCalc[var5] = Math.exp(-this.xDatas[0][var5]);
                 }
         }
 
@@ -12217,7 +12219,7 @@ public class Regression {
         var4.println("residual");
 
         for(int var9 = 0; var9 < this.nData; ++var9) {
-            var4.printtab(Fmath.truncate(this.xData[0][var9], this.prec), this.field);
+            var4.printtab(Fmath.truncate(this.xDatas[0][var9], this.prec), this.field);
             var4.printtab(Fmath.truncate(this.yData[var9], this.prec), this.field);
             var4.printtab(Fmath.truncate(this.yCalc[var9], this.prec), this.field);
             var4.println(Fmath.truncate(this.yData[var9] - this.yCalc[var9], this.prec));
@@ -12274,7 +12276,7 @@ public class Regression {
                 if (this.nParam == 0) {
                     this.noParameters("Gumbel");
                 } else {
-                    sort(this.xData[0], this.yData, this.weight);
+                    sort(this.xDatas[0], this.yData, this.weight);
                     Double var3 = null;
                     ArrayList var4 = dataSign(this.yData);
                     var3 = (Double)var4.get(4);
@@ -12292,12 +12294,12 @@ public class Regression {
                         var7 = true;
                     }
 
-                    ArrayList var22 = dataSign(this.xData[0]);
+                    ArrayList var22 = dataSign(this.xDatas[0]);
                     Integer var9 = null;
                     var9 = (Integer)var4.get(5);
                     int var10 = var9;
-                    double var11 = this.xData[0][var10];
-                    double var13 = halfWidth(this.xData[0], this.yData);
+                    double var11 = this.xDatas[0][var10];
+                    double var13 = halfWidth(this.xDatas[0], this.yData);
                     double[] var15 = new double[this.nParam];
                     double[] var16 = new double[this.nParam];
                     double var19;
@@ -12312,7 +12314,7 @@ public class Regression {
 
                             var16[0] = 0.1D * var15[0];
                             if (var16[0] == 0.0D) {
-                                ArrayList var17 = dataSign(this.xData[0]);
+                                ArrayList var17 = dataSign(this.xDatas[0]);
                                 Double var18 = null;
                                 var18 = (Double)var17.get(2);
                                 var19 = var18;
@@ -12380,7 +12382,7 @@ public class Regression {
                         }
 
                         for(int var21 = 0; var21 < this.nData; ++var21) {
-                            var24[0][var21] = Math.exp(var19 * this.xData[0][var21]) * Math.exp(-Math.exp(var19 * this.xData[0][var21]));
+                            var24[0][var21] = Math.exp(var19 * this.xDatas[0][var21]) * Math.exp(-Math.exp(var19 * this.xDatas[0][var21]));
                         }
 
                         this.linNonLin = true;
@@ -12418,7 +12420,7 @@ public class Regression {
         for(double var10 = 0.0D; var4 < var5 - 1; var2[var4] = var10) {
             int var13 = var4 + 1;
 
-            for(int var12 = var4 + 2; var12 < var5; ++var12) {
+            for(int var12 = var4 + 2; var12 < var5; var12++) {
                 if (var0[var12] < var0[var13]) {
                     var13 = var12;
                 }
@@ -12477,7 +12479,7 @@ public class Regression {
             var17 = var4 + 1;
             var15 = Math.abs(var2 - var1[var17]);
 
-            for(int var18 = var4 + 2; var18 < var5; ++var18) {
+            for(int var18 = var4 + 2; var18 < var5; var18++) {
                 var10 = Math.abs(var2 - var1[var18]);
                 if (var10 < var15) {
                     var15 = var10;
@@ -12525,14 +12527,14 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 int var2 = this.yData.length;
                 int var3 = var2;
                 boolean[] var4 = new boolean[var2];
 
                 for(int var5 = 0; var5 < var2; ++var5) {
                     var4[var5] = true;
-                    if (this.xData[0][var5] <= 0.0D || this.yData[var5] <= 0.0D) {
+                    if (this.xDatas[0][var5] <= 0.0D || this.yData[var5] <= 0.0D) {
                         var4[var5] = false;
                         --var3;
                     }
@@ -12545,7 +12547,7 @@ public class Regression {
 
                 for(int var9 = 0; var9 < var2; ++var9) {
                     if (var4[var9]) {
-                        var15[var8] = Math.log(this.xData[0][var9]);
+                        var15[var8] = Math.log(this.xDatas[0][var9]);
                         var6[var8] = Math.log(this.yData[var9]);
                         var7[var8] = Math.abs(this.weight[var9] / this.yData[var9]);
                         ++var8;
@@ -12637,14 +12639,14 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 int var3 = this.yData.length;
                 int var4 = var3;
                 boolean[] var5 = new boolean[var3];
 
                 for(int var6 = 0; var6 < var3; ++var6) {
                     var5[var6] = true;
-                    if (this.xData[0][var6] <= 0.0D || this.yData[var6] <= 0.0D) {
+                    if (this.xDatas[0][var6] <= 0.0D || this.yData[var6] <= 0.0D) {
                         var5[var6] = false;
                         --var4;
                     }
@@ -12655,9 +12657,9 @@ public class Regression {
                 double[] var8 = new double[var4];
                 int var9 = 0;
 
-                for(int var10 = 0; var10 < var3; ++var10) {
+                for(int var10 = 0; var10 < var3; var10++) {
                     if (var5[var10]) {
-                        var18[var9] = Math.log(this.xData[0][var10]);
+                        var18[var9] = Math.log(this.xDatas[0][var10]);
                         var7[var9] = Math.log(this.yData[var10]);
                         var8[var9] = Math.abs(this.weight[var10] / this.yData[var10]);
                         ++var9;
@@ -12720,7 +12722,7 @@ public class Regression {
             } else if (var3.length != this.nParam) {
                 throw new IllegalArgumentException(" Number of A and Bs, " + var3.length + ", does not match the number of exponentials, " + var1);
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 double[] var4 = new double[this.nParam];
                 double[] var5 = new double[this.nParam];
 
@@ -12771,7 +12773,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 ArrayMaths var2 = new ArrayMaths(this.yData);
                 double var3 = var2.maximum();
                 double var5 = var2.minimum();
@@ -12790,16 +12792,16 @@ public class Regression {
                 while(true) {
                     while(var13) {
                         if (this.yData[var14] == var9) {
-                            var11 = this.xData[0][var14] - this.xData[0][0];
+                            var11 = this.xDatas[0][var14] - this.xDatas[0][0];
                             var13 = false;
                         } else if (this.yData[var14] < var9 && this.yData[var14 + 1] > var9) {
-                            var11 = (this.xData[0][var14] + this.xData[0][var14 + 1]) / 2.0D - this.xData[0][0];
+                            var11 = (this.xDatas[0][var14] + this.xDatas[0][var14 + 1]) / 2.0D - this.xDatas[0][0];
                             var13 = false;
                         } else if (this.yData[var14] > var9 && this.yData[var14 + 1] < var9) {
-                            var11 = (this.xData[0][var14] + this.xData[0][var14 + 1]) / 2.0D - this.xData[0][0];
+                            var11 = (this.xDatas[0][var14] + this.xDatas[0][var14 + 1]) / 2.0D - this.xDatas[0][0];
                             var13 = false;
                         } else {
-                            ++var14;
+                            var14++;
                             if (var14 >= this.nData - 1) {
                                 var13 = false;
                             }
@@ -12919,12 +12921,12 @@ public class Regression {
                     double[] var5 = new double[this.nData];
 
                     for(int var6 = 0; var6 < this.nData; ++var6) {
-                        var3[var6] = this.xData[0][var6];
+                        var3[var6] = this.xDatas[0][var6];
                         var4[var6] = this.yData[var6];
                         var5[var6] = this.weight[var6];
                     }
 
-                    sort(this.xData[0], this.yData, this.weight);
+                    sort(this.xDatas[0], this.yData, this.weight);
                     Double var35 = null;
                     ArrayList var7 = dataSign(this.yData);
                     var35 = (Double)var7.get(4);
@@ -12948,7 +12950,7 @@ public class Regression {
                         var8 = 1.0D;
                     }
 
-                    ArrayList var17 = dataSign(this.xData[0]);
+                    ArrayList var17 = dataSign(this.xDatas[0]);
                     var35 = (Double)var17.get(0);
                     double var18 = var35;
                     double var20 = var8 / Math.exp(1.0D);
@@ -12968,7 +12970,7 @@ public class Regression {
                         }
                     }
 
-                    double var36 = this.xData[0][var26] - this.xData[0][0];
+                    double var36 = this.xDatas[0][var26] - this.xDatas[0][0];
                     double[] var29 = new double[this.nParam];
                     double[] var30 = new double[this.nParam];
                     switch(var2) {
@@ -12981,7 +12983,7 @@ public class Regression {
 
                             var30[0] = 0.1D * var29[0];
                             if (var30[0] == 0.0D) {
-                                ArrayList var31 = dataSign(this.xData[0]);
+                                ArrayList var31 = dataSign(this.xDatas[0]);
                                 Double var32 = null;
                                 var32 = (Double)var31.get(2);
                                 double var33 = var32;
@@ -13118,7 +13120,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var3 = null;
                 ArrayList var4 = dataSign(this.yData);
                 var3 = (Double)var4.get(4);
@@ -13146,19 +13148,19 @@ public class Regression {
                 double[] var15 = new double[this.nData];
                 double[] var16 = new double[this.nData];
 
-                for(int var17 = 0; var17 < this.nData; ++var17) {
-                    var14[var17] = this.xData[0][var17];
+                for(int var17 = 0; var17 < this.nData; var17++) {
+                    var14[var17] = this.xDatas[0][var17];
                     var15[var17] = this.yData[var17];
                     var16[var17] = this.weight[var17];
                 }
 
-                ArrayList var41 = dataSign(this.xData[0]);
+                ArrayList var41 = dataSign(this.xDatas[0]);
                 var3 = (Double)var41.get(0);
                 double var18 = var3;
                 var3 = (Double)var41.get(2);
                 double var20 = var3;
-                double var22 = this.xData[0][var8];
-                double var24 = Math.log(2.0D) * halfWidth(this.xData[0], this.yData);
+                double var22 = this.xDatas[0][var8];
+                double var24 = Math.log(2.0D) * halfWidth(this.xDatas[0], this.yData);
                 double[] var26 = new double[this.nData];
                 double[] var27 = new double[this.nData];
                 double[] var28 = new double[this.nData];
@@ -13175,7 +13177,7 @@ public class Regression {
                 }
 
                 for(var32 = 0; var32 < this.nData; ++var32) {
-                    this.xData[0][var32] = var26[var32];
+                    this.xDatas[0][var32] = var26[var32];
                     this.yData[var32] = var27[var32];
                     this.weight[var32] = var28[var32];
                 }
@@ -13204,7 +13206,7 @@ public class Regression {
                 this.weightOpt = var42;
 
                 for(int var38 = 0; var38 < this.nData; ++var38) {
-                    this.xData[0][var38] = var14[var38];
+                    this.xDatas[0][var38] = var14[var38];
                     this.yData[var38] = var15[var38];
                     this.weight[var38] = var16[var38];
                 }
@@ -13319,7 +13321,7 @@ public class Regression {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
                 String var3 = "Pareto";
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var4 = null;
                 ArrayList var5 = dataSign(this.yData);
                 var4 = (Double)var5.get(4);
@@ -13351,19 +13353,19 @@ public class Regression {
                     var6 = 1.0D;
                 }
 
-                ArrayList var14 = dataSign(this.xData[0]);
+                ArrayList var14 = dataSign(this.xDatas[0]);
                 var4 = (Double)var14.get(0);
                 double var15 = var4;
                 var4 = (Double)var14.get(2);
                 double var17 = var4;
-                double var19 = this.xData[0][var9];
-                double var10000 = Math.log(2.0D) * halfWidth(this.xData[0], this.yData);
+                double var19 = this.xDatas[0][var9];
+                double var10000 = Math.log(2.0D) * halfWidth(this.xDatas[0], this.yData);
                 double[] var23 = new double[this.nData];
                 double[] var24 = new double[this.nData];
                 double[] var25 = new double[this.nData];
 
                 for(int var26 = 0; var26 < this.nData; ++var26) {
-                    var23[var26] = this.xData[0][var26];
+                    var23[var26] = this.xDatas[0][var26];
                     var24[var26] = this.yData[var26];
                     var25[var26] = this.weight[var26];
                 }
@@ -13382,7 +13384,7 @@ public class Regression {
                 }
 
                 for(var32 = 0; var32 < this.nData; ++var32) {
-                    this.xData[0][var32] = var41[var32];
+                    this.xDatas[0][var32] = var41[var32];
                     this.yData[var32] = var27[var32];
                     this.weight[var32] = var28[var32];
                 }
@@ -13475,7 +13477,7 @@ public class Regression {
                 this.weightOpt = var42;
 
                 for(int var38 = 0; var38 < this.nData; ++var38) {
-                    this.xData[0][var38] = var23[var38];
+                    this.xDatas[0][var38] = var23[var38];
                     this.yData[var38] = var24[var38];
                     this.weight[var38] = var25[var38];
                 }
@@ -13644,7 +13646,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 double var2 = Fmath.minimum(this.yData);
                 double var4 = Fmath.maximum(this.yData);
                 byte var6 = 1;
@@ -13653,37 +13655,37 @@ public class Regression {
                 }
 
                 double var7 = (var4 - var2) / 2.0D;
-                double var9 = this.xData[0][0];
+                double var9 = this.xDatas[0][0];
                 int var11 = 1;
                 int var12 = this.yData.length;
                 boolean var13 = true;
 
                 while(var13) {
                     if (this.yData[var11] >= (double)var6 * var7) {
-                        var9 = this.xData[0][var11];
+                        var9 = this.xDatas[0][var11];
                         var13 = false;
                     } else {
-                        ++var11;
+                        var11++;
                         if (var11 >= var12) {
-                            var9 = Stat.mean(this.xData[0]);
+                            var9 = Stat.mean(this.xDatas[0]);
                             var11 = var12 - 1;
                             var13 = false;
                         }
                     }
                 }
 
-                double var14 = this.xData[0][var12 - 1];
+                double var14 = this.xDatas[0][var12 - 1];
                 int var16 = var12 - 1;
                 var13 = true;
 
                 while(var13) {
                     if (this.yData[var16] <= (double)var6 * var7) {
-                        var14 = this.xData[0][var16];
+                        var14 = this.xDatas[0][var16];
                         var13 = false;
                     } else {
                         --var16;
                         if (var16 < 0) {
-                            var14 = Stat.mean(this.xData[0]);
+                            var14 = Stat.mean(this.xDatas[0]);
                             var16 = 1;
                             var13 = false;
                         }
@@ -13691,9 +13693,9 @@ public class Regression {
                 }
 
                 int var17 = (var11 + var16) / 2;
-                double var18 = this.xData[0][var17];
-                double var20 = 2.0D * (this.yData[var12 - 1] - var18) / (this.xData[0][var12 - 1] - this.xData[0][var17]);
-                double var22 = 2.0D * var18 / (this.xData[0][var17] - this.xData[0][var12 - 1]);
+                double var18 = this.xDatas[0][var17];
+                double var20 = 2.0D * (this.yData[var12 - 1] - var18) / (this.xDatas[0][var12 - 1] - this.xDatas[0][var17]);
+                double var22 = 2.0D * var18 / (this.xDatas[0][var17] - this.xDatas[0][var12 - 1]);
                 double var24 = Math.max(var20, var22);
                 double[] var26 = new double[this.nParam];
                 var26[0] = 4.0D * var24;
@@ -13719,11 +13721,11 @@ public class Regression {
                 }
 
                 if (var27[0] == 0.0D) {
-                    var27[0] = 0.1D * (this.xData[0][var12 - 1] - this.xData[0][0]) / (this.yData[var12 - 1] - this.yData[0]);
+                    var27[0] = 0.1D * (this.xDatas[0][var12 - 1] - this.xDatas[0][0]) / (this.yData[var12 - 1] - this.yData[0]);
                 }
 
                 if (var27[1] == 0.0D) {
-                    var27[1] = (this.xData[0][var12 - 1] - this.xData[0][0]) / 20.0D;
+                    var27[1] = (this.xDatas[0][var12 - 1] - this.xDatas[0][0]) / 20.0D;
                 }
 
                 if (this.scaleFlag && var27[2] == 0.0D) {
@@ -13731,15 +13733,15 @@ public class Regression {
                 }
 
                 int var30;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     this.dualErrorsRequired = true;
                     this.nonLinStatsNeeded = true;
                     this.simplexFlag = 3;
                     SigmoidThresholdFunctionDual var31 = new SigmoidThresholdFunctionDual();
                     var31.setScaleOption(this.scaleFlag);
                     var31.setScaleFactor(this.yScaleFactor);
-                    var31.setXerrors(this.xErrors);
-                    var31.setYerrors(this.yErrors);
+                    var31.setXerrors(this.xWeights);
+                    var31.setYerrors(this.yWeight);
                     this.nelderMead(var31, (Object)null, var26, var27, this.fTol, this.nMax);
                     if (var1 == 1) {
                         if (!this.suppressPrint) {
@@ -13802,8 +13804,8 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
-                double[] var2 = Conv.copy(this.xData[0]);
+                sort(this.xDatas[0], this.yData, this.weight);
+                double[] var2 = Conv.copy(this.xDatas[0]);
                 double[] var3 = Conv.copy(this.yData);
                 byte var4 = 1;
                 if (this.yData[0] > this.yData[this.nData - 1]) {
@@ -13821,7 +13823,7 @@ public class Regression {
                 if (var29 <= 0.0D) {
                     var9 = var29 - 0.01D * var11;
 
-                    for(int var13 = 0; var13 < this.nData; ++var13) {
+                    for(int var13 = 0; var13 < this.nData; var13++) {
                         var3[var13] -= var9;
                     }
                 }
@@ -13862,11 +13864,11 @@ public class Regression {
                 }
 
                 if (var25[0] == 0.0D) {
-                    var25[0] = 0.1D * (this.xData[0][var24 - 1] - this.xData[0][0]) / (this.yData[var24 - 1] - this.yData[0]);
+                    var25[0] = 0.1D * (this.xDatas[0][var24 - 1] - this.xDatas[0][0]) / (this.yData[var24 - 1] - this.yData[0]);
                 }
 
                 if (var25[1] == 0.0D) {
-                    var25[1] = (this.xData[0][var24 - 1] - this.xData[0][0]) / 20.0D;
+                    var25[1] = (this.xDatas[0][var24 - 1] - this.xDatas[0][0]) / 20.0D;
                 }
 
                 if (this.scaleFlag && var25[2] == 0.0D) {
@@ -13874,15 +13876,15 @@ public class Regression {
                 }
 
                 int var28;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     this.dualErrorsRequired = true;
                     this.nonLinStatsNeeded = true;
                     this.simplexFlag = 3;
                     SigmoidHillSipsFunctionDual var32 = new SigmoidHillSipsFunctionDual();
                     var32.setScaleOption(this.scaleFlag);
                     var32.setScaleFactor(this.yScaleFactor);
-                    var32.setXerrors(this.xErrors);
-                    var32.setYerrors(this.yErrors);
+                    var32.setXerrors(this.xWeights);
+                    var32.setYerrors(this.yWeight);
                     this.nelderMead(var32, (Object)null, var23, var25, this.fTol, this.nMax);
                     if (var1 == 1) {
                         if (!this.suppressPrint) {
@@ -13987,7 +13989,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 int var4 = this.yData.length;
                 this.midPoint();
                 double var5 = 1.0D;
@@ -14015,11 +14017,11 @@ public class Regression {
                 }
 
                 if (var8[2] == 0.0D) {
-                    var8[2] = 0.05D * (this.xData[0][var4 - 1] - this.xData[0][0]);
+                    var8[2] = 0.05D * (this.xDatas[0][var4 - 1] - this.xDatas[0][0]);
                 }
 
                 if (var8[3] == 0.0D) {
-                    var8[3] = 0.1D * (this.xData[0][var4 - 1] - this.xData[0][0]) / (this.yData[var4 - 1] - this.yData[0]);
+                    var8[3] = 0.1D * (this.xDatas[0][var4 - 1] - this.xDatas[0][0]) / (this.yData[var4 - 1] - this.yData[0]);
                 }
 
                 if (var3) {
@@ -14027,10 +14029,10 @@ public class Regression {
                 }
 
                 int var11;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     EC50FunctionDual var12 = new EC50FunctionDual();
-                    var12.setXerrors(this.xErrors);
-                    var12.setYerrors(this.yErrors);
+                    var12.setXerrors(this.xWeights);
+                    var12.setYerrors(this.yWeight);
                     this.simplexFlag = 3;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
@@ -14101,7 +14103,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 int var6 = this.yData.length;
                 this.midPoint();
                 double var7 = 1.0D;
@@ -14114,25 +14116,25 @@ public class Regression {
                 var9[1] = var7;
                 double[] var10 = new double[this.nParam];
 
-                for(int var11 = 0; var11 < this.nParam; ++var11) {
+                for(int var11 = 0; var11 < this.nParam; var11++) {
                     var10[var11] = 0.1D * Math.abs(var9[var11]);
                 }
 
                 if (var10[0] == 0.0D) {
-                    var10[0] = 0.05D * (this.xData[0][var6 - 1] - this.xData[0][0]);
+                    var10[0] = 0.05D * (this.xDatas[0][var6 - 1] - this.xDatas[0][0]);
                 }
 
                 if (var10[1] == 0.0D) {
-                    var10[1] = 0.1D * (this.xData[0][var6 - 1] - this.xData[0][0]) / (this.yData[var6 - 1] - this.yData[0]);
+                    var10[1] = 0.1D * (this.xDatas[0][var6 - 1] - this.xDatas[0][0]) / (this.yData[var6 - 1] - this.yData[0]);
                 }
 
                 int var13;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     EC50FixedFunctionDual var14 = new EC50FixedFunctionDual();
                     var14.setBottom(this.bottom);
                     var14.setTop(this.top);
-                    var14.setXerrors(this.xErrors);
-                    var14.setYerrors(this.yErrors);
+                    var14.setXerrors(this.xWeights);
+                    var14.setYerrors(this.yWeight);
                     this.simplexFlag = 3;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
@@ -14214,7 +14216,7 @@ public class Regression {
 
         double var4 = this.topS - (this.topS - this.bottomS) / 2.0D;
         this.midPointYvalue = var4;
-        double var6 = this.xData[0][0];
+        double var6 = this.xDatas[0][0];
         var2 = 0;
         double var8;
         int var10;
@@ -14224,30 +14226,30 @@ public class Regression {
 
             while(var3) {
                 if (this.yData[var2] >= var4) {
-                    var6 = this.xData[0][var2];
+                    var6 = this.xDatas[0][var2];
                     var3 = false;
                 } else {
                     ++var2;
                     if (var2 >= var1) {
-                        var6 = Stat.mean(this.xData[0]);
+                        var6 = Stat.mean(this.xDatas[0]);
                         var2 = var1 - 1;
                         var3 = false;
                     }
                 }
             }
 
-            var8 = this.xData[0][var1 - 1];
+            var8 = this.xDatas[0][var1 - 1];
             var10 = var1 - 1;
             var3 = true;
 
             while(var3) {
                 if (this.yData[var10] <= var4) {
-                    var8 = this.xData[0][var10];
+                    var8 = this.xDatas[0][var10];
                     var3 = false;
                 } else {
                     --var10;
                     if (var10 < 0) {
-                        var8 = Stat.mean(this.xData[0]);
+                        var8 = Stat.mean(this.xDatas[0]);
                         var10 = 1;
                         var3 = false;
                     }
@@ -14262,37 +14264,37 @@ public class Regression {
 
             this.midPointLowerIndex = var10;
             this.midPointUpperIndex = var2;
-            this.midPointXvalue = (this.xData[0][var2] + this.xData[0][var10]) / 2.0D;
+            this.midPointXvalue = (this.xDatas[0][var2] + this.xDatas[0][var10]) / 2.0D;
         } else {
             var2 = 0;
             var3 = true;
 
             while(var3) {
                 if (this.yData[var2] <= var4) {
-                    var6 = this.xData[0][var2];
+                    var6 = this.xDatas[0][var2];
                     var3 = false;
                 } else {
                     ++var2;
                     if (var2 >= var1) {
-                        var6 = Stat.mean(this.xData[0]);
+                        var6 = Stat.mean(this.xDatas[0]);
                         var2 = var1 - 1;
                         var3 = false;
                     }
                 }
             }
 
-            var8 = this.xData[0][var1 - 1];
+            var8 = this.xDatas[0][var1 - 1];
             var10 = var1 - 1;
             var3 = true;
 
             while(var3) {
                 if (this.yData[var10] >= var4) {
-                    var8 = this.xData[0][var10];
+                    var8 = this.xDatas[0][var10];
                     var3 = false;
                 } else {
                     --var10;
                     if (var10 < 0) {
-                        var8 = Stat.mean(this.xData[0]);
+                        var8 = Stat.mean(this.xDatas[0]);
                         var10 = 1;
                         var3 = false;
                     }
@@ -14313,7 +14315,7 @@ public class Regression {
 
             this.midPointLowerIndex = var10;
             this.midPointUpperIndex = var2;
-            this.midPointXvalue = (this.xData[0][var2] + this.xData[0][var10]) / 2.0D;
+            this.midPointXvalue = (this.xDatas[0][var2] + this.xDatas[0][var10]) / 2.0D;
         }
 
     }
@@ -14341,7 +14343,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 int var3 = this.yData.length;
                 this.midPoint();
                 double var4 = 1.0D;
@@ -14370,18 +14372,18 @@ public class Regression {
                 }
 
                 if (var7[2] == 0.0D) {
-                    var7[2] = 0.05D * (this.xData[0][var3 - 1] - this.xData[0][0]);
+                    var7[2] = 0.05D * (this.xDatas[0][var3 - 1] - this.xDatas[0][0]);
                 }
 
                 if (var7[3] == 0.0D) {
-                    var7[3] = 0.1D * (this.xData[0][var3 - 1] - this.xData[0][0]) / (this.yData[var3 - 1] - this.yData[0]);
+                    var7[3] = 0.1D * (this.xDatas[0][var3 - 1] - this.xDatas[0][0]) / (this.yData[var3 - 1] - this.yData[0]);
                 }
 
                 int var10;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     Logistic5FunctionDual var11 = new Logistic5FunctionDual();
-                    var11.setXerrors(this.xErrors);
-                    var11.setYerrors(this.yErrors);
+                    var11.setXerrors(this.xWeights);
+                    var11.setYerrors(this.yWeight);
                     this.simplexFlag = 3;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
@@ -14440,7 +14442,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 int var6 = this.yData.length;
                 this.midPoint();
                 double var7 = 1.0D;
@@ -14454,16 +14456,16 @@ public class Regression {
                 var9[2] = 1.0D;
                 double[] var10 = new double[this.nParam];
 
-                for(int var11 = 0; var11 < this.nParam; ++var11) {
+                for(int var11 = 0; var11 < this.nParam; var11++) {
                     var10[var11] = 0.1D * Math.abs(var9[var11]);
                 }
 
                 if (var10[0] == 0.0D) {
-                    var10[0] = 0.05D * (this.xData[0][var6 - 1] - this.xData[0][0]);
+                    var10[0] = 0.05D * (this.xDatas[0][var6 - 1] - this.xDatas[0][0]);
                 }
 
                 if (var10[1] == 0.0D) {
-                    var10[1] = 0.1D * (this.xData[0][var6 - 1] - this.xData[0][0]) / (this.yData[var6 - 1] - this.yData[0]);
+                    var10[1] = 0.1D * (this.xDatas[0][var6 - 1] - this.xDatas[0][0]) / (this.yData[var6 - 1] - this.yData[0]);
                 }
 
                 if (var10[2] == 0.0D) {
@@ -14471,12 +14473,12 @@ public class Regression {
                 }
 
                 int var13;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     Logistic5FixedFunctionDual var14 = new Logistic5FixedFunctionDual();
                     var14.setBottom(bottom);
                     var14.setTop(top);
-                    var14.setXerrors(this.xErrors);
-                    var14.setYerrors(this.yErrors);
+                    var14.setXerrors(this.xWeights);
+                    var14.setYerrors(this.yWeight);
                     this.simplexFlag = 3;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
@@ -14540,7 +14542,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 double var2 = Fmath.minimum(this.yData);
                 double var4 = Fmath.maximum(this.yData);
                 byte var6 = 1;
@@ -14549,37 +14551,37 @@ public class Regression {
                 }
 
                 double var7 = (var4 - var2) / 2.0D;
-                double var9 = this.xData[0][0];
+                double var9 = this.xDatas[0][0];
                 int var11 = 1;
                 int var12 = this.yData.length;
                 boolean var13 = true;
 
                 while(var13) {
                     if (this.yData[var11] >= (double)var6 * var7) {
-                        var9 = this.xData[0][var11];
+                        var9 = this.xDatas[0][var11];
                         var13 = false;
                     } else {
-                        ++var11;
+                        var11++;
                         if (var11 >= var12) {
-                            var9 = Stat.mean(this.xData[0]);
+                            var9 = Stat.mean(this.xDatas[0]);
                             var11 = var12 - 1;
                             var13 = false;
                         }
                     }
                 }
 
-                double var14 = this.xData[0][var12 - 1];
+                double var14 = this.xDatas[0][var12 - 1];
                 int var16 = var12 - 1;
                 var13 = true;
 
                 while(var13) {
                     if (this.yData[var16] <= (double)var6 * var7) {
-                        var14 = this.xData[0][var16];
+                        var14 = this.xDatas[0][var16];
                         var13 = false;
                     } else {
                         --var16;
                         if (var16 < 0) {
-                            var14 = Stat.mean(this.xData[0]);
+                            var14 = Stat.mean(this.xDatas[0]);
                             var16 = 1;
                             var13 = false;
                         }
@@ -14587,7 +14589,7 @@ public class Regression {
                 }
 
                 int var17 = (var11 + var16) / 2;
-                double var18 = this.xData[0][var17];
+                double var18 = this.xDatas[0][var17];
                 double[] var20 = new double[this.nParam];
                 var20[0] = var18;
                 if (this.scaleFlag) {
@@ -14605,7 +14607,7 @@ public class Regression {
                 }
 
                 if (var21[0] == 0.0D) {
-                    var21[0] = (this.xData[0][var12 - 1] - this.xData[0][0]) / 20.0D;
+                    var21[0] = (this.xDatas[0][var12 - 1] - this.xDatas[0][0]) / 20.0D;
                 }
 
                 if (this.scaleFlag && var21[1] == 0.0D) {
@@ -14613,12 +14615,12 @@ public class Regression {
                 }
 
                 int var24;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     RectangularHyperbolaFunctionDual var25 = new RectangularHyperbolaFunctionDual();
                     var25.setScaleOption(this.scaleFlag);
                     var25.setScaleFactor(this.yScaleFactor);
-                    var25.setXerrors(this.xErrors);
-                    var25.setYerrors(this.yErrors);
+                    var25.setXerrors(this.xWeights);
+                    var25.setYerrors(this.yWeight);
                     this.simplexFlag = 3;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
@@ -14680,7 +14682,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 double var3 = Fmath.minimum(this.yData);
                 double var5 = Fmath.maximum(this.yData);
                 byte var7 = 1;
@@ -14689,37 +14691,37 @@ public class Regression {
                 }
 
                 double var8 = (var5 - var3) / 2.0D;
-                double var10 = this.xData[0][0];
+                double var10 = this.xDatas[0][0];
                 int var12 = 1;
                 int var13 = this.yData.length;
                 boolean var14 = true;
 
                 while(var14) {
                     if (this.yData[var12] >= (double)var7 * var8) {
-                        var10 = this.xData[0][var12];
+                        var10 = this.xDatas[0][var12];
                         var14 = false;
                     } else {
-                        ++var12;
+                        var12++;
                         if (var12 >= var13) {
-                            var10 = Stat.mean(this.xData[0]);
+                            var10 = Stat.mean(this.xDatas[0]);
                             var12 = var13 - 1;
                             var14 = false;
                         }
                     }
                 }
 
-                double var15 = this.xData[0][var13 - 1];
+                double var15 = this.xDatas[0][var13 - 1];
                 int var17 = var13 - 1;
                 var14 = true;
 
                 while(var14) {
                     if (this.yData[var17] <= (double)var7 * var8) {
-                        var15 = this.xData[0][var17];
+                        var15 = this.xDatas[0][var17];
                         var14 = false;
                     } else {
                         --var17;
                         if (var17 < 0) {
-                            var15 = Stat.mean(this.xData[0]);
+                            var15 = Stat.mean(this.xDatas[0]);
                             var17 = 1;
                             var14 = false;
                         }
@@ -14727,7 +14729,7 @@ public class Regression {
                 }
 
                 int var18 = (var12 + var17) / 2;
-                double var19 = this.xData[0][var18];
+                double var19 = this.xDatas[0][var18];
                 double[] var21 = new double[this.nParam];
                 var21[0] = var19;
                 var21[1] = this.yData[0];
@@ -14744,7 +14746,7 @@ public class Regression {
                 }
 
                 if (var22[0] == 0.0D) {
-                    var22[0] = (this.xData[0][var13 - 1] - this.xData[0][0]) / 20.0D;
+                    var22[0] = (this.xDatas[0][var13 - 1] - this.xDatas[0][0]) / 20.0D;
                 }
 
                 if (var22[1] == 0.0D) {
@@ -14756,10 +14758,10 @@ public class Regression {
                 }
 
                 int var25;
-                if (this.xErrorsEntered) {
+                if (this.xWeightsEntered) {
                     ShiftedRectangularHyperbolaFunctionDual var26 = new ShiftedRectangularHyperbolaFunctionDual();
-                    var26.setYerrors(this.yErrors);
-                    var26.setXerrors(this.xErrors);
+                    var26.setYerrors(this.yWeight);
+                    var26.setXerrors(this.xWeights);
                     this.simplexFlag = 3;
                     this.nonLinStatsNeeded = true;
                     this.dualErrorsRequired = true;
@@ -14822,7 +14824,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 double var2 = Fmath.minimum(this.yData);
                 double var4 = Fmath.maximum(this.yData);
                 byte var6 = 1;
@@ -14831,37 +14833,37 @@ public class Regression {
                 }
 
                 double var7 = (var4 - var2) / 2.0D;
-                double var9 = this.xData[0][0];
+                double var9 = this.xDatas[0][0];
                 int var11 = 1;
                 int var12 = this.yData.length;
                 boolean var13 = true;
 
                 while(var13) {
                     if (this.yData[var11] >= (double)var6 * var7) {
-                        var9 = this.xData[0][var11];
+                        var9 = this.xDatas[0][var11];
                         var13 = false;
                     } else {
-                        ++var11;
+                        var11++;
                         if (var11 >= var12) {
-                            var9 = Stat.mean(this.xData[0]);
+                            var9 = Stat.mean(this.xDatas[0]);
                             var11 = var12 - 1;
                             var13 = false;
                         }
                     }
                 }
 
-                double var14 = this.xData[0][var12 - 1];
+                double var14 = this.xDatas[0][var12 - 1];
                 int var16 = var12 - 1;
                 var13 = true;
 
                 while(var13) {
                     if (this.yData[var16] <= (double)var6 * var7) {
-                        var14 = this.xData[0][var16];
+                        var14 = this.xDatas[0][var16];
                         var13 = false;
                     } else {
                         --var16;
                         if (var16 < 0) {
-                            var14 = Stat.mean(this.xData[0]);
+                            var14 = Stat.mean(this.xDatas[0]);
                             var16 = 1;
                             var13 = false;
                         }
@@ -14869,7 +14871,7 @@ public class Regression {
                 }
 
                 int var17 = (var11 + var16) / 2;
-                double var18 = this.xData[0][var17];
+                double var18 = this.xDatas[0][var17];
                 double[] var20 = new double[this.nParam];
                 var20[0] = var18;
                 if (this.scaleFlag) {
@@ -14887,7 +14889,7 @@ public class Regression {
                 }
 
                 if (var21[0] == 0.0D) {
-                    var21[0] = (this.xData[0][var12 - 1] - this.xData[0][0]) / 20.0D;
+                    var21[0] = (this.xDatas[0][var12 - 1] - this.xDatas[0][0]) / 20.0D;
                 }
 
                 if (this.scaleFlag && var21[1] == 0.0D) {
@@ -14941,7 +14943,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var2 = null;
                 ArrayList var3 = dataSign(this.yData);
                 var2 = (Double)var3.get(4);
@@ -14963,8 +14965,8 @@ public class Regression {
                 Integer var8 = null;
                 var8 = (Integer)var22.get(5);
                 int var9 = var8;
-                double var10 = this.xData[0][var9];
-                double var12 = Math.sqrt(6.0D) * halfWidth(this.xData[0], this.yData) / 3.141592653589793D;
+                double var10 = this.xDatas[0][var9];
+                double var12 = Math.sqrt(6.0D) * halfWidth(this.xDatas[0], this.yData) / 3.141592653589793D;
                 var2 = (Double)var22.get(4);
                 double var14 = var2;
                 var14 = var14 * var12 * Math.sqrt(6.283185307179586D);
@@ -14979,7 +14981,7 @@ public class Regression {
                 var17[0] = 0.1D * var12;
                 var17[1] = 0.1D * var16[1];
                 if (var17[1] == 0.0D) {
-                    ArrayList var18 = dataSign(this.xData[0]);
+                    ArrayList var18 = dataSign(this.xDatas[0]);
                     Double var19 = null;
                     var19 = (Double)var18.get(2);
                     double var20 = var19;
@@ -15065,7 +15067,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var3 = null;
                 ArrayList var4 = dataSign(this.yData);
                 var3 = (Double)var4.get(4);
@@ -15083,11 +15085,11 @@ public class Regression {
                     var7 = true;
                 }
 
-                ArrayList var34 = dataSign(this.xData[0]);
+                ArrayList var34 = dataSign(this.xDatas[0]);
                 Integer var9 = null;
                 var9 = (Integer)var4.get(5);
                 int var10 = var9;
-                double var11 = this.xData[0][var10];
+                double var11 = this.xDatas[0][var10];
                 var3 = (Double)var34.get(0);
                 double var13 = var3;
                 var3 = (Double)var34.get(2);
@@ -15255,7 +15257,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var3 = null;
                 ArrayList var4 = dataSign(this.yData);
                 var3 = (Double)var4.get(4);
@@ -15273,11 +15275,11 @@ public class Regression {
                     var7 = true;
                 }
 
-                ArrayList var32 = dataSign(this.xData[0]);
+                ArrayList var32 = dataSign(this.xDatas[0]);
                 Integer var9 = null;
                 var9 = (Integer)var4.get(5);
                 int var10 = var9;
-                double var11 = this.xData[0][var10];
+                double var11 = this.xDatas[0][var10];
                 var3 = (Double)var32.get(0);
                 double var13 = var3;
                 var3 = (Double)var32.get(2);
@@ -15413,7 +15415,7 @@ public class Regression {
             if (this.degreesOfFreedom < 1 && !this.ignoreDofFcheck) {
                 throw new IllegalArgumentException("Degrees of freedom must be greater than 0");
             } else {
-                sort(this.xData[0], this.yData, this.weight);
+                sort(this.xDatas[0], this.yData, this.weight);
                 Double var5 = null;
                 ArrayList var6 = dataSign(this.yData);
                 var5 = (Double)var6.get(4);
@@ -15423,7 +15425,7 @@ public class Regression {
                     System.out.println("Regression.fitGamma(): This implementation of the Erlang distribution takes only positive y values\n(noise taking low values below zero are allowed)");
                     System.out.println("All y values have been multiplied by -1 before fitting");
 
-                    for(int var10 = 0; var10 < this.nData; ++var10) {
+                    for(int var10 = 0; var10 < this.nData; var10++) {
                         this.yData[var10] = -this.yData[var10];
                     }
 
@@ -15431,11 +15433,11 @@ public class Regression {
                     var9 = true;
                 }
 
-                ArrayList var57 = dataSign(this.xData[0]);
+                ArrayList var57 = dataSign(this.xDatas[0]);
                 Integer var11 = null;
                 var11 = (Integer)var6.get(5);
                 int var12 = var11;
-                double var13 = this.xData[0][var12];
+                double var13 = this.xDatas[0][var12];
                 var5 = (Double)var57.get(0);
                 double var15 = var5;
                 var5 = (Double)var57.get(2);
@@ -15748,10 +15750,10 @@ public class Regression {
             double[] var12 = new double[var7];
             int var10 = 0;
 
-            for(int var11 = 0; var11 < var8; ++var11) {
+            for(int var11 = 0; var11 < var8; var11++) {
                 if (var0[var11] <= var5) {
                     var12[var10] = var0[var11];
-                    ++var10;
+                    var10++;
                 }
             }
 
@@ -15772,20 +15774,20 @@ public class Regression {
         int var8 = var0.length;
         int[] var9 = new int[var8];
 
-        for(int var10 = 0; var10 < var8; ++var10) {
+        for(int var10 = 0; var10 < var8; var10++) {
             var9[var10] = 0;
         }
 
         double[] var15 = new double[var7 + 1];
         var15[0] = var3;
 
-        for(int var11 = 1; var11 <= var7; ++var11) {
+        for(int var11 = 1; var11 <= var7; var11++) {
             var15[var11] = var15[var11 - 1] + var1;
         }
 
         double[][] var16 = new double[2][var7];
 
-        for(int var12 = 0; var12 < var7; ++var12) {
+        for(int var12 = 0; var12 < var7; var12++) {
             var16[0][var12] = (var15[var12] + var15[var12 + 1]) / 2.0D;
             var16[1][var12] = 0.0D;
         }
@@ -15794,19 +15796,19 @@ public class Regression {
 
         int var13;
         int var14;
-        for(var13 = 0; var13 < var8; ++var13) {
+        for(var13 = 0; var13 < var8; var13++) {
             var17 = true;
             var14 = 0;
 
             while(var17) {
                 if (var14 == var7 - 1) {
                     if (var0[var13] >= var15[var14] && var0[var13] <= var15[var14 + 1] * (1.0D + histTol)) {
-                        ++var16[1][var14];
+                        var16[1][var14]++;
                         var9[var13] = 1;
                         var17 = false;
                     }
                 } else if (var0[var13] >= var15[var14] && var0[var13] < var15[var14 + 1]) {
-                    ++var16[1][var14];
+                    var16[1][var14]++;
                     var9[var13] = 1;
                     var17 = false;
                 }
@@ -15815,7 +15817,7 @@ public class Regression {
                     if (var14 == var7 - 1) {
                         var17 = false;
                     } else {
-                        ++var14;
+                        var14++;
                     }
                 }
             }
@@ -15823,9 +15825,9 @@ public class Regression {
 
         var13 = 0;
 
-        for(var14 = 0; var14 < var8; ++var14) {
+        for(var14 = 0; var14 < var8; var14++) {
             if (var9[var14] == 0) {
-                ++var13;
+                var13++;
                 System.out.println("p " + var14 + " " + var0[var14] + " " + var15[0] + " " + var15[var7]);
             }
         }
@@ -15857,7 +15859,7 @@ public class Regression {
                 var12 = (double)var11 * var1;
                 var14 = var12 - var7;
                 if (var14 < 0.0D) {
-                    ++var19;
+                    var19++;
                     if (var19 > 1000) {
                         var16 = false;
                         System.out.println("histogram method could not encompass all data within histogram\nContact Michael thomas Flanagan");

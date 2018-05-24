@@ -485,7 +485,7 @@ public class ThreeDimensionalSmooth {
                 }
 
                 var5 = true;
-                System.out.println("vData transposed to match the dimensions of the xData and yData");
+                System.out.println("vData transposed to match the dimensions of the xDatas and yData");
             } else {
                 if (this.nPointsZ == var3 && this.nPointsY == var2 && this.nPointsX == var1) {
                     var6 = this.copy3D(this.vData);
@@ -501,7 +501,7 @@ public class ThreeDimensionalSmooth {
                 }
 
                 var5 = true;
-                System.out.println("vData transposed to match the dimensions of the xData and zData");
+                System.out.println("vData transposed to match the dimensions of the xDatas and zData");
             }
         }
 

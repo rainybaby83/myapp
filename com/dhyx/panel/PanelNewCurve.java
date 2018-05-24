@@ -448,9 +448,6 @@ public class PanelNewCurve extends JPanel {
                 PanelFit panelFit = new PanelFit(concentrations,values);
                 panelFit.setVisible(true);
             }
-
-
-
         }
     }
 
