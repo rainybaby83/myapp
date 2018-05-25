@@ -111,8 +111,8 @@ public class PanelProject extends JPanel {
         tblProject.setBounds(0, standardY, 840, 325);
 
         // 3.设置滚动面板尺寸，并添加到窗口面板
-        tblProject.jScrollPane.setBounds(tblProject.getBounds());
-        this.add(tblProject.jScrollPane);
+        tblProject.j.setBounds(tblProject.getBounds());
+        this.add(tblProject.j);
 
         //4.添加弹出菜单
 //        tblProject.jPopupMenu.add(btnEdit);

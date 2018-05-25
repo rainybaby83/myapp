@@ -219,9 +219,9 @@ public class PanelNewCurve extends JPanel {
         tblConcentration.setWidth(30, 75, 105, 105);
 
         // 2.4 设置滚动面板
-        tblCurve.jScrollPane.setBounds(tblCurve.getBounds());
-        tblConcentration.jScrollPane.setBounds(tblConcentration.getBounds());
-        tblConcentration.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tblCurve.j.setBounds(tblCurve.getBounds());
+        tblConcentration.j.setBounds(tblConcentration.getBounds());
+        tblConcentration.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //2.5 取得“浓度值”的index，然后对该列设置CellEditor，使其只能输入小数
         int index = dmConcentration.findColumn("浓度值");
@@ -231,8 +231,8 @@ public class PanelNewCurve extends JPanel {
 //        tblCurve.jPopupMenu.add(btnDel);
 
         // 2.7 添加表格到面板
-        this.add(tblCurve.jScrollPane);
-        this.add(tblConcentration.jScrollPane);
+        this.add(tblCurve.j);
+        this.add(tblConcentration.j);
     }
 
 

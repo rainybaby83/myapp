@@ -224,18 +224,18 @@ public class PanelTest extends JPanel {
         tblTestData.setAutoCreateColumnsFromModel(true);
 
         // 2.4 设置滚动面板
-        tblExperiment.jScrollPane.setBounds(tblExperiment.getBounds());
-        tblCurve.jScrollPane.setBounds(tblCurve.getBounds());
-        tblTest.jScrollPane.setBounds(tblTest.getBounds());
-        tblTestData.jScrollPane.setBounds(tblTestData.getBounds());
+        tblExperiment.j.setBounds(tblExperiment.getBounds());
+        tblCurve.j.setBounds(tblCurve.getBounds());
+        tblTest.j.setBounds(tblTest.getBounds());
+        tblTestData.j.setBounds(tblTestData.getBounds());
 
-        tblExperiment.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        tblCurve.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tblExperiment.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tblCurve.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        this.add(tblExperiment.jScrollPane);
-        this.add(tblCurve.jScrollPane);
-        this.add(tblTest.jScrollPane);
-        this.add(tblTestData.jScrollPane);
+        this.add(tblExperiment.j);
+        this.add(tblCurve.j);
+        this.add(tblTest.j);
+        this.add(tblTestData.j);
     }
 
 

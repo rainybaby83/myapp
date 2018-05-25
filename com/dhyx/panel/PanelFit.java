@@ -3,14 +3,12 @@ package com.dhyx.panel;
 import com.dhyx.myclass.Const;
 import com.dhyx.myclass.MyIconButton;
 import com.dhyx.myclass.MyTable;
-import com.flanagan.analysis.Regression;
 import com.flanagan.physchem.ImmunoAssay;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,81 +17,75 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 public class PanelFit extends JDialog {
+    private MyIconButton btnViewImage;
 
     private ImmunoAssay assay;
     private MyTable table;
     private int selectMethod;
-    MyIconButton btnViewImage;
-    private ImageIcon icon = Const.ICON_VIEW_IMAGE;
-
-
 
     PanelFit(double[] concentrations, double[] values) {
         //设置窗口弹出的相应属性
-        super((Frame) null, "双击一种拟合后返回", true);
+        super((Frame) null, "双击某一行后，返回拟合结果", true);
         this.setIconImage(Const.ICON_APP.getImage());
         this.setLayout(null);
         this.setBounds(0, 0, 1100, 600);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.white);
 
+        //设置按钮属性
+        btnViewImage = new MyIconButton(Const.ICON_VIEW_IMAGE, Const.ICON_VIEW_IMAGE_ENABLED, Const.ICON_VIEW_IMAGE);
+        btnViewImage.setBackground(null);
+        btnViewImage.setOpaque(true);
+        btnViewImage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, 1231451);
+            }
+        });
+
         double[] xArray = {-0.301029996, 0, 0.301029996, 0.602059991, 1.301029996, 2, 2.397940009, 2.698970004, 2.875061263, 3};
         double[] yArray = {-1.210066919, -0.735418271, -0.607127255, -0.410832609, 0.075765878, 0.772915521, 0.939549203, 1.333288038, 1.383134677, 1.624252179};
 
         //将数组的浓度、反应值，写入直线拟合、曲线拟合类
         assay = new ImmunoAssay(xArray,yArray);
-//        assay = new ImmunoAssay(concentrations,values);
         assay.setData();
         assay.setPlotStatus(true);
 
-        //查看图形按钮
-        btnViewImage = new MyIconButton(Const.ICON_VIEW_IMAGE, Const.ICON_VIEW_IMAGE_ENABLED, Const.ICON_VIEW_IMAGE);
-        btnViewImage.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(null,1234);
-            }
-        });
-        btnViewImage.setBounds(0,0,120,30);
-
         //初始化表格
         initTable();
-        table.getColumnModel().getColumn(9).setCellEditor(new MyEditor());
     }
 
 
     //创建表格，设置基本属性
     private void initTable() {
-        //重写渲染器
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(
-                    JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (column ==2) {
-                    this.setIcon((Icon) value);
-                    this.setText("");
-                } else {
-                    setIcon(null);
-                }
-                return this;
-            }
-        };
-
-        renderer.setHorizontalAlignment(JLabel.CENTER);
         table = new MyTable(createTableModel()){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 9;
             }
         };
-        table.setDefaultRenderer(Object.class,renderer);
+
+
         table.setBounds(40, 20, 1000, 500);
         table.setRowHeight(70);
-        table.setWidth(40,80,200,80,80,80,80,80,80,150);
+        table.setWidth(40,80,200,80,80,80,80,80,80,140);
         table.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.lightGray));
-        table.jScrollPane.setBounds(table.getBounds());
-        this.add(table.jScrollPane);
+
+        //第3列图片，使用自定义的渲染器，以便显示图片
+        int index =((DefaultTableModel)table.getModel()).findColumn("公式");
+        table.getColumnModel().getColumn(index).setCellRenderer(new IconRenderer());
+        table.getColumnModel().getColumn(index).setResizable(false);
+
+        //第10列按钮，使用自定义编辑器。
+        index =((DefaultTableModel)table.getModel()).findColumn("查看图形");
+        table.getColumnModel().getColumn(index).setCellRenderer(new ButtonRenderer());
+        table.getColumnModel().getColumn(index).setCellEditor(new ButtonEditor());
+        table.getColumnModel().getColumn(index).setResizable(false);
+
+
+        //添加到面板
+        table.j.setBounds(table.getBounds());
+        this.add(table.j);
     }
 
 
@@ -124,7 +116,6 @@ public class PanelFit extends JDialog {
     }
 
 
-
     //返回直线拟合的Vector数据，用于创建表格
     private Vector getLinear(){
         Vector<Object> data = new Vector<>();
@@ -142,8 +133,6 @@ public class PanelFit extends JDialog {
         data.addElement("无");
         data.addElement("无");
         data.addElement(assay.getCoefficientOfDetermination());
-//        data.addElement(btnViewImage);
-
         return data;
     }
 
@@ -161,7 +150,6 @@ public class PanelFit extends JDialog {
         }
 
         data.addElement("无");
-//        data.addElement(btnViewImage);
         return data;
     }
 
@@ -181,38 +169,51 @@ public class PanelFit extends JDialog {
         return data;
     }
 
+
+
+
+    //图片渲染器
+    private class IconRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            this.setIcon((Icon) value);
+            this.setText("");
+            return this;
+        }
+    }
+
+
+    //按钮的渲染器
+    private class ButtonRenderer extends DefaultTableCellRenderer {
+//        ButtonRenderer() {
+//            this.setLayout(new BorderLayout());
+//            this.add(new JButton("查看"), BorderLayout.CENTER);
+//        }
+
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            this.setBackground(Const.GREEN_ACTIVE);
+            return btnViewImage;
+        }
+    }
+
+
+    //按钮的编辑器
+    private class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
+        @Override
+        public Object getCellEditorValue() {
+            return btnViewImage;
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected, int row, int column) {
+            return btnViewImage;
+        }
+    }
 }
 
-class MyEditor extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
-    private static final long serialVersionUID = 1L;
-    private MyIconButton btnViewImage;
 
-    MyEditor() {
-        btnViewImage = new MyIconButton(Const.ICON_VIEW_IMAGE, Const.ICON_VIEW_IMAGE_ENABLED, Const.ICON_VIEW_IMAGE);
-        btnViewImage.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(null,1234);
-            }
-        });
-
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return btnViewImage;
-    }
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-                                                   boolean isSelected, boolean hasFocus, int row, int column) {
-        // TODO Auto-generated method stub
-        return btnViewImage;
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value,
-                                                 boolean isSelected, int row, int column) {
-        return btnViewImage;
-    }
-}

@@ -13,7 +13,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.*;
 import java.awt.*;
@@ -26,7 +25,7 @@ import static javax.swing.JFileChooser.APPROVE_OPTION;
 import static javax.swing.JFileChooser.FILES_ONLY;
 
 public class MyTable extends JTable{
-    public JScrollPane jScrollPane;
+    public JScrollPane j;
     private Logger logger = LogManager.getLogger();
     public JPopupMenu jPopupMenu = new JPopupMenu();
 
@@ -119,14 +118,14 @@ public class MyTable extends JTable{
      * 设置滚动面板的默认属性
      */
     private void setScrollPanel() {
-        jScrollPane = new JScrollPane(this);
-        jScrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
-        jScrollPane.getHorizontalScrollBar().setUI(new MyScrollBarUI());
-        jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setWheelScrollingEnabled(true);
-        jScrollPane.setBackground(Color.white);
-        jScrollPane.getViewport().setOpaque(false);
+        j = new JScrollPane(this);
+        j.getVerticalScrollBar().setUI(new MyScrollBarUI());
+        j.getHorizontalScrollBar().setUI(new MyScrollBarUI());
+        j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        j.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        j.setWheelScrollingEnabled(true);
+        j.setBackground(Color.white);
+        j.getViewport().setOpaque(false);
     }
 
 

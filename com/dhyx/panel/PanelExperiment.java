@@ -167,10 +167,10 @@ public class PanelExperiment extends JPanel {
 
         tblProject.setBounds(0, lblProject.getY() + lblProject.getHeight(), 345, 545);
         tblExperiment.setBounds(lblExperiment.getX(), lblExperiment.getY() + lblExperiment.getHeight(), 450, 545);
-        tblProject.jScrollPane.setBounds(tblProject.getBounds());
-        tblExperiment.jScrollPane.setBounds(tblExperiment.getBounds());
-        this.add(tblProject.jScrollPane);
-        this.add(tblExperiment.jScrollPane);
+        tblProject.j.setBounds(tblProject.getBounds());
+        tblExperiment.j.setBounds(tblExperiment.getBounds());
+        this.add(tblProject.j);
+        this.add(tblExperiment.j);
 //        tblProject.jPopupMenu.add(btnNew);
     }   // END : private void initTableCreateTable()
 
