@@ -9,8 +9,11 @@ import com.flanagan.physchem.ImmunoAssay;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
@@ -18,7 +21,6 @@ import java.util.Vector;
 public class PanelFit extends JDialog {
 
     private ImmunoAssay assay;
-    private Regression regression;
     private MyTable table;
     private int selectMethod;
     MyIconButton btnViewImage;
@@ -31,7 +33,7 @@ public class PanelFit extends JDialog {
         super((Frame) null, "双击一种拟合后返回", true);
         this.setIconImage(Const.ICON_APP.getImage());
         this.setLayout(null);
-        this.setBounds(0, 0, 1000, 600);
+        this.setBounds(0, 0, 1100, 600);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.white);
 
@@ -53,63 +55,58 @@ public class PanelFit extends JDialog {
             }
         });
         btnViewImage.setBounds(0,0,120,30);
-        this.add(btnViewImage);
+
         //初始化表格
         initTable();
-
+        table.getColumnModel().getColumn(9).setCellEditor(new MyEditor());
     }
 
 
     //创建表格，设置基本属性
     private void initTable() {
         //重写渲染器
-        DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(
                     JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                MyIconButton btn = new MyIconButton(Const.ICON_VIEW_IMAGE, Const.ICON_VIEW_IMAGE_ENABLED, Const.ICON_VIEW_IMAGE);
-                if (value instanceof ImageIcon) {
+                if (column ==2) {
                     this.setIcon((Icon) value);
                     this.setText("");
-
-                } else if (column == 8) {
-
-                    return btn;
                 } else {
                     setIcon(null);
-
                 }
-
                 return this;
             }
-
         };
 
-        tcr.setHorizontalAlignment(JLabel.CENTER);
-        table = new MyTable(initTableModel()) ;
-        table.setDefaultRenderer(Object.class,tcr);
-        table.setBounds(40, 20, 900, 500);
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        table = new MyTable(createTableModel()){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 9;
+            }
+        };
+        table.setDefaultRenderer(Object.class,renderer);
+        table.setBounds(40, 20, 1000, 500);
         table.setRowHeight(70);
-        table.setWidth(40,80,200,80,80,80,80,80,150);
+        table.setWidth(40,80,200,80,80,80,80,80,80,150);
         table.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.lightGray));
         table.jScrollPane.setBounds(table.getBounds());
         this.add(table.jScrollPane);
     }
 
 
-    private DefaultTableModel initTableModel() {
-
+    private DefaultTableModel createTableModel() {
         // 1 创建表头
         Vector<String> vectorHeader = getTableHeader();
-
         // 2 添加拟合方法
         Vector<Vector> datas= new Vector<>();
         datas.addElement(getLinear());
         datas.addElement(get4PL());
         datas.addElement(get5PL());
 
+        //创建DefaultTableModel
         DefaultTableModel dm = new DefaultTableModel(datas, vectorHeader);
         return dm;
     }
@@ -119,7 +116,7 @@ public class PanelFit extends JDialog {
     private Vector<String> getTableHeader() {
         //初始化表头
         Vector<String> vecHeader = new Vector<>();
-        String[] titles = {"序号","方法", "公式", "a", "b", "c", "d", "e", "查看图形"};
+        String[] titles = {"序号","方法", "公式", "a", "b", "c", "d", "e", "R2","查看图形"};
         for (String title : titles) {
             vecHeader.addElement(title);
         }
@@ -144,6 +141,7 @@ public class PanelFit extends JDialog {
         data.addElement("无");
         data.addElement("无");
         data.addElement("无");
+        data.addElement(assay.getCoefficientOfDetermination());
 //        data.addElement(btnViewImage);
 
         return data;
@@ -180,11 +178,41 @@ public class PanelFit extends JDialog {
         for (double aResult1 : para) {
             data.addElement(aResult1);
         }
-//        data.addElement(btnViewImage);
         return data;
     }
 
+}
 
+class MyEditor extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
+    private static final long serialVersionUID = 1L;
+    private MyIconButton btnViewImage;
 
+    MyEditor() {
+        btnViewImage = new MyIconButton(Const.ICON_VIEW_IMAGE, Const.ICON_VIEW_IMAGE_ENABLED, Const.ICON_VIEW_IMAGE);
+        btnViewImage.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JOptionPane.showMessageDialog(null,1234);
+            }
+        });
 
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+        return btnViewImage;
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+                                                   boolean isSelected, boolean hasFocus, int row, int column) {
+        // TODO Auto-generated method stub
+        return btnViewImage;
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value,
+                                                 boolean isSelected, int row, int column) {
+        return btnViewImage;
+    }
 }

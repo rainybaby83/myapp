@@ -1,4 +1,4 @@
-package com;/*      ImmunoAssayExampleOne
+package test;/*      ImmunoAssayExampleOne
  *
  *       An example program illustrating the use of the ImmunoAssay class
  *       This example enters the assay data via the program enter methods,
@@ -42,7 +42,7 @@ public class ImmunoAssayExampleOne{
 //        assay.fourParameterLogisticFit();
 //        assay.bestPolynomialFit();
 
-        // Print an analysis of the fit to a test file named ImmunoAssayOneOutput.txt
+        // Print an analysis of the fit to a main file named ImmunoAssayOneOutput.txt
 //        assay.print("ImmunoAssayOneOutput.txt");
 
 //        // Find concentration for a given response i.e. of a sample of unknown concentration
