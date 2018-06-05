@@ -709,7 +709,7 @@ public class ImmunoAssay extends Regression {
             readText = fileInput.readLine().trim();
             int pos1 = this.separatorPosition(readText);
             if (pos1 == -1) {
-                throw new IllegalArgumentException("Input file line " + (i + 1) + ": analyte concentration and response value required for all fillData points");
+                throw new IllegalArgumentException("Input file line " + (i + 1) + ": analyte concentration and response value required for all data points");
             }
 
             subReadText = readText.substring(0, pos1);
@@ -717,7 +717,7 @@ public class ImmunoAssay extends Regression {
             readText = readText.substring(pos1 + 1).trim();
             int length = readText.length();
             if (length < 1) {
-                throw new IllegalArgumentException("Input file line " + (i + 1) + ": response value required for all fillData points");
+                throw new IllegalArgumentException("Input file line " + (i + 1) + ": response value required for all data points");
             }
 
             int pos2 = this.separatorPosition(readText);
@@ -777,7 +777,7 @@ public class ImmunoAssay extends Regression {
 
     public void cubicSpline() {
         if (this.nAnalyteConcns < 3) {
-            throw new IllegalArgumentException("Method cubicSpline requres at least 3 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method cubicSpline requres at least 3 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 0;
             this.sampleErrorFlag = false;
@@ -802,7 +802,7 @@ public class ImmunoAssay extends Regression {
 
     public void cubicInterpolation() {
         if (this.nAnalyteConcns < 2) {
-            throw new IllegalArgumentException("Method cubicInterpolation requres at least 2 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method cubicInterpolation requres at least 2 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 1;
             this.sampleErrorFlag = false;
@@ -827,7 +827,7 @@ public class ImmunoAssay extends Regression {
 
     public void linearInterpolation() {
         if (this.nAnalyteConcns < 2) {
-            throw new IllegalArgumentException("Method cubicInterpolation requres at least 2 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method cubicInterpolation requres at least 2 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 14;
             this.sampleErrorFlag = false;
@@ -852,7 +852,7 @@ public class ImmunoAssay extends Regression {
 
     public void polynomialFit(int degree) {
         if (this.nAnalyteConcns < degree + 2) {
-            throw new IllegalArgumentException("Method polynomialFit(" + degree + ") requres at least " + (degree + 2) + " fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method polynomialFit(" + degree + ") requres at least " + (degree + 2) + " data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 2;
             this.sampleErrorFlag = true;
@@ -911,7 +911,7 @@ public class ImmunoAssay extends Regression {
 
     public void nonIntegerPolynomialFit(int nTerms) {
         if (this.nAnalyteConcns < nTerms + 1) {
-            throw new IllegalArgumentException("Method nonIntegerPolynomial requres at least " + (nTerms + 1) + " fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method nonIntegerPolynomial requres at least " + (nTerms + 1) + " data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 4;
             this.polyNterms = nTerms;
@@ -946,7 +946,7 @@ public class ImmunoAssay extends Regression {
 
     public void sigmoidThresholdFit() {
         if (this.nAnalyteConcns < 4) {
-            throw new IllegalArgumentException("Method sigmoidThresholdFit requres at least 4 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method sigmoidThresholdFit requres at least 4 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 5;
             this.sampleErrorFlag = true;
@@ -971,7 +971,7 @@ public class ImmunoAssay extends Regression {
 
     public void sipsSigmoidFit() {
         if (this.nAnalyteConcns < 4) {
-            throw new IllegalArgumentException("Method sipsSigmoidFit requres at least 4 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method sipsSigmoidFit requres at least 4 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 6;
             this.sampleErrorFlag = true;
@@ -998,11 +998,11 @@ public class ImmunoAssay extends Regression {
 
     public void fourParameterLogisticFit() {
         if (this.nAnalyteConcns < 5) {
-            JOptionPane.showMessageDialog(null,"四参数拟合至少需要5个数据，当前只有" + this.nAnalyteConcns + "个。");
+            throw new IllegalArgumentException("Method fourParameterLogisticFit requres at least 5 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 7;
             this.sampleErrorFlag = true;
-            this.titleOne = "四参数拟合: r = top + (bottom - top)/(1 + (a/C50)^HillSlope)";
+            this.titleOne = "Four parameter logistic fitting: r = top + (bottom - top)/(1 + (a/C50)^HillSlope)";
             if (!this.setDataOneDone) {
                 this.setDataOne();
             }
@@ -1011,14 +1011,14 @@ public class ImmunoAssay extends Regression {
             super.ec50();
             super.removeConstraints();
 
-            for(int i = 0; i < this.nInterp; ++i) {
-                this.calculatedResponses[i] = super.best[0] + (super.best[1] - super.best[0]) / (1.0D + Math.pow(this.interpolationConcns[i] / super.best[2], super.best[3]));
+            for(int var1 = 0; var1 < this.nInterp; ++var1) {
+                this.calculatedResponses[var1] = super.best[0] + (super.best[1] - super.best[0]) / (1.0D + Math.pow(this.interpolationConcns[var1] / super.best[2], super.best[3]));
             }
 
-//            if (!this.suppressPlot) {
-//                this.plot();
-//            }
-//
+            if (!this.suppressPlot) {
+                this.plot();
+            }
+
 //            this.curveCheck(this.methodIndices[this.methodUsed]);
         }
     }
@@ -1029,7 +1029,7 @@ public class ImmunoAssay extends Regression {
 
     public void fourParameterLogisticFit(double bottom, double top) {
         if (this.nAnalyteConcns < 3) {
-            throw new IllegalArgumentException("Method fourParameterLogisticFit requres at least 3 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method fourParameterLogisticFit requres at least 3 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.bottom = bottom;
             this.top = top;
@@ -1063,13 +1063,13 @@ public class ImmunoAssay extends Regression {
 
     public void fiveParameterLogisticFit() {
         if (this.nAnalyteConcns < 6) {
-//            throw new IllegalArgumentException("Method fiveParameterLogisticFit requres at least 6 fillData points; only " + this.nAnalyteConcns + " were supplied");
+//            throw new IllegalArgumentException("Method fiveParameterLogisticFit requres at least 6 data points; only " + this.nAnalyteConcns + " were supplied");
             throw new IllegalArgumentException("五参数拟合至少需要6个数据点。");
 
         } else {
             this.methodUsed = 8;
             this.sampleErrorFlag = true;
-            this.titleOne = "五参数拟合: y = a + (b - a)/((1 + (x/c)^d)^e)";
+            this.titleOne = "五参数拟合: r = top + (bottom - top)/((1 + (a/C50)^HillSlope)^asymm)";
             if (!this.setDataOneDone) {
                 this.setDataOne();
             }
@@ -1082,9 +1082,9 @@ public class ImmunoAssay extends Regression {
                 this.calculatedResponses[i] = super.best[0] + (super.best[1] - super.best[0]) / Math.pow(1.0D + Math.pow(this.interpolationConcns[i] / super.best[2], super.best[3]), super.best[4]);
             }
 
-//            if (!this.suppressPlot) {
-//                this.plot();
-//            }
+            if (!this.suppressPlot) {
+                this.plot();
+            }
 
 //            this.curveCheck(this.methodIndices[this.methodUsed]);
         }
@@ -1092,7 +1092,7 @@ public class ImmunoAssay extends Regression {
 
     public void fiveParameterLogisticFit(double bottom, double top) {
         if (this.nAnalyteConcns < 5) {
-            throw new IllegalArgumentException("Method fiveParameterLogisticFit requres at least 5 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method fiveParameterLogisticFit requres at least 5 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 13;
             this.sampleErrorFlag = true;
@@ -1122,7 +1122,7 @@ public class ImmunoAssay extends Regression {
 
     public void shiftedRectangularHyperbolaFit() {
         if (this.nAnalyteConcns < 4) {
-            throw new IllegalArgumentException("Method shiftedRectangularHyperbolaFit requres at least 4 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method shiftedRectangularHyperbolaFit requres at least 4 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 9;
             this.sampleErrorFlag = true;
@@ -1147,7 +1147,7 @@ public class ImmunoAssay extends Regression {
 
     public void rectangularHyperbolaFit() {
         if (this.nAnalyteConcns < 3) {
-            throw new IllegalArgumentException("Method rectangularHyperbolaFit requres at least 3 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method rectangularHyperbolaFit requres at least 3 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.methodUsed = 10;
             this.sampleErrorFlag = true;
@@ -1195,7 +1195,7 @@ public class ImmunoAssay extends Regression {
 
     private void fitAmersham(double[] estimates) {
         if (this.nAnalyteConcns < 6) {
-            throw new IllegalArgumentException("Method amershamFit requres at least 6 fillData points; only " + this.nAnalyteConcns + " were supplied");
+            throw new IllegalArgumentException("Method amershamFit requres at least 6 data points; only " + this.nAnalyteConcns + " were supplied");
         } else {
             this.sampleErrorFlag = true;
             this.titleOne = "Amersham equation fitting: r = S(2.P(1-N/L)/(K+P+L+a+[(K-P+L+a)^2+4KP]^0.5)+N/L)";
@@ -1305,10 +1305,10 @@ public class ImmunoAssay extends Regression {
 
             if (count >= this.nAnalyteConcns / 2) {
                 if (this.responses[this.nAnalyteConcns - 1] >= this.responses[0]) {
-                    throw new IllegalArgumentException("The fillData appears incompatible with a competitive assay");
+                    throw new IllegalArgumentException("The data appears incompatible with a competitive assay");
                 }
 
-                System.out.println("The fillData has been queried as that of a competitive assay but the fitting has not been aborted");
+                System.out.println("The data has been queried as that of a competitive assay but the fitting has not been aborted");
             }
         }
 
@@ -1655,51 +1655,51 @@ public class ImmunoAssay extends Regression {
             }
 
             if (this.nAnalyteConcns < i) {
-                double[] tmp2 = this.analyteConcns;
+                double[] var17 = this.analyteConcns;
                 this.analyteConcns = new double[this.nAnalyteConcns];
 
                 for(count = 0; count < this.nAnalyteConcns; ++count) {
-                    this.analyteConcns[count] = tmp2[count];
+                    this.analyteConcns[count] = var17[count];
                 }
 
-                tmp2 = this.responses;
+                var17 = this.responses;
                 this.responses = new double[this.nAnalyteConcns];
 
                 for(count = 0; count < this.nAnalyteConcns; ++count) {
-                    this.responses[count] = tmp2[count];
+                    this.responses[count] = var17[count];
                 }
 
-                tmp2 = super.yWeight;
+                var17 = super.yWeight;
                 super.yWeight = new double[this.nAnalyteConcns];
 
                 for(count = 0; count < this.nAnalyteConcns; ++count) {
-                    this.weight[count] = tmp2[count];
+                    this.weight[count] = var17[count];
                 }
 
                 if (super.xWeightsEntered) {
-                    tmp2 = super.xWeights[0];
+                    var17 = super.xWeights[0];
                     super.xWeights = new double[1][this.nAnalyteConcns];
 
                     for(count = 0; count < this.nAnalyteConcns; ++count) {
-                        super.xWeights[0][count] = tmp2[count];
+                        super.xWeights[0][count] = var17[count];
                     }
                 }
 
                 if (this.analyteConcnFlag == 1) {
-                    tmp2 = this.log10AnalyteConcns;
+                    var17 = this.log10AnalyteConcns;
                     this.log10AnalyteConcns = new double[this.nAnalyteConcns];
 
                     for(count = 0; count < this.nAnalyteConcns; ++count) {
-                        this.log10AnalyteConcns[count] = tmp2[count];
+                        this.log10AnalyteConcns[count] = var17[count];
                     }
                 }
 
                 if (this.analyteConcnFlag == 2) {
-                    tmp2 = this.logeAnalyteConcns;
+                    var17 = this.logeAnalyteConcns;
                     this.logeAnalyteConcns = new double[this.nAnalyteConcns];
 
                     for(count = 0; count < this.nAnalyteConcns; ++count) {
-                        this.logeAnalyteConcns[count] = tmp2[count];
+                        this.logeAnalyteConcns[count] = var17[count];
                     }
                 }
             }
@@ -1831,7 +1831,8 @@ public class ImmunoAssay extends Regression {
 
 
 
-    public int plot() {
+    private int plot() {
+        byte var1 = 1;
         double[][] data = new double[4][];
         PlotGraph plotGraph = null;
         int var4;
@@ -2017,10 +2018,10 @@ public class ImmunoAssay extends Regression {
         plotGraph.setGraphTitle(this.titleZero);
         plotGraph.setGraphTitle2(this.titleOne);
         plotGraph.plot();
-        return 1;
+        return var1;
     }
 
-    private void curveCheck(int methodIndex) {
+    private void curveCheck(int var1) {
         this.interpStartIndex = 0;
         this.interpEndIndex = this.nInterp - 1;
         this.outlierFlag = false;
@@ -2091,7 +2092,7 @@ public class ImmunoAssay extends Regression {
                 this.interpEndIndex = this.turnIndices[0];
             }
 
-            System.out.println(this.methodNames[methodIndex]);
+            System.out.println(this.methodNames[var1]);
             System.out.println("The fitted or interpolated standard curve is not monotonic");
             System.out.println("The useable analyte concentration range is " + this.interpolationConcns[this.interpStartIndex] + " to " + this.interpolationConcns[this.interpEndIndex]);
         }
@@ -2142,7 +2143,7 @@ public class ImmunoAssay extends Regression {
                 }
             }
 
-            System.out.println(this.methodNames[methodIndex]);
+            System.out.println(this.methodNames[var1]);
             System.out.println("The fitted or interpolated standard curve is not monotonic");
             System.out.println("The useable analyte concentration range is " + this.interpolationConcns[this.interpStartIndex] + " to " + this.interpolationConcns[this.interpEndIndex]);
         }
@@ -2192,7 +2193,7 @@ public class ImmunoAssay extends Regression {
         double[] var31 = new double[this.nWorking];
         double var32 = Math.sqrt(super.sumOfSquaresError / (double)(this.nAnalyteConcns - super.nParam));
         if (this.sampleErrorFlag) {
-            double[] y;
+            double[] var20;
             int i4;
             double var23;
             double[] var41;
@@ -2233,26 +2234,26 @@ public class ImmunoAssay extends Regression {
                 }
 
                 var19 = var17 - var16 + 1;
-                y = new double[var19];
+                var20 = new double[var19];
 
                 for(i4 = 0; i4 < var19; ++i4) {
-                    y[i4] = super.yWeight[i4 + var16];
+                    var20[i4] = super.yWeight[i4 + var16];
                 }
 
-                var33 = isMonotonic(y);
+                var33 = isMonotonic(var20);
                 int var25;
                 if (var33) {
-                    double var38 = Math.abs(y[1] - y[0]);
+                    double var38 = Math.abs(var20[1] - var20[0]);
                     var23 = var38;
 
                     for(var25 = 2; var25 < var19; ++var25) {
-                        var38 = Math.abs(y[var25] - y[var25 - 1]);
+                        var38 = Math.abs(var20[var25] - var20[var25 - 1]);
                         if (var38 > var23) {
                             var23 = var38;
                         }
                     }
 
-                    if (var23 > 0.6D * Math.abs(Fmath.maximum(y) - Fmath.minimum(y))) {
+                    if (var23 > 0.6D * Math.abs(Fmath.maximum(var20) - Fmath.minimum(var20))) {
                         var33 = false;
                     }
                 }
@@ -2286,16 +2287,16 @@ public class ImmunoAssay extends Regression {
 
             int i;
             for(i = 0; i < this.nAnalyteConcns; ++i) {
-                boolean is = false;
+                boolean var37 = false;
                 if (this.curveDirection) {
                     if (this.responses[i] < this.interpResponseStart || this.responses[i] > this.interpResponseEnd) {
-                        is = true;
+                        var37 = true;
                     }
                 } else if (this.responses[i] > this.interpResponseStart || this.responses[i] < this.interpResponseEnd) {
-                    is = true;
+                    var37 = true;
                 }
 
-                if (is == true) {
+                if (var37) {
                     this.propagatedErrors[i] = "**";
                 } else {
                     arrayList.add(new Double(this.responses[i]));
@@ -2308,20 +2309,20 @@ public class ImmunoAssay extends Regression {
             }
 
             i = arrayList.size() / 2;
-            double[] x = new double[i];
-            y = new double[i];
+            double[] var39 = new double[i];
+            var20 = new double[i];
 
             for(i4 = 0; i4 < i; ++i4) {
-                x[i4] = (Double)arrayList.get(2 * i4);
-                y[i4] = (Double)arrayList.get(2 * i4 + 1);
+                var39[i4] = (Double)arrayList.get(2 * i4);
+                var20[i4] = (Double)arrayList.get(2 * i4 + 1);
             }
 
-            CubicSpline var42 = new CubicSpline(x, y);
+            CubicSpline var42 = new CubicSpline(var39, var20);
             var41 = new double[1001];
             double[] var43 = new double[1001];
-            var41[0] = x[0];
-            var41[1000] = x[i - 1];
-            var23 = (x[i - 1] - x[0]) / 1000.0D;
+            var41[0] = var39[0];
+            var41[1000] = var39[i - 1];
+            var23 = (var39[i - 1] - var39[0]) / 1000.0D;
 
             int var26;
             for(var26 = 1; var26 < 1000; ++var26) {
@@ -2439,7 +2440,6 @@ public class ImmunoAssay extends Regression {
     public double[] getModelParameterValues() {
         return Conv.copy(super.best);
     }
-
 
     public double[] getModelParameterErrors() {
         return Conv.copy(super.bestSd);
@@ -2774,7 +2774,7 @@ public class ImmunoAssay extends Regression {
         fileOutput.println();
         fileOutput.printtab("Degrees of freedom");
         fileOutput.println(super.degreesOfFreedom);
-        fileOutput.printtab("Number of fillData points");
+        fileOutput.printtab("Number of data points");
         fileOutput.println(super.nData);
         fileOutput.printtab("Number of estimated paramaters");
         fileOutput.println(super.nParam);

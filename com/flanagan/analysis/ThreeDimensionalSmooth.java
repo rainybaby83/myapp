@@ -506,7 +506,7 @@ public class ThreeDimensionalSmooth {
         }
 
         if (!var5) {
-            throw new IllegalArgumentException("The lengths of the x, y, and z fillData arrays, " + this.nPointsX + ", " + this.nPointsY + " and " + this.nPointsZ + ", do not match the dimensions of the z fillData matrix, " + var3 + ", " + var2 + " and " + var1);
+            throw new IllegalArgumentException("The lengths of the x, y, and z data arrays, " + this.nPointsX + ", " + this.nPointsY + " and " + this.nPointsZ + ", do not match the dimensions of the z data matrix, " + var3 + ", " + var2 + " and " + var1);
         } else {
             if (!this.arbprec) {
                 this.xBDdata = new BigDecimal[this.nPointsX];
@@ -1435,7 +1435,7 @@ public class ThreeDimensionalSmooth {
             } else {
                 ++var6;
                 if (var6 >= var4) {
-                    throw new IllegalArgumentException("The entered plot value, " + var2 + ",  must equal an entered fillData value");
+                    throw new IllegalArgumentException("The entered plot value, " + var2 + ",  must equal an entered data value");
                 }
             }
         }
@@ -1455,7 +1455,7 @@ public class ThreeDimensionalSmooth {
         double[] var20;
         var8 = null;
         var9 = null;
-        String var10 = ",  Original fillData - circles,  Smoothed fillData - squares";
+        String var10 = ",  Original data - circles,  Smoothed data - squares";
         var11 = null;
         var12 = null;
         int[] var13 = new int[]{0, this.nPointsX / 4, this.nPointsX / 2, 3 * this.nPointsX / 4, this.nPointsX - 1};

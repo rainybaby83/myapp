@@ -3,7 +3,6 @@ package com.dhyx.myclass;
 //import jxl.Workbook;
 //import jxl.write.WritableSheet;
 //import jxl.write.WritableWorkbook;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.logging.log4j.LogManager;
@@ -49,11 +48,11 @@ public class MyTable extends JTable{
     }
 
 
-    //默认所有单元格不可编辑
     @Override
     public boolean isCellEditable(int row, int column) {
         return false;
     }
+
 
 
     //初始化表格
@@ -222,24 +221,19 @@ public class MyTable extends JTable{
     }
 
 
-    /**根据提供的文字，在指定的列中查找相同的文字，并选中该行
-     * @param columnIndex 表格中列的索引，从0开始
-     * @param value 要查找的文字
-     */
     public void setRowByValue(int columnIndex,String value) {
-        value = StringUtils.trim(value);
         if (columnIndex < this.getColumnCount()) {
             int rowCount = this.getRowCount();
             for (int i = 0; i < rowCount; i++) {
-                String s = StringUtils.trim(getValueAt(i, columnIndex).toString());
+                String s = getValueAt(i, columnIndex).toString();
                 if (value.equals(s)) {
                     setRowSelectionInterval(i, i);
                     break;
                 } else {
                     clearSelection();
                 }
-            }   // END for
-        }   // END : if (columnIndex < this.getColumnCount())
-    }   // END : public void setRowByValue()
+            }
+        }
 
+    }
 }

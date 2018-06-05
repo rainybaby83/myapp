@@ -1026,7 +1026,7 @@ public class ProbabilityPlot {
         this.lastMethod = 0;
         this.gaussianNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var2 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -1118,7 +1118,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var18 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var18 = PlotGraph.data(2, this.numberOfDataPoints);
                 var18[0] = this.gaussianOrderMedians;
                 var18[1] = this.sortedData;
                 var18[2] = this.gaussianOrderMedians;
@@ -1353,7 +1353,7 @@ public class ProbabilityPlot {
         this.lastMethod = 14;
         this.gaussianStandardNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             this.gaussianStandardOrderMedians = Stat.gaussianOrderStatisticMedians(this.numberOfDataPoints);
             Regression var2 = new Regression(this.gaussianStandardOrderMedians, this.sortedData, this.sortedWeights);
@@ -1376,7 +1376,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var3 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var3 = PlotGraph.data(2, this.numberOfDataPoints);
                 var3[0] = this.gaussianStandardOrderMedians;
                 var3[1] = this.sortedData;
                 var3[2] = this.gaussianStandardOrderMedians;
@@ -1536,7 +1536,7 @@ public class ProbabilityPlot {
         this.lastMethod = 8;
         this.logisticNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -1593,7 +1593,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var6 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var6 = PlotGraph.data(2, this.numberOfDataPoints);
                 var6[0] = this.logisticOrderMedians;
                 var6[1] = this.sortedData;
                 var6[2] = this.logisticOrderMedians;
@@ -1731,7 +1731,7 @@ public class ProbabilityPlot {
         this.lastMethod = 1;
         this.weibullNumberOfParameters = 3;
         if (this.numberOfDataPoints < 4) {
-            throw new IllegalArgumentException("There must be at least four fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least four data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -1852,7 +1852,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var17 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var17 = PlotGraph.data(2, this.numberOfDataPoints);
                 var17[0] = this.weibullOrderMedians;
                 var17[1] = this.sortedData;
                 var17[2] = this.weibullOrderMedians;
@@ -2014,7 +2014,7 @@ public class ProbabilityPlot {
 
         this.weibullTwoParNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2110,7 +2110,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var17 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var17 = PlotGraph.data(2, this.numberOfDataPoints);
                 var17[0] = this.weibullTwoParOrderMedians;
                 var17[1] = this.sortedData;
                 var17[2] = this.weibullTwoParOrderMedians;
@@ -2251,7 +2251,7 @@ public class ProbabilityPlot {
 
         this.weibullStandardNumberOfParameters = 1;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2330,7 +2330,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var17 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var17 = PlotGraph.data(2, this.numberOfDataPoints);
                 var17[0] = this.weibullStandardOrderMedians;
                 var17[1] = this.sortedData;
                 var17[2] = this.weibullStandardOrderMedians;
@@ -2455,7 +2455,7 @@ public class ProbabilityPlot {
         this.lastMethod = 2;
         this.exponentialNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2508,7 +2508,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var6 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var6 = PlotGraph.data(2, this.numberOfDataPoints);
                 var6[0] = this.exponentialOrderMedians;
                 var6[1] = this.sortedData;
                 var6[2] = this.exponentialOrderMedians;
@@ -2646,7 +2646,7 @@ public class ProbabilityPlot {
         this.lastMethod = 7;
         this.frechetNumberOfParameters = 3;
         if (this.numberOfDataPoints < 4) {
-            throw new IllegalArgumentException("There must be at least four fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least four data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2760,7 +2760,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var17 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var17 = PlotGraph.data(2, this.numberOfDataPoints);
                 var17[0] = this.frechetOrderMedians;
                 var17[1] = this.sortedData;
                 var17[2] = this.frechetOrderMedians;
@@ -2917,7 +2917,7 @@ public class ProbabilityPlot {
         this.lastMethod = 16;
         this.frechetTwoParNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3006,7 +3006,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var17 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var17 = PlotGraph.data(2, this.numberOfDataPoints);
                 var17[0] = this.frechetTwoParOrderMedians;
                 var17[1] = this.sortedData;
                 var17[2] = this.frechetTwoParOrderMedians;
@@ -3158,7 +3158,7 @@ public class ProbabilityPlot {
         this.lastMethod = 17;
         this.frechetStandardNumberOfParameters = 1;
         if (this.numberOfDataPoints < 2) {
-            throw new IllegalArgumentException("There must be at least two fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least two data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3232,7 +3232,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var17 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var17 = PlotGraph.data(2, this.numberOfDataPoints);
                 var17[0] = this.frechetStandardOrderMedians;
                 var17[1] = this.sortedData;
                 var17[2] = this.frechetStandardOrderMedians;
@@ -3385,7 +3385,7 @@ public class ProbabilityPlot {
         this.lastMethod = 5;
         this.gumbelMinNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3437,7 +3437,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var6 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var6 = PlotGraph.data(2, this.numberOfDataPoints);
                 var6[0] = this.gumbelMinOrderMedians;
                 var6[1] = this.sortedData;
                 var6[2] = this.gumbelMinOrderMedians;
@@ -3574,7 +3574,7 @@ public class ProbabilityPlot {
         this.lastMethod = 6;
         this.gumbelMaxNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3625,7 +3625,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var6 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var6 = PlotGraph.data(2, this.numberOfDataPoints);
                 var6[0] = this.gumbelMaxOrderMedians;
                 var6[1] = this.sortedData;
                 var6[2] = this.gumbelMaxOrderMedians;
@@ -3761,7 +3761,7 @@ public class ProbabilityPlot {
         this.lastMethod = 3;
         this.rayleighNumberOfParameters = 1;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3811,7 +3811,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var6 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var6 = PlotGraph.data(2, this.numberOfDataPoints);
                 var6[0] = this.rayleighOrderMedians;
                 var6[1] = this.sortedData;
                 var6[2] = this.rayleighOrderMedians;
@@ -3932,7 +3932,7 @@ public class ProbabilityPlot {
         this.lastMethod = 4;
         this.paretoNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3987,7 +3987,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var6 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var6 = PlotGraph.data(2, this.numberOfDataPoints);
                 var6[0] = this.paretoOrderMedians;
                 var6[1] = this.sortedData;
                 var6[2] = this.paretoOrderMedians;
@@ -4115,7 +4115,7 @@ public class ProbabilityPlot {
         this.fDistributionNu2 = var2;
         this.fDistributionNumberOfParameters = 0;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             this.fDistributionOrderMedians = Stat.fDistributionOrderStatisticMedians(var1, var2, this.numberOfDataPoints);
             Regression var3 = new Regression(this.fDistributionOrderMedians, this.sortedData, this.sortedWeights);
@@ -4139,7 +4139,7 @@ public class ProbabilityPlot {
             }
 
             if (!this.suppressPlot) {
-                double[][] var4 = PlotGraph.fillData(2, this.numberOfDataPoints);
+                double[][] var4 = PlotGraph.data(2, this.numberOfDataPoints);
                 var4[0] = this.fDistributionOrderMedians;
                 var4[1] = this.sortedData;
                 var4[2] = this.fDistributionOrderMedians;

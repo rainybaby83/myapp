@@ -330,7 +330,7 @@ public class FourierTransform extends Canvas implements Serializable {
 
     public void setFftData(double[] var1) {
         if (var1.length % 2 != 0) {
-            throw new IllegalArgumentException("fillData length must be an even number");
+            throw new IllegalArgumentException("data length must be an even number");
         } else {
             this.originalDataLength = var1.length / 2;
             this.fftDataLength = nextPowerOfTwo(this.originalDataLength);
@@ -377,7 +377,7 @@ public class FourierTransform extends Canvas implements Serializable {
 
     public Complex[] getComplexInputData() {
         if (!this.complexDataSet) {
-            System.out.println("complex fillData set not entered or calculated - null returned");
+            System.out.println("complex data set not entered or calculated - null returned");
         }
 
         return this.complexData;
@@ -385,7 +385,7 @@ public class FourierTransform extends Canvas implements Serializable {
 
     public double[] getAlternateInputData() {
         if (!this.fftDataSet) {
-            System.out.println("fft fillData set not entered or calculted - null returned");
+            System.out.println("fft data set not entered or calculted - null returned");
         }
 
         return this.fftData;
@@ -393,15 +393,15 @@ public class FourierTransform extends Canvas implements Serializable {
 
     public double[] getAlternateWindowedInputData() {
         if (!this.fftDataSet) {
-            System.out.println("fft fillData set not entered or calculted - null returned");
+            System.out.println("fft data set not entered or calculted - null returned");
         }
 
         if (!this.fftDataSet) {
-            System.out.println("fft fillData set not entered or calculted - null returned");
+            System.out.println("fft data set not entered or calculted - null returned");
         }
 
         if (!this.windowApplied) {
-            System.out.println("fft fillData set has not been multiplied by windowing weights");
+            System.out.println("fft data set has not been multiplied by windowing weights");
         }
 
         return this.fftDataWindow;
@@ -687,12 +687,12 @@ public class FourierTransform extends Canvas implements Serializable {
 
     private void checkSegmentDetails() {
         if (!this.fftDataSet) {
-            throw new IllegalArgumentException("No fft fillData has been entered or calculated");
+            throw new IllegalArgumentException("No fft data has been entered or calculated");
         } else if (this.fftDataLength < 2) {
             throw new IllegalArgumentException("More than one point, MANY MORE, are needed");
         } else {
             if (this.fftDataLength % 2 != 0) {
-                System.out.println("Number of fillData points must be an even number");
+                System.out.println("Number of data points must be an even number");
                 System.out.println("last point deleted");
                 --this.fftDataLength;
                 this.dataAltered = true;
@@ -708,15 +708,15 @@ public class FourierTransform extends Canvas implements Serializable {
                         this.segLenSet = true;
                     } else {
                         System.out.println("segment length is not an integer power of two");
-                        System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                        System.out.println("segment length reset to total data length, i.e. no segmentation");
                         this.warning[1] = true;
                         this.segmentNumber = 1;
                         this.segmentLength = this.fftDataLength;
                         this.segLenSet = true;
                     }
                 } else {
-                    System.out.println("total fillData length divided by the number of segments is not an integer");
-                    System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                    System.out.println("total data length divided by the number of segments is not an integer");
+                    System.out.println("segment length reset to total data length, i.e. no segmentation");
                     this.warning[2] = true;
                     this.segmentNumber = 1;
                     this.segmentLength = this.fftDataLength;
@@ -731,15 +731,15 @@ public class FourierTransform extends Canvas implements Serializable {
                         this.segNumSet = true;
                     } else {
                         System.out.println("segment length is not an integer power of two");
-                        System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                        System.out.println("segment length reset to total data length, i.e. no segmentation");
                         this.warning[1] = true;
                         this.segmentNumber = 1;
                         this.segmentLength = this.fftDataLength;
                         this.segNumSet = true;
                     }
                 } else {
-                    System.out.println("total fillData length divided by the segment length is not an integer");
-                    System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                    System.out.println("total data length divided by the segment length is not an integer");
+                    System.out.println("segment length reset to total data length, i.e. no segmentation");
                     this.warning[3] = true;
                     this.segmentNumber = 1;
                     this.segmentLength = this.fftDataLength;
@@ -755,7 +755,7 @@ public class FourierTransform extends Canvas implements Serializable {
                         this.segLenSet = true;
                     } else {
                         System.out.println("segment length is not an integer power of two");
-                        System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                        System.out.println("segment length reset to total data length, i.e. no segmentation");
                         this.warning[1] = true;
                         this.segmentNumber = 1;
                         this.segmentLength = this.fftDataLength;
@@ -763,8 +763,8 @@ public class FourierTransform extends Canvas implements Serializable {
                         this.overlap = false;
                     }
                 } else {
-                    System.out.println("total fillData length divided by the number of segments plus one is not an integer");
-                    System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                    System.out.println("total data length divided by the number of segments plus one is not an integer");
+                    System.out.println("segment length reset to total data length, i.e. no segmentation");
                     this.warning[4] = true;
                     this.segmentNumber = 1;
                     this.segmentLength = this.fftDataLength;
@@ -780,7 +780,7 @@ public class FourierTransform extends Canvas implements Serializable {
                         this.segNumSet = true;
                     } else {
                         System.out.println("segment length is not an integer power of two");
-                        System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                        System.out.println("segment length reset to total data length, i.e. no segmentation");
                         this.warning[1] = true;
                         this.segmentNumber = 1;
                         this.segmentLength = this.fftDataLength;
@@ -788,8 +788,8 @@ public class FourierTransform extends Canvas implements Serializable {
                         this.overlap = false;
                     }
                 } else {
-                    System.out.println("twice the total fillData length divided by the segment length is not an integer");
-                    System.out.println("segment length reset to total fillData length, i.e. no segmentation");
+                    System.out.println("twice the total data length divided by the segment length is not an integer");
+                    System.out.println("segment length reset to total data length, i.e. no segmentation");
                     this.warning[5] = true;
                     this.segmentNumber = 1;
                     this.segmentLength = this.fftDataLength;
@@ -889,7 +889,7 @@ public class FourierTransform extends Canvas implements Serializable {
                         if (var10 && this.originalDataLength - var11 <= this.fftDataLength - this.originalDataLength) {
                             System.out.println("Data length is not an integer power of two");
                             System.out.println("Data cannot be transformed as a single segment");
-                            System.out.print("The fillData has been split into " + var12 + " segments of length " + var11);
+                            System.out.print("The data has been split into " + var12 + " segments of length " + var11);
                             if (var13) {
                                 System.out.println(" with 50% overlap");
                             } else {
@@ -903,7 +903,7 @@ public class FourierTransform extends Canvas implements Serializable {
                         } else {
                             System.out.println("Data length is not an integer power of two");
                             if (this.dataAltered) {
-                                System.out.println("Deleted point has been restored and the fillData has been padded with zeros to give a power of two length");
+                                System.out.println("Deleted point has been restored and the data has been padded with zeros to give a power of two length");
                                 this.warning[0] = false;
                             } else {
                                 System.out.println("Data has been padded with zeros to give a power of two length");
@@ -923,7 +923,7 @@ public class FourierTransform extends Canvas implements Serializable {
     private void printWarnings(FileOutput var1) {
         if (this.warning[0]) {
             var1.println("WARNING!");
-            var1.println("Number of fillData points must be an even number");
+            var1.println("Number of data points must be an even number");
             var1.println("The last point was deleted");
             var1.println();
         }
@@ -931,35 +931,35 @@ public class FourierTransform extends Canvas implements Serializable {
         if (this.warning[1]) {
             var1.println("WARNING!");
             var1.println("Segment length was not an integer power of two");
-            var1.println("Segment length was reset to total fillData length, i.e. no segmentation");
+            var1.println("Segment length was reset to total data length, i.e. no segmentation");
             var1.println();
         }
 
         if (this.warning[2]) {
             var1.println("WARNING!");
-            var1.println("Total fillData length divided by the number of segments was not an integer");
-            var1.println("Segment length was reset to total fillData length, i.e. no segmentation");
+            var1.println("Total data length divided by the number of segments was not an integer");
+            var1.println("Segment length was reset to total data length, i.e. no segmentation");
             var1.println();
         }
 
         if (this.warning[3]) {
             var1.println("WARNING!");
-            var1.println("Total fillData length divided by the segment length was not an integer");
-            var1.println("Segment length was reset to total fillData length, i.e. no segmentation");
+            var1.println("Total data length divided by the segment length was not an integer");
+            var1.println("Segment length was reset to total data length, i.e. no segmentation");
             var1.println();
         }
 
         if (this.warning[4]) {
             var1.println("WARNING!");
-            var1.println("Total fillData length divided by the number of segments plus one was not an integer");
-            var1.println("Segment length was reset to total fillData length, i.e. no segmentation");
+            var1.println("Total data length divided by the number of segments plus one was not an integer");
+            var1.println("Segment length was reset to total data length, i.e. no segmentation");
             var1.println();
         }
 
         if (this.warning[5]) {
             var1.println("WARNING!");
-            var1.println("Twice the total fillData length divided by the segment length was not an integer");
-            var1.println("Segment length was reset to total fillData length, i.e. no segmentation");
+            var1.println("Twice the total data length divided by the segment length was not an integer");
+            var1.println("Segment length was reset to total data length, i.e. no segmentation");
             var1.println();
         }
 
@@ -973,8 +973,8 @@ public class FourierTransform extends Canvas implements Serializable {
         if (this.warning[7]) {
             var1.println("WARNING!");
             var1.println("Data length was not an integer power of two");
-            var1.println("The fillData could not be transformed as a single segment");
-            var1.print("The fillData has been split into " + this.segmentNumber + " segment/s of length " + this.segmentLength);
+            var1.println("The data could not be transformed as a single segment");
+            var1.print("The data has been split into " + this.segmentNumber + " segment/s of length " + this.segmentLength);
             if (this.overlap) {
                 var1.println(" with 50% overlap");
             } else {
@@ -1021,10 +1021,10 @@ public class FourierTransform extends Canvas implements Serializable {
     public void transform() {
         byte var1 = 1;
         if (!this.fftDataSet) {
-            throw new IllegalArgumentException("No fillData has been entered for the Fast Fourier Transform");
+            throw new IllegalArgumentException("No data has been entered for the Fast Fourier Transform");
         } else {
             if (this.originalDataLength != this.fftDataLength) {
-                System.out.println("Fast Fourier Transform fillData length ," + this.originalDataLength + ", is not an integer power of two");
+                System.out.println("Fast Fourier Transform data length ," + this.originalDataLength + ", is not an integer power of two");
                 System.out.println("WARNING!!! Data has been padded with zeros to fill to nearest integer power of two length " + this.fftDataLength);
             }
 
@@ -1051,10 +1051,10 @@ public class FourierTransform extends Canvas implements Serializable {
     public void inverse() {
         byte var1 = -1;
         if (!this.fftDataSet) {
-            throw new IllegalArgumentException("No fillData has been entered for the inverse Fast Fourier Transform");
+            throw new IllegalArgumentException("No data has been entered for the inverse Fast Fourier Transform");
         } else {
             if (this.originalDataLength != this.fftDataLength) {
-                System.out.println("Fast Fourier Transform fillData length ," + this.originalDataLength + ", is not an integer power of two");
+                System.out.println("Fast Fourier Transform data length ," + this.originalDataLength + ", is not an integer power of two");
                 System.out.println("WARNING!!! Data has been padded with zeros to fill to nearest integer power of two length " + this.fftDataLength);
             }
 
@@ -1163,11 +1163,11 @@ public class FourierTransform extends Canvas implements Serializable {
         if (!this.overlap && this.segmentNumber < 2) {
             byte var1 = 1;
             if (!this.fftDataSet) {
-                throw new IllegalArgumentException("No fillData has been entered for the Fast Fourier Transform");
+                throw new IllegalArgumentException("No data has been entered for the Fast Fourier Transform");
             }
 
             if (!checkPowerOfTwo(this.fftDataLength)) {
-                throw new IllegalArgumentException("Fast Fourier Transform fillData length ," + this.fftDataLength + ", is not an integer power of two");
+                throw new IllegalArgumentException("Fast Fourier Transform data length ," + this.fftDataLength + ", is not an integer power of two");
             }
 
             double[] var2 = new double[this.fftDataLength * 2];
@@ -1928,11 +1928,11 @@ public class FourierTransform extends Canvas implements Serializable {
     public double[][] correlate(double[] var1) {
         int var2 = var1.length;
         if (!this.fftDataSet) {
-            throw new IllegalArgumentException("No fillData has been previously entered");
+            throw new IllegalArgumentException("No data has been previously entered");
         } else if (var2 != this.originalDataLength) {
-            throw new IllegalArgumentException("The two fillData sets to be correlated are of different length");
+            throw new IllegalArgumentException("The two data sets to be correlated are of different length");
         } else if (!checkPowerOfTwo(var2)) {
-            throw new IllegalArgumentException("The length of the correlation fillData sets is not equal to an integer power of two");
+            throw new IllegalArgumentException("The length of the correlation data sets is not equal to an integer power of two");
         } else {
             this.complexCorr = Complex.oneDarray(var2);
 
@@ -1960,9 +1960,9 @@ public class FourierTransform extends Canvas implements Serializable {
         int var3 = var1.length;
         int var4 = var2.length;
         if (var3 != var4) {
-            throw new IllegalArgumentException("The two fillData sets to be correlated are of different length");
+            throw new IllegalArgumentException("The two data sets to be correlated are of different length");
         } else if (!checkPowerOfTwo(var3)) {
-            throw new IllegalArgumentException("The length of the correlation fillData sets is not equal to an integer power of two");
+            throw new IllegalArgumentException("The length of the correlation data sets is not equal to an integer power of two");
         } else {
             this.fftDataLength = var3;
             this.complexData = Complex.oneDarray(this.fftDataLength);
@@ -2212,7 +2212,7 @@ public class FourierTransform extends Canvas implements Serializable {
             }
 
             System.out.println("Method - shortTime");
-            System.out.println("Window length, provided as time, " + var1 + ", did not convert to an integer power of two fillData points");
+            System.out.println("Window length, provided as time, " + var1 + ", did not convert to an integer power of two data points");
             System.out.println("A value of " + (double)(var3 - 1) * this.deltaT + " was substituted");
         }
 
@@ -2221,11 +2221,11 @@ public class FourierTransform extends Canvas implements Serializable {
 
     public double[][] shortTime(int var1) {
         if (!checkPowerOfTwo(var1)) {
-            throw new IllegalArgumentException("Moving window fillData length ," + var1 + ", is not an integer power of two");
+            throw new IllegalArgumentException("Moving window data length ," + var1 + ", is not an integer power of two");
         } else if (!this.fftDataSet) {
-            throw new IllegalArgumentException("No fillData has been entered for the Fast Fourier Transform");
+            throw new IllegalArgumentException("No data has been entered for the Fast Fourier Transform");
         } else if (var1 > this.originalDataLength) {
-            throw new IllegalArgumentException("The window length, " + var1 + ", is greater than the fillData length, " + this.originalDataLength + ".");
+            throw new IllegalArgumentException("The window length, " + var1 + ", is greater than the data length, " + this.originalDataLength + ".");
         } else {
             if (this.windowOption == 0) {
                 this.setGaussian();
@@ -2379,7 +2379,7 @@ public class FourierTransform extends Canvas implements Serializable {
                     var2.println("In the output below, each magnitude point is the average of " + var7 + " calculated points");
                 }
 
-                var2.println("The fillData, without averaging, may be accessed using the method getTimeFrequencyMatrix()");
+                var2.println("The data, without averaging, may be accessed using the method getTimeFrequencyMatrix()");
             }
 
             var2.println();

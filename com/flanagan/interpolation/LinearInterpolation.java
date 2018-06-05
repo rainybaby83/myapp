@@ -31,7 +31,7 @@ public class LinearInterpolation {
         if (this.nPoints != var2.length) {
             throw new IllegalArgumentException("Arrays x and y are of different length " + this.nPoints + " " + var2.length);
         } else if (this.nPoints < 3) {
-            throw new IllegalArgumentException("A minimum of three fillData points is needed");
+            throw new IllegalArgumentException("A minimum of three data points is needed");
         } else {
             this.x = new double[this.nPoints];
             this.y = new double[this.nPoints];
@@ -105,7 +105,7 @@ public class LinearInterpolation {
                     if (this.y[var3] == this.y[var5]) {
                         if (!supress) {
                             System.out.print("LinearInterpolation: Two identical points, " + this.x[var3] + ", " + this.y[var3]);
-                            System.out.println(", in fillData array at indices " + this.newAndOldIndices[var3] + " and " + this.newAndOldIndices[var5] + ", latter point removed");
+                            System.out.println(", in data array at indices " + this.newAndOldIndices[var3] + " and " + this.newAndOldIndices[var5] + ", latter point removed");
                         }
 
                         var6 = new double[this.nPoints - 1];
@@ -264,7 +264,7 @@ public class LinearInterpolation {
         }
 
         if (this.nPoints < 3) {
-            throw new IllegalArgumentException("Removal of duplicate points has reduced the number of points to less than the required minimum of three fillData points");
+            throw new IllegalArgumentException("Removal of duplicate points has reduced the number of points to less than the required minimum of three data points");
         } else {
             this.checkPoints = true;
         }
@@ -299,7 +299,7 @@ public class LinearInterpolation {
     public double interpolate(double var1) {
         if (var1 < this.x[0]) {
             if (!roundingCheck || Math.abs(this.x[0] - var1) > Math.pow(10.0D, Math.floor(Math.log10(Math.abs(this.x[0])))) * potentialRoundingError) {
-                throw new IllegalArgumentException("x (" + var1 + ") is outside the range of fillData points (" + this.x[0] + " to " + this.x[this.nPoints - 1] + ")");
+                throw new IllegalArgumentException("x (" + var1 + ") is outside the range of data points (" + this.x[0] + " to " + this.x[this.nPoints - 1] + ")");
             }
 
             var1 = this.x[0];
@@ -307,7 +307,7 @@ public class LinearInterpolation {
 
         if (var1 > this.x[this.nPoints - 1]) {
             if (!roundingCheck || Math.abs(var1 - this.x[this.nPoints - 1]) > Math.pow(10.0D, Math.floor(Math.log10(Math.abs(this.x[this.nPoints - 1])))) * potentialRoundingError) {
-                throw new IllegalArgumentException("x (" + var1 + ") is outside the range of fillData points (" + this.x[0] + " to " + this.x[this.nPoints - 1] + ")");
+                throw new IllegalArgumentException("x (" + var1 + ") is outside the range of data points (" + this.x[0] + " to " + this.x[this.nPoints - 1] + ")");
             }
 
             var1 = this.x[this.nPoints - 1];

@@ -44,7 +44,7 @@ public class CubicSplineFast {
 
     public static CubicSplineFast zero(int var0) {
         if (var0 < 3) {
-            throw new IllegalArgumentException("A minimum of three fillData points is needed");
+            throw new IllegalArgumentException("A minimum of three data points is needed");
         } else {
             CubicSplineFast var1 = new CubicSplineFast(var0);
             return var1;

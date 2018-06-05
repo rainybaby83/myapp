@@ -46,7 +46,7 @@ public class PolyCubicSpline {
         this.limits();
         switch(this.nDimensions) {
             case 0:
-                throw new IllegalArgumentException("fillData array must have at least one dimension");
+                throw new IllegalArgumentException("data array must have at least one dimension");
             case 1:
                 CubicSpline var13 = new CubicSpline(this.xArray[0], (double[])((double[])this.fOfX));
                 if (this.averageIdenticalAbscissae) {
@@ -196,11 +196,11 @@ public class PolyCubicSpline {
     public double interpolate(double[] var1) {
         int var2 = var1.length;
         if (var2 != this.nDimensions) {
-            throw new IllegalArgumentException("Number of unknown value coordinates, " + var2 + ", does not equal the number of tabulated fillData dimensions, " + this.nDimensions);
+            throw new IllegalArgumentException("Number of unknown value coordinates, " + var2 + ", does not equal the number of tabulated data dimensions, " + this.nDimensions);
         } else {
             switch(this.nDimensions) {
                 case 0:
-                    throw new IllegalArgumentException("fillData array must have at least one dimension");
+                    throw new IllegalArgumentException("data array must have at least one dimension");
                 case 1:
                     this.yValue = ((CubicSpline)((CubicSpline)this.method)).interpolate(var1[0]);
                     break;

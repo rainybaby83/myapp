@@ -509,7 +509,7 @@ public class PlotPoleZero {
             }
 
             boolean var55 = false;
-            double[][] var31 = PlotGraph.fillData(var29, var15);
+            double[][] var31 = PlotGraph.data(var29, var15);
             boolean[] var56 = new boolean[var29];
             boolean[] var33 = new boolean[var29];
             int[] var57 = new int[var29];

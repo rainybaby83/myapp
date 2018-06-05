@@ -8083,7 +8083,7 @@ public class Stat extends ArrayMaths {
                 }
             }
 
-            System.out.println(var8 - var7 + " fillData points, above histogram upper limit, excluded in Stat.histogramBins");
+            System.out.println(var8 - var7 + " data points, above histogram upper limit, excluded in Stat.histogramBins");
             return histogramBins(var12, var1, var3);
         } else {
             return histogramBins(var0, var1, var3);
@@ -8159,7 +8159,7 @@ public class Stat extends ArrayMaths {
         }
 
         if (var13 > 0) {
-            System.out.println(var13 + " fillData points, outside histogram limits, excluded in Stat.histogramBins");
+            System.out.println(var13 + " data points, outside histogram limits, excluded in Stat.histogramBins");
         }
 
         return var16;
@@ -8188,7 +8188,7 @@ public class Stat extends ArrayMaths {
                     ++var19;
                     if (var19 > 1000) {
                         var16 = false;
-                        System.out.println("histogram method could not encompass all fillData within histogram\nContact Michael thomas Flanagan");
+                        System.out.println("histogram method could not encompass all data within histogram\nContact Michael thomas Flanagan");
                     }
                 } else {
                     var16 = false;
@@ -8225,7 +8225,7 @@ public class Stat extends ArrayMaths {
                 }
             }
 
-            System.out.println(var9 - var8 + " fillData points, above histogram upper limit, excluded in Stat.histogramBins");
+            System.out.println(var9 - var8 + " data points, above histogram upper limit, excluded in Stat.histogramBins");
             return histogramBinsPlot(var13, var1, var3, var7);
         } else {
             return histogramBinsPlot(var0, var1, var3, var7);
@@ -8241,7 +8241,7 @@ public class Stat extends ArrayMaths {
         double[][] var6 = histogramBins(var0, var1, var3);
         int var7 = var6[0].length;
         int var8 = var7 * 3 + 1;
-        double[][] var9 = PlotGraph.fillData(1, var8);
+        double[][] var9 = PlotGraph.data(1, var8);
         var9[0][0] = var3;
         var9[1][0] = 0.0D;
         int var10 = 1;

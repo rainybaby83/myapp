@@ -69,7 +69,7 @@ public class CubicInterpolation {
         if (var6 != var2.length) {
             throw new IllegalArgumentException("Arrays x and y-row are of different length " + var6 + " " + var2.length);
         } else if (var6 < var5) {
-            throw new IllegalArgumentException("The fillData matrix must have a minimum size of " + var5 + " X " + var5);
+            throw new IllegalArgumentException("The data matrix must have a minimum size of " + var5 + " X " + var5);
         } else {
             ArrayMaths var7 = new ArrayMaths(var1);
             var7 = var7.sort();

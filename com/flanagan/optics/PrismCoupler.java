@@ -68,7 +68,7 @@ public class PrismCoupler extends PlanarWaveguide {
     public void enterTEmodeData(double var1, double var3, double var5) {
         if (this.setMeasurementsTEprism) {
             if (this.setErrorsTE) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var7 = this.numberOfTEmeasurementsPrism + 1;
@@ -132,7 +132,7 @@ public class PrismCoupler extends PlanarWaveguide {
     public void enterTMmodeData(double var1, double var3, double var5) {
         if (this.setMeasurementsTMprism) {
             if (this.setTMerrors) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var7 = this.numberOfTMmeasurementsPrism + 1;
@@ -206,7 +206,7 @@ public class PrismCoupler extends PlanarWaveguide {
                 int var7;
                 if (this.setMeasurementsTEprism) {
                     if (this.setTEerrors) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var7 = this.numberOfTEmeasurementsPrism + var4;
@@ -292,7 +292,7 @@ public class PrismCoupler extends PlanarWaveguide {
                 int var7;
                 if (this.setMeasurementsTMprism) {
                     if (this.setTMerrors) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var7 = this.numberOfTMmeasurementsPrism + var4;
@@ -368,7 +368,7 @@ public class PrismCoupler extends PlanarWaveguide {
     public void enterTEmodeData(double var1, double var3, double var5, double var7) {
         if (this.setMeasurementsTEprism) {
             if (!this.setTEerrors) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var9 = this.numberOfTEmeasurementsPrism + 1;
@@ -438,7 +438,7 @@ public class PrismCoupler extends PlanarWaveguide {
     public void enterTMmodeData(double var1, double var3, double var5, double var7) {
         if (this.setMeasurementsTMprism) {
             if (!this.setTMerrors) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var9 = this.numberOfTMmeasurementsPrism + 1;
@@ -518,7 +518,7 @@ public class PrismCoupler extends PlanarWaveguide {
                 int var8;
                 if (this.setMeasurementsTEprism) {
                     if (!this.setTEerrors) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var8 = this.numberOfTEmeasurementsPrism + var5;
@@ -612,7 +612,7 @@ public class PrismCoupler extends PlanarWaveguide {
                 int var8;
                 if (this.setMeasurementsTMprism) {
                     if (!this.setTMerrors) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var8 = this.numberOfTMmeasurementsPrism + var5;

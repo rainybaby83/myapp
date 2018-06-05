@@ -283,7 +283,7 @@ public class PanelTest extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int columnIndex = tblTest.getTableHeader().columnAtPoint(e.getPoint());
                 if (columnIndex == 0) {
-                    selectAll(tblTest,"tblTest.getTableHeader().addMouseListener");
+                    selectAll(tblTest);
                     updateUI_TestData("表头全选调用");
                     panelChart.updateChart(tblTestData, pro.projectID);
                 }
@@ -304,10 +304,8 @@ public class PanelTest extends JPanel {
         lblCurveOrder.setHorizontalAlignment(JLabel.CENTER);
         lblConentrationOrder.setHorizontalAlignment(JLabel.CENTER);
 
-        listCurveOrder = new MyList();
-        listCurveOrder.addNumber(1, 10);
-        listConcentrationOrder = new MyList();
-        listConcentrationOrder.addNumber(1,50);
+        listCurveOrder = new MyList(1, 10);
+        listConcentrationOrder = new MyList(1, 50);
 
         listCurveOrder.setBounds(lblCurveOrder.getX(), 25, width, TABLE_HEIGHT_250);
         listConcentrationOrder.setBounds(lblConentrationOrder.getX(), 25, width, TABLE_HEIGHT_250);
@@ -614,7 +612,7 @@ public class PanelTest extends JPanel {
         }
 
         //全选测试列表。如果没有列表为空，不影响
-        selectAll(tblTest,"click_tblCurve");
+        selectAll(tblTest);
         updateUI_TestData("曲线列表点击调用");
         panelChart.updateChart(tblTestData, pro.projectID);
 
@@ -645,7 +643,7 @@ public class PanelTest extends JPanel {
 
 
     //表格全选，并打钩
-    private void selectAll(MyTable myTable,String msg) {
+    private void selectAll(MyTable myTable) {
         int rowCount = myTable.getRowCount();
         btnDel.setEnabled(false);
         if (rowCount > 0) {

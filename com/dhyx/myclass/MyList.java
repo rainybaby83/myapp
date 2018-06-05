@@ -3,47 +3,40 @@ package com.dhyx.myclass;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedHashMap;
 import java.util.Vector;
 
 public class MyList extends JList<String> {
     public  JScrollPane j;
     private ListModel<String> model;
+    public int maxNumber=0;
 
-
-    public MyList() {
-        super();
-        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
-        j = new JScrollPane(this);
-        j.getVerticalScrollBar().setUI(new MyScrollBarUI());
-        DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-        dlcr.setHorizontalAlignment(JLabel.CENTER);
-        this.setCellRenderer(dlcr);
-
+    public MyList(int start,int end) {
+//        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
+//        jScrollPane = new JScrollPane(this);
+//        jScrollPane.getVerticalScrollBar().setUI(new MyScrollBarUI());
+//        model = this.getModel();
+        MyList();
+        addNumber(start, end);
         model = this.getModel();
     }
 
 
-    public void addString(String[] str) {
-        this.removeAll();
-        Vector<String> vector = new Vector<>();
-        for (int i = 0; i < str.length; i++) {
-            vector.addElement(str[i]);
-        }
-        this.setListData(vector);
+    public void MyList() {
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
+        j = new JScrollPane(this);
+        j.getVerticalScrollBar().setUI(new MyScrollBarUI());
+
     }
 
-
     //按照数字范围，添加到列表中
-    public void addNumber(int start, int end) {
+    private void addNumber(int start, int end) {
         this.removeAll();
         Vector<String> vector = new Vector<>();
         for (int i = start; i <= end; i++) {
             vector.addElement(String.valueOf(i));
         }
         this.setListData(vector);
-
+        maxNumber = end;
     }
 
 

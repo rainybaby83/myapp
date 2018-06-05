@@ -674,7 +674,7 @@ public class TransmissionLine {
     }
 
     public void plotVandI() {
-        double[][] var1 = PlotGraph.fillData(4, this.numberOfPoints);
+        double[][] var1 = PlotGraph.data(4, this.numberOfPoints);
         double var2 = this.segmentLength / (double)(this.numberOfPoints - 1);
         var1[0][0] = 0.0D;
         var1[2][0] = 0.0D;

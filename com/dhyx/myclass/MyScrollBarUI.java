@@ -25,7 +25,8 @@ public class MyScrollBarUI extends BasicScrollBarUI {
         super.thumbDarkShadowColor = Const.GREEN_LIGHT;
 
         //背景颜色
-        super.trackColor = new Color(240,240,240);
+        super.trackColor = new Color(250,250,250);
+//        super.trackHighlightColor = Color.red;
         super.scrollBarWidth = 15;
     }
 

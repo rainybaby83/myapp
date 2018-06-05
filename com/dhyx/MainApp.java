@@ -4,7 +4,6 @@ import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import com.dhyx.myclass.Const;
 import com.dhyx.dbclass.MyDatabase;
 import com.dhyx.panel.*;
-import jdk.nashorn.internal.scripts.JO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,10 +41,26 @@ public class MainApp extends JFrame{
                     "缺少组件",JOptionPane.WARNING_MESSAGE);
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
         }
+//        UIManager.put("ScrollPane.foreground",Color.red);
 
-        this.setResizable(false);
+        //显示框架，获取4个边的厚度，然后隐藏框架
+        this.setVisible(true);
+        int top = this.getInsets().top;
+        int bottom = this.getInsets().bottom;
+        int left = this.getInsets().left;
+        int right = this.getInsets().right;
+        this.setVisible(false);
+
         this.setLayout(null);
-        this.setSize(new Dimension(Const.APP_WIDHT, Const.APP_HEIGHT));
+
+        //框架尺寸要加上4个边
+        this.setPreferredSize(new Dimension(Const.APP_WIDHT + left + right, Const.APP_HEIGHT + top + bottom));
+        this.setMinimumSize(getPreferredSize());
+        this.setMaximumSize(getPreferredSize());
+
+        //内部面板的尺寸为1220x700
+        this.getContentPane().setSize(Const.APP_WIDHT, Const.APP_HEIGHT);
+
         this.setTitle(Const.APP_NAME);
         this.setLocationRelativeTo(null);
         this.setIconImage(Const.ICON_APP.getImage());
@@ -62,7 +77,7 @@ public class MainApp extends JFrame{
         //主面板
         panelMain.setBackground(Color.white);
         panelMain.setLayout(null);
-        panelMain.setBounds(panelMenu.getWidth(), 0, 1100, Const.APP_HEIGHT);
+        panelMain.setBounds(panelMenu.getWidth(), 0, 1100, this.getHeight());
 
 
 

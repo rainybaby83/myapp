@@ -10,15 +10,8 @@ class Logistic5Function implements RegressionFunction {
     }
 
     @Override
-    public double function(double[] paraArray, double[] xArray) {
-        // y = top + (bottom - top) /  ( (1+x/c)^d) )^e
-        double top = paraArray[0];
-        double bottom = paraArray[1];
-        double c = paraArray[2];
-        double d = paraArray[3];
-        double e = paraArray[4];
-        double x = xArray[0];
-        double y = top + (bottom - top) / Math.pow(1.0D + Math.pow(x / c, d), e);
-        return y;
+    public double function(double[] var1, double[] var2) {
+        double var3 = var1[0] + (var1[1] - var1[0]) / Math.pow(1.0D + Math.pow(var2[0] / var1[2], var1[3]), var1[4]);
+        return var3;
     }
 }
