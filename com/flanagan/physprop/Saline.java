@@ -28,7 +28,7 @@ public class Saline {
 
             return var11;
         } else {
-            throw new IllegalArgumentException("concentration outside the experimental data limits");
+            throw new IllegalArgumentException("concentration outside the experimental fillData limits");
         }
     }
 
@@ -41,7 +41,7 @@ public class Saline {
             double var5 = CubicSpline.interpolate(var0, var2, var3, var4);
             return var5;
         } else {
-            throw new IllegalArgumentException("concentration outside the experimental data limits");
+            throw new IllegalArgumentException("concentration outside the experimental fillData limits");
         }
     }
 

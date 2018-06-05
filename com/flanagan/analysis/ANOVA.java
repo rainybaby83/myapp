@@ -254,7 +254,7 @@ public class ANOVA {
         this.dofBetweenG = null;
         this.dofWithinG = null;
         this.allCalcn = true;
-        this.setTitle("Untitled data", false);
+        this.setTitle("Untitled fillData", false);
     }
 
     public ANOVA(String var1) {
@@ -1074,7 +1074,7 @@ public class ANOVA {
 
     public Object getResponsesAsEntered() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No data has been entered");
+            throw new IllegalArgumentException("No fillData has been entered");
         } else {
             return Conv.copy(this.originalData);
         }
@@ -1082,7 +1082,7 @@ public class ANOVA {
 
     public double[][] getResponses() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No data has been entered");
+            throw new IllegalArgumentException("No fillData has been entered");
         } else {
             return Conv.copy(this.responses0);
         }
@@ -1090,7 +1090,7 @@ public class ANOVA {
 
     public double[][] getResponsesAsdouble() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No data has been entered");
+            throw new IllegalArgumentException("No fillData has been entered");
         } else {
             return Conv.copy(this.responses0);
         }
@@ -1098,7 +1098,7 @@ public class ANOVA {
 
     public BigDecimal[][] getResponsesAsBigDecimal() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No data has been entered");
+            throw new IllegalArgumentException("No fillData has been entered");
         } else {
             return Conv.copy(this.responsesBD);
         }
@@ -1132,7 +1132,7 @@ public class ANOVA {
 
     public int getNumberOfGroups() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No data has been entered");
+            throw new IllegalArgumentException("No fillData has been entered");
         } else {
             return this.nGroups;
         }
@@ -1140,7 +1140,7 @@ public class ANOVA {
 
     public String[] getGroupNames() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no data has been entered");
+            throw new IllegalArgumentException("no fillData has been entered");
         } else {
             String[] var1 = new String[this.nGroups];
 
@@ -1154,7 +1154,7 @@ public class ANOVA {
 
     public String getGroupName(int var1) {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no data has been entered");
+            throw new IllegalArgumentException("no fillData has been entered");
         } else {
             return this.groupNames[var1 - 1];
         }
@@ -1162,7 +1162,7 @@ public class ANOVA {
 
     private void groupStatistics() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no data has been entered");
+            throw new IllegalArgumentException("no fillData has been entered");
         } else {
             this.groupMeansBD = new BigDecimal[this.nGroups];
             this.groupMeans = new double[this.nGroups];
@@ -1290,7 +1290,7 @@ public class ANOVA {
 
     private void groupStatisticsBD() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no data has been entered");
+            throw new IllegalArgumentException("no fillData has been entered");
         } else {
             this.groupMeansBD = new BigDecimal[this.nGroups];
             this.groupMeans = new double[this.nGroups];
@@ -1420,7 +1420,7 @@ public class ANOVA {
 
     public int[] numberOfResponsesPerGroup() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No data has been entered");
+            throw new IllegalArgumentException("No fillData has been entered");
         } else {
             return this.nResponsesPerGroup;
         }

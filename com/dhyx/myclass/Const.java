@@ -29,7 +29,7 @@ public class Const {
      */
     public final static String APP_NAME = "诊断分析系统";
     public final static int APP_WIDHT = 1220;
-    public final static int APP_HEIGHT = 700;
+    public final static int APP_HEIGHT = 730;
 
     public final static int TITLE_HEIGHT = 40;
     public final static int BUTTON_WIDTH = 120;
@@ -56,7 +56,8 @@ public class Const {
 
     // 系统常用字体
 //    public final static Font FONT_YAHEI_12 = new Font("微软雅黑", Font.PLAIN, 12);
-    public final static Font SONG_12 = new Font("宋体", Font.PLAIN, 12);
+    public final static Font SONG_12 = new Font("宋体", Font.PLAIN, 13);
+
 
     //主窗口背景色
     public final static Color GREEN = new Color(37, 174, 96);
@@ -175,7 +176,7 @@ public class Const {
     private static TestDataClass[] getArrayFromFile() {
         try {
 
-            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("src/data.xlsx")));
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("src/fillData.xlsx")));
             XSSFSheet sheet = workbook.getSheetAt(0);
             XSSFRow row = sheet.getRow(0);
 

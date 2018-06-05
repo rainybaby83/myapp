@@ -16,28 +16,33 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.Vector;
+
+import static java.lang.Double.NaN;
 
 
 public class PanelNewCurve extends JPanel {
-    JDesktopPane jd = new JDesktopPane();
     private Logger logger = LogManager.getLogger();
     private MyDatabase db = MainApp.myDB;
     private PanelQuery panelQuery;
     private MyIconButton btnQuery, btnDel, btnFit;
-    private DefaultTableModel dmCurve,dmConcentration;
+    private DefaultTableModel dmCurve, dmConcentration;
     private String sqlSelectCurve = "SELECT DISTINCT 项目名称,实验名称,曲线序号,曲线日期,曲线ID,实验ID,项目ID FROM view_project_exp_curve";
     private String sqlSelectConcentration = "SELECT DISTINCT 浓度序号,浓度值,反应值,浓度ID FROM view_curve_concentration";
     private String curveID;
-    private MyTable tblCurve,tblConcentration;
-    private MyComboBox lstXType,lstYType ;
-    private JLabel[] lRight = new JLabel[6];
+    private MyTable tblCurve, tblConcentration;
+    private MyList lstXLog, lstYLog;
+    private JLabel[] lRight = new JLabel[7];
+    private JLabel lblImage = new JLabel();
 
 
     public PanelNewCurve() {
+
         initSelf();
         initQueryPanel();
         initButton();
@@ -47,10 +52,9 @@ public class PanelNewCurve extends JPanel {
         initTableAddListener();
         initList();
         initOther();
-        click_btnQuery("启动窗体调用");
-        click_tblCurve("启动窗体调用");
+        click_btnQuery("启动窗体调用，PanelNewCurve() ");
+        click_tblCurve("启动窗体调用，PanelNewCurve() ");
     }
-
 
 
     //初始化面板基本属性
@@ -72,8 +76,8 @@ public class PanelNewCurve extends JPanel {
             public void keyPressed(KeyEvent e) {
                 //按回车键执行相应操作;
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-                    click_btnQuery("文本框回车调用");
-                    click_tblCurve("文本框回车调用");
+                    click_btnQuery("文本框回车调用，initQueryPanel() ");
+                    click_tblCurve("文本框回车调用，initQueryPanel() ");
                 }
             }
         });
@@ -93,8 +97,8 @@ public class PanelNewCurve extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnQuery.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：生成曲线-查询" + panelQuery.txtQuery.getText());
-                    click_btnQuery("监听：鼠标单击查询按钮");
-                    click_tblCurve("监听：鼠标单击查询按钮");
+                    click_btnQuery("监听：鼠标单击查询按钮。mouseClicked() ");
+                    click_tblCurve("监听：鼠标单击查询按钮。mouseClicked() ");
                 }
             }
         });
@@ -117,7 +121,7 @@ public class PanelNewCurve extends JPanel {
 
         //"查看所有拟合"按钮
         btnFit = new MyIconButton(Const.ICON_FIT, Const.ICON_FIT_ENABLED, Const.ICON_FIT_DISABLED);
-        btnFit.setBounds(845, 170, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT);
+        btnFit.setBounds(840, 0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT);
         btnFit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -127,27 +131,45 @@ public class PanelNewCurve extends JPanel {
                 }
             }
         });
-        this.add(btnFit);
+        panelQuery.add(btnFit);
     }   // END : private void initButton()
-    
+
 
     //初始化标签
     private void initLabel() {
         JLabel lblCurve = new JLabel("曲线列表");
         JLabel lblConcentration = new JLabel("所选曲线的浓度(已求平均)");
-        JLabel lblFitType = new JLabel("拟合方式");
-        JLabel lblFitTitle = new JLabel("选中的拟合结果");
-        JLabel lblXType = new JLabel("X处理");
-        JLabel lblYType = new JLabel("Y处理");
-        JLabel lblFitResult = new JLabel("方法：");
+        JLabel lblFitType = new JLabel("设置对数(仅限直线拟合)");
+        JLabel lblFitTitle = new JLabel("拟合结果");
+        JLabel lblXType = new JLabel("X");
+        JLabel lblYType = new JLabel("Y");
+
 
         lblCurve.setBounds(0, 40, 385, 25);
         lblConcentration.setBounds(435, 40, 310, 25);
         lblFitType.setBounds(800, 40, 200, 25);
-        lblFitTitle.setBounds(800, 250, 200, 25);
-        lblXType.setBounds(815, 85, 45, 25);
-        lblYType.setBounds(815, 120, 45, 25);
-        lblFitResult.setBounds(820, 295, 160, 25);
+        lblFitTitle.setBounds(800, 265, 200, 25);
+        lblXType.setBounds(820, 100, 20, 25);
+        lblYType.setBounds(820, 185, 20, 25);
+        lblImage.setBounds(800, 525, 200, 70);
+
+        JLabel[] lLeft = new JLabel[7];
+        String[] title = {"方法", "a =", "b =", "c =", "d =", "e =", "R2 ="};
+
+        for (int i = 0; i < lLeft.length; i++) {
+            lLeft[i] = new JLabel();
+            lLeft[i].setText(title[i]);
+
+            lLeft[i].setBounds(820, 310 + i * 30, 45, 25);
+            lLeft[i].setHorizontalAlignment(JLabel.CENTER);
+            this.add(lLeft[i]);
+
+            lRight[i] = new JLabel();
+            lRight[i].setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+            lRight[i].setBounds(870, 310 + i * 30, 100, 25);
+            lRight[i].setHorizontalAlignment(JLabel.CENTER);
+            this.add(lRight[i]);
+        }
 
         this.add(lblCurve);
         this.add(lblConcentration);
@@ -155,28 +177,7 @@ public class PanelNewCurve extends JPanel {
         this.add(lblFitTitle);
         this.add(lblXType);
         this.add(lblYType);
-        this.add(lblFitResult);
-
-
-        JLabel[] lLeft = new JLabel[6];
-        String[] title = {"R =", "a =", "b =", "c =", "d =", "e ="};
-        for (int i = 0; i < 6; i++) {
-            lLeft[i] = new JLabel();
-            lLeft[i].setText(title[i]);
-            lLeft[i].setFont(new Font("宋体", Font.PLAIN, 14));
-            lLeft[i].setBounds(820, 430 + i * 25, 45, 25);
-            lLeft[i].setHorizontalAlignment(JLabel.CENTER);
-            lLeft[i].setVerticalAlignment(JLabel.BOTTOM);
-            this.add(lLeft[i]);
-
-            lRight[i] = new JLabel();
-            lRight[i].setText("");
-            lRight[i].setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.gray));
-            lRight[i].setBounds(880, 430 + i * 25, 85, 25);
-            lRight[i].setHorizontalAlignment(JLabel.CENTER);
-            this.add(lRight[i]);
-        }
-
+        this.add(lblImage);
     }
 
 
@@ -191,7 +192,7 @@ public class PanelNewCurve extends JPanel {
     private void initTableCreate() {
         // 2.1 创建表格
         tblCurve = new MyTable(dmCurve);
-        tblConcentration = new MyTable(dmConcentration){
+        tblConcentration = new MyTable(dmConcentration) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 2;
@@ -202,7 +203,7 @@ public class PanelNewCurve extends JPanel {
                 Object value = getValueAt(0, c);
                 if (value != null) {
                     return value.getClass();
-                } else{
+                } else {
                     return super.getClass();
                 }
             }
@@ -212,7 +213,7 @@ public class PanelNewCurve extends JPanel {
 
         // 2.2 设置尺寸
         tblCurve.setBounds(0, 65, 385, 550);
-        tblConcentration.setBounds(435,65,315,550);
+        tblConcentration.setBounds(435, 65, 315, 550);
 
         // 2.3 表格列宽
         tblCurve.setWidth(70, 125, 60, 80, 50, 50, 50);
@@ -267,6 +268,7 @@ public class PanelNewCurve extends JPanel {
                 //此处退出编辑状态，如果数据符合要求，则写入数据库
                 updateDB_StopEdit("监听：editingStopped");
             }
+
             @Override
             public void editingCanceled(ChangeEvent e) {
             }
@@ -286,22 +288,22 @@ public class PanelNewCurve extends JPanel {
     }   // END : private void initTableAddListener()
 
 
-
-
-
-
     // 初始化列表框
     private void initList() {
-        String[] value = {"1 不变换", "2 取e为底的对数", "3 取10为底的对数", "4 取2为底的对数"};
-        String[] key = {"1", "2", "3", "4"};
-        lstXType = new MyComboBox();
-        lstYType = new MyComboBox();
-        lstXType.setKeyValue(key, value);
-        lstYType.setKeyValue(key, value);
-        lstXType.setBounds(860, 85, 125, 25);
-        lstYType.setBounds(860, 120, 125, 25);
-        this.add(lstXType);
-        this.add(lstYType);
+        String[] value = {"不取对数", "log 10", "log e"};
+
+        lstXLog = new MyList();
+        lstYLog = new MyList();
+        lstXLog.addString(value);
+        lstYLog.addString(value);
+        lstXLog.setBounds(850, 85, 125, 58);
+        lstYLog.setBounds(850, 170, 125, 58);
+        lstXLog.setBorder(BorderFactory.createEtchedBorder());
+        lstYLog.setBorder(BorderFactory.createEtchedBorder());
+        lstXLog.setSelectedIndex(1);
+        lstYLog.setSelectedIndex(1);
+        this.add(lstXLog);
+        this.add(lstYLog);
     }
 
 
@@ -311,14 +313,13 @@ public class PanelNewCurve extends JPanel {
         JPanel jp2 = new JPanel();
         jp1.setOpaque(false);
         jp2.setOpaque(false);
-        jp1.setBounds(800, 65, 200, 160);
-        jp2.setBounds(800, 275, 200, 340);
+        jp1.setBounds(800, 65, 200, 185);
+        jp2.setBounds(800, 290, 200, 325);
         jp1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
         jp2.setBorder(jp1.getBorder());
         this.add(jp1);
         this.add(jp2);
 
-        //拟合公式图片
 
     }
 
@@ -347,11 +348,11 @@ public class PanelNewCurve extends JPanel {
      * 取消自动提交
      * 逻辑删除曲线
      * 获取浓度ID集合，循环1
-     *      获得1个浓度ID，逻辑删除该浓度
-     *      根据该浓度查询所有testID集合，进入循环2
-     *          获得1个testID，逻辑删除该test数据
-     *          逻辑删除该testID对应的所有test_original
-     *      结束循环2
+     * 获得1个浓度ID，逻辑删除该浓度
+     * 根据该浓度查询所有testID集合，进入循环2
+     * 获得1个testID，逻辑删除该test数据
+     * 逻辑删除该testID对应的所有test_original
+     * 结束循环2
      * 结束循环1
      * 提交
      */
@@ -431,7 +432,7 @@ public class PanelNewCurve extends JPanel {
             double[] concentrations = new double[nowRows.length];
             double[] values = new double[nowRows.length];
             int count0 = 0;
-            for(int i =0;i<nowRows.length;i++) {
+            for (int i = 0; i < nowRows.length; i++) {
                 concentrations[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index1).toString());
                 if (concentrations[i] == 0) {
                     count0++;
@@ -444,13 +445,14 @@ public class PanelNewCurve extends JPanel {
                 JOptionPane.showMessageDialog(null, "浓度值为0的数据最多只能有1个，当前有"
                         + count0 + "个，请检查。", "数据错误", JOptionPane.ERROR_MESSAGE);
             } else {
+                int xLog = lstXLog.getSelectedIndex();
+                int yLog = lstYLog.getSelectedIndex();
                 //弹出窗口
-                PanelFit panelFit = new PanelFit(concentrations,values);
-                panelFit.setVisible(true);
+                PanelViewFit panelViewFit = new PanelViewFit(this, concentrations, values, xLog, yLog);
+                panelViewFit.setVisible(true);
             }
         }
     }
-
 
 
     //表格全选，并打钩
@@ -462,12 +464,6 @@ public class PanelNewCurve extends JPanel {
                 myTable.setValueAt(true, i, 0);
             }
         }
-    }
-
-
-    // 用户查看所有拟合后，选定一个拟合，然后新面板调用本面板的receiveFitData()，接收数据。
-    public void receiveFitData() {
-
     }
 
 
@@ -489,10 +485,8 @@ public class PanelNewCurve extends JPanel {
                 btnFit.setEnabled(true);
             }
         }
-
         tblConcentration.setModel(dmConcentration);
-    }
-
+    }   // END : private void click_tblCurve()
 
 
     private void click_tblConcentration(String msg) {
@@ -507,15 +501,39 @@ public class PanelNewCurve extends JPanel {
                 tblConcentration.setValueAt(false, i, 0);
             }
         }
+//        tblConcentration.getCellRenderer(1, 2).getTableCellRendererComponent
+//                (tblConcentration, "", true, true, 1, 3)
+//                .addFocusListener(new FocusAdapter() {
+//                    @Override
+//                    public void focusLost(FocusEvent e) {
+//                        JOptionPane.showMessageDialog(null,1);
+//                    }
+//                });
 
-        tblConcentration.getCellRenderer(1, 2).getTableCellRendererComponent
-                (tblConcentration, "123", true, true, 1, 3)
-                .addFocusListener(new FocusAdapter() {
-                    @Override
-                    public void focusLost(FocusEvent e) {
-                        JOptionPane.showMessageDialog(null,1);
-                    }
-                });
+    }   // END : private void click_tblConcentration()
+
+
+
+
+
+    //浓度表某个单元格的退出编辑状态时，将符合条件的浓度写入数据库，不符合的给出提示，不保存
+    private void updateDB_StopEdit(String msg) {
+        int nowRow = tblConcentration.getSelectedRow();
+        DefaultTableModel currentDM = (DefaultTableModel) tblConcentration.getModel();
+        String concentrationID = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度ID")).toString();
+        String concentrationValue = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度值")).toString();
+        String sqlUpdate = "UPDATE concentration SET concentrationValue = ? WHERE concentrationID = ? ";
+        String[] param = {concentrationValue, concentrationID};
+        db.pstmtUpdateAndCommit(sqlUpdate, param);
+    }
+
+
+    // 用户查看所有拟合后，选定一个拟合，然后新面板调用本面板的receiveFitData()，接收数据。
+    public void receiveFitData(Vector para) {
+        lblImage.setIcon((Icon) para.get(0));
+        for (int i = 0; i < lRight.length; i++) {
+            lRight[i].setText(String.valueOf(para.get(i + 1)));
+        }
     }
 
 
@@ -539,21 +557,8 @@ public class PanelNewCurve extends JPanel {
             DecimalFormat df = new DecimalFormat(pattern);
             return df.format(tmp);
         }
-
     }
-
-
-    //退出浓度表某个单元格的编辑状态时，将符合条件的浓度写入数据库，不符合的给出提示，不保存
-    private void updateDB_StopEdit(String msg) {
-        int nowRow = tblConcentration.getSelectedRow();
-        DefaultTableModel currentDM = (DefaultTableModel) tblConcentration.getModel();
-        String concentrationID = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度ID")).toString();
-        String concentrationValue = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度值")).toString();
-        String sqlUpdate = "UPDATE concentration SET concentrationValue = ? WHERE concentrationID = ? ";
-        String[] param = {concentrationValue, concentrationID};
-        db.pstmtUpdateAndCommit(sqlUpdate, param);
-    }
-
-
 
 }
+
+

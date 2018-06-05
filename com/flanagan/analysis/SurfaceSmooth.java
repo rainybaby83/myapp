@@ -385,11 +385,11 @@ public class SurfaceSmooth {
         int var2 = this.zData[0].length;
         if (this.nPointsX == var2) {
             if (this.nPointsY != var1) {
-                throw new IllegalArgumentException("The lengths of the x data arrays, " + this.nPointsX + " and " + this.nPointsY + ", do not match the dimensions of the  y data matrix, " + var1 + " and " + var2);
+                throw new IllegalArgumentException("The lengths of the x fillData arrays, " + this.nPointsX + " and " + this.nPointsY + ", do not match the dimensions of the  y fillData matrix, " + var1 + " and " + var2);
             }
         } else if (this.nPointsY == var2) {
             if (this.nPointsX != var1) {
-                throw new IllegalArgumentException("The lengths of the x data arrays, " + this.nPointsX + " and " + this.nPointsY + ", do not match the dimensions of the  y data matrix, " + var1 + " and " + var2);
+                throw new IllegalArgumentException("The lengths of the x fillData arrays, " + this.nPointsX + " and " + this.nPointsY + ", do not match the dimensions of the  y fillData matrix, " + var1 + " and " + var2);
             }
 
             this.zData = this.transpose(this.zData);
@@ -1058,7 +1058,7 @@ public class SurfaceSmooth {
             } else {
                 ++var6;
                 if (var6 >= var4) {
-                    throw new IllegalArgumentException("The entered plot value, " + var2 + ",  must equal an entered data value");
+                    throw new IllegalArgumentException("The entered plot value, " + var2 + ",  must equal an entered fillData value");
                 }
             }
         }
@@ -1078,7 +1078,7 @@ public class SurfaceSmooth {
         double[] var16;
         var5 = null;
         var6 = null;
-        String var7 = ",  Original data - circles,  Smoothed data - squares";
+        String var7 = ",  Original fillData - circles,  Smoothed fillData - squares";
         var8 = null;
         var9 = null;
         int[] var10 = new int[]{0, this.nPointsX / 4, this.nPointsX / 2, 3 * this.nPointsX / 4, this.nPointsX - 1};

@@ -958,7 +958,7 @@ public class ImpedSpecSimulation {
 
         var10.println();
         var3 = 14;
-        var10.println("Frequecy - Impedance data");
+        var10.println("Frequecy - Impedance fillData");
         var10.print("Frequency", var3);
         var10.print("Magnitude", var3);
         var10.print("Phase", var3);
@@ -994,7 +994,7 @@ public class ImpedSpecSimulation {
             var10.println("Reference impedance: " + this.referenceImpedance + " ohms");
             var10.println();
             var3 = 14;
-            var10.println("Frequecy - Voltage data");
+            var10.println("Frequecy - Voltage fillData");
             var10.print("Frequency", var3);
             var10.print("Magnitude", var3);
             var10.print("Phase", var3);
@@ -1103,7 +1103,7 @@ public class ImpedSpecSimulation {
 
         var10.println();
         var3 = 10;
-        var10.println("Frequecy - Impedance data");
+        var10.println("Frequecy - Impedance fillData");
         var10.printtab("Frequency", var3);
         var10.printtab("Magnitude", var3);
         var10.printtab("Phase", var3);
@@ -1139,7 +1139,7 @@ public class ImpedSpecSimulation {
             var10.println("Reference impedance: " + this.referenceImpedance + " ohms");
             var10.println();
             var3 = 14;
-            var10.println("Frequecy - Voltage data");
+            var10.println("Frequecy - Voltage fillData");
             var10.printtab("Frequency", var3);
             var10.printtab("Magnitude", var3);
             var10.printtab("Phase", var3);

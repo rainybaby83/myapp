@@ -832,7 +832,7 @@ public class Normality {
         var3.print("Parameter / statistic", this.field0);
         var3.print("Value", this.field);
         var3.println("Error");
-        var3.print("Number of data points: ", this.field0);
+        var3.print("Number of fillData points: ", this.field0);
         var3.println(this.nPoints);
         var3.print("Sample mean: ", this.field0);
         var3.println(Fmath.truncate(this.mean, this.trunc));
@@ -913,7 +913,7 @@ public class Normality {
         var3.print(Fmath.truncate(this.pp.gaussianSigma(), this.trunc), this.field);
         var3.println(Fmath.truncate(this.pp.gaussianSigmaError(), this.trunc));
         var3.println();
-        var3.println("Input data: ");
+        var3.println("Input fillData: ");
         int var10 = 0;
 
         for(int var11 = 0; var11 < this.nPoints; ++var11) {

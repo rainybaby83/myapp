@@ -136,7 +136,7 @@ public class Sucrose {
             var5 = weightpercentToGperl(var5, var0);
             return var5;
         } else {
-            throw new IllegalArgumentException("The temperatue is outside the experimental data limits");
+            throw new IllegalArgumentException("The temperatue is outside the experimental fillData limits");
         }
     }
 
@@ -156,7 +156,7 @@ public class Sucrose {
             double var12 = 1.0D / (var14 + var16 * var2);
             return var12;
         } else {
-            throw new IllegalArgumentException("Either Temperature or Concentration is outside the experimental data limits");
+            throw new IllegalArgumentException("Either Temperature or Concentration is outside the experimental fillData limits");
         }
     }
 
@@ -285,7 +285,7 @@ public class Sucrose {
                 throw new IllegalArgumentException("Root must be bracketed in the bisection");
             }
         } else {
-            throw new IllegalArgumentException("concentration is outside the experimental data limits");
+            throw new IllegalArgumentException("concentration is outside the experimental fillData limits");
         }
     }
 }

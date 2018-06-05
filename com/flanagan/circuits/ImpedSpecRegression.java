@@ -89,8 +89,8 @@ public class ImpedSpecRegression extends Regression {
     private int degreesOfFreedom = 0;
     private double sumOfSquares = 0.0D;
     private double reducedSumOfSquares = 0.0D;
-    private double chiSquare = 0.0D / 0.0;
-    private double reducedChiSquare = 0.0D / 0.0;
+    private double chiSquare = 0.0D;
+    private double reducedChiSquare = 0.0D;
     private double[] realZresiduals = null;
     private double[] imagZresiduals = null;
     private double[] calculatedRealZ = null;
@@ -1491,8 +1491,8 @@ public class ImpedSpecRegression extends Regression {
             double[][] var15 = new double[this.numberOfParameters][2];
             if (this.getGrad() == null) {
                 for(direction = 0; direction < this.numberOfParameters; ++direction) {
-                    this.preMinimumGradients[direction] = 0.0D / 0.0;
-                    this.postMinimumGradients[direction] = 0.0D / 0.0;
+                    this.preMinimumGradients[direction] = 0.0D;
+                    this.postMinimumGradients[direction] = 0.0D;
                 }
             } else {
                 var15 = this.getGrad();
@@ -1638,6 +1638,7 @@ public class ImpedSpecRegression extends Regression {
     }
 
 
+    @Override
     public double[] getBestEstimates() {
         if (!this.regressionDone) {
             this.regression();
@@ -1729,7 +1730,7 @@ public class ImpedSpecRegression extends Regression {
         }
 
         this.calculateLineFrequencies();
-        double[][] var4 = PlotGraph.data(2, this.numberOfLineFrequencies);
+        double[][] var4 = PlotGraph.fillData(2, this.numberOfLineFrequencies);
 
         int var5;
         for(var5 = 0; var5 < this.numberOfFrequencies; ++var5) {
@@ -1771,7 +1772,7 @@ public class ImpedSpecRegression extends Regression {
         }
 
         this.calculateLineFrequencies();
-        double[][] var4 = PlotGraph.data(2, this.numberOfLineFrequencies);
+        double[][] var4 = PlotGraph.fillData(2, this.numberOfLineFrequencies);
         int var5;
         if (this.logOrLinear) {
             for(var5 = 0; var5 < this.numberOfFrequencies; ++var5) {
@@ -1841,7 +1842,7 @@ public class ImpedSpecRegression extends Regression {
         }
 
         this.calculateLineFrequencies();
-        double[][] var4 = PlotGraph.data(2, this.numberOfLineFrequencies);
+        double[][] var4 = PlotGraph.fillData(2, this.numberOfLineFrequencies);
         int var5;
         if (this.logOrLinear) {
             for(var5 = 0; var5 < this.numberOfFrequencies; ++var5) {
@@ -1912,7 +1913,7 @@ public class ImpedSpecRegression extends Regression {
             String var2 = "ImpedSpecRegression program:  Voltage magnitude versus frequency plot   [" + var1[0] + "    " + var1[1] + "]";
             String var3 = this.regressionTitle;
             this.calculateLineFrequencies();
-            double[][] var4 = PlotGraph.data(2, this.numberOfLineFrequencies);
+            double[][] var4 = PlotGraph.fillData(2, this.numberOfLineFrequencies);
             int var5;
             if (this.logOrLinear) {
                 for(var5 = 0; var5 < this.numberOfFrequencies; ++var5) {
@@ -1992,7 +1993,7 @@ public class ImpedSpecRegression extends Regression {
             String var2 = "ImpedSpecRegression program:  Voltage phase versus frequency plot   [" + var1[0] + "    " + var1[1] + "]";
             String var3 = this.regressionTitle;
             this.calculateLineFrequencies();
-            double[][] var4 = PlotGraph.data(2, this.numberOfLineFrequencies);
+            double[][] var4 = PlotGraph.fillData(2, this.numberOfLineFrequencies);
             int var5;
             if (this.logOrLinear) {
                 for(var5 = 0; var5 < this.numberOfFrequencies; ++var5) {
@@ -2161,8 +2162,8 @@ public class ImpedSpecRegression extends Regression {
 
         var5.println();
         var2 = 14;
-        var5.println("Fitted and entered data [frequencies, calculated impedances, data as entered]");
-        var5.print("Entered data type:  ");
+        var5.println("Fitted and entered fillData [frequencies, calculated impedances, fillData as entered]");
+        var5.print("Entered fillData type:  ");
         var5.println(this.dataEnteredType[this.dataEnteredTypePointer]);
         var5.println();
         var5.print("Frequency", var2);
@@ -2379,8 +2380,8 @@ public class ImpedSpecRegression extends Regression {
         var5.println("Maximum number of iterations allowed in each regression: " + this.maximumIterations);
         var5.println();
         var2 = 14;
-        var5.println("Fitted and entered data [frequencies, calculated impedances, data as entered]");
-        var5.print("Entered data type:  ");
+        var5.println("Fitted and entered fillData [frequencies, calculated impedances, fillData as entered]");
+        var5.print("Entered fillData type:  ");
         var5.println(this.dataEnteredType[this.dataEnteredTypePointer]);
         var5.println();
         var5.printtab("Frequency", var2);

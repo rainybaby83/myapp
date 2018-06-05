@@ -9,15 +9,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.io.Serializable;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class PlotGraph extends Plot implements Serializable {
     protected static final long serialVersionUID = 1L;
     protected int graphWidth = 800;
     protected int graphHeight = 600;
     protected int closeChoice = 1;
-    protected JFrame window = new JFrame("Michael T Flanagan's plotting program - PlotGraph");
+    public JFrame window = new JFrame("Michael T Flanagan's plotting program - PlotGraph");
+
 
     public PlotGraph(double[][] var1) {
         super(var1);
@@ -65,6 +65,7 @@ public class PlotGraph extends Plot implements Serializable {
         this.closeChoice = var1;
     }
 
+    @Override
     public void paint(Graphics var1) {
         double var2 = (double)this.getSize().width;
         double var4 = (double)this.getSize().height;
