@@ -25,7 +25,7 @@ public class TableMethod {
     //创建普通的表格Model
     public static DefaultTableModel getTableModel(String sql) {
         int i;
-        DefaultTableModel defaultTableModel = null;
+        DefaultTableModel dm = null;
         ResultSet rs;
         Vector<Vector> vectorData = new Vector<>();
         Vector<String> vectorHead = new Vector<>();
@@ -42,7 +42,7 @@ public class TableMethod {
                 }
                 vectorData.addElement(vectorRow);
             }
-            defaultTableModel = new DefaultTableModel(vectorData, vectorHead);
+            dm = new DefaultTableModel(vectorData, vectorHead);
             rs.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "数据获取失败，请截图后联系开发人员。\n"
@@ -51,7 +51,7 @@ public class TableMethod {
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
         }
         // DefaultTableModel若为null，则会抛异常“IllegalArgumentExceptionn: Cannot set a null TableModel”。
-        return defaultTableModel;
+        return dm;
     }   // END:  public DefaultTableModel getTableModel(String sql)
 
 

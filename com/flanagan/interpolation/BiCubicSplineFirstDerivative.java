@@ -66,7 +66,7 @@ public class BiCubicSplineFirstDerivative {
             this.cspdY = new BiCubicSplinePartialDerivative(var1, var2, var3);
             this.cspdYt = new BiCubicSplinePartialDerivative(var2, var1, this.yTranspose);
         } else {
-            throw new IllegalArgumentException("The data matrix must have a minimum size of 3 X 3");
+            throw new IllegalArgumentException("The fillData matrix must have a minimum size of 3 X 3");
         }
     }
 

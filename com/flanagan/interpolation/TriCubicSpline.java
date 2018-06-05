@@ -108,7 +108,7 @@ public class TriCubicSpline {
             this.y = new double[this.nPoints][this.mPoints][this.lPoints];
             this.d2ydx2inner = new double[this.nPoints][this.mPoints][this.lPoints];
         } else {
-            throw new IllegalArgumentException("The data matrix must have a minimum size of 3 X 3 X 3");
+            throw new IllegalArgumentException("The fillData matrix must have a minimum size of 3 X 3 X 3");
         }
     }
 
@@ -140,7 +140,7 @@ public class TriCubicSpline {
             TriCubicSpline var3 = new TriCubicSpline(var0, var1, var2);
             return var3;
         } else {
-            throw new IllegalArgumentException("A minimum of three x three x three data points is needed");
+            throw new IllegalArgumentException("A minimum of three x three x three fillData points is needed");
         }
     }
 
@@ -154,7 +154,7 @@ public class TriCubicSpline {
 
             return var4;
         } else {
-            throw new IllegalArgumentException("A minimum of three x three x three data points is needed");
+            throw new IllegalArgumentException("A minimum of three x three x three fillData points is needed");
         }
     }
 

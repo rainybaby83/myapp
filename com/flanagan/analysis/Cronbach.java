@@ -232,21 +232,21 @@ public class Cronbach extends Scores {
         var1.println();
         var1.println("RELIABILITY ESTIMATORS");
         var1.println("Cronbach's coefficient alpha");
-        var1.printtab("Raw data                  ");
+        var1.printtab("Raw fillData                  ");
         var1.println(Fmath.truncate(this.rawAlpha, this.trunc));
-        var1.printtab("Standardized data           ");
+        var1.printtab("Standardized fillData           ");
         var1.println(Fmath.truncate(this.standardizedAlpha, this.trunc));
         var1.println();
         var1.println("Average of the inter-item correlation coefficients, excluding item totals");
-        var1.printtab("Raw data                  ");
+        var1.printtab("Raw fillData                  ");
         var1.println(Fmath.truncate(this.rawMeanRhoWithoutTotals, this.trunc));
-        var1.printtab("Standardized data           ");
+        var1.printtab("Standardized fillData           ");
         var1.println(Fmath.truncate(this.standardizedMeanRhoWithoutTotals, this.trunc));
         var1.println();
         var1.println("Average of the inter-item correlation coefficients, including item totals");
-        var1.printtab("Raw data                  ");
+        var1.printtab("Raw fillData                  ");
         var1.println(Fmath.truncate(this.rawMeanRhoWithTotals, this.trunc));
-        var1.printtab("Standardized data           ");
+        var1.printtab("Standardized fillData           ");
         var1.println(Fmath.truncate(this.standardizedMeanRhoWithTotals, this.trunc));
         var1.println();
         var1.println("'NO RESPONSE' DELETIONS AND REPLACEMENTS");
@@ -308,7 +308,7 @@ public class Cronbach extends Scores {
         var1.println(this.nPersons);
         var1.println();
         var1.println("CORRELATION COEFFICIENTS");
-        var1.println("Correlation coefficients between items  -  raw data");
+        var1.println("Correlation coefficients between items  -  raw fillData");
         var1.printtab("    ");
 
         for(var6 = 0; var6 <= this.nItems; ++var6) {
@@ -338,7 +338,7 @@ public class Cronbach extends Scores {
         var1.print("Standard deviation of the inter-item correlation coefficient (including total)  ");
         var1.println(Fmath.truncate(this.rawStandardDeviationRhoWithTotals, this.trunc));
         var1.println();
-        var1.println("Correlation coefficients between items  -  standardized data");
+        var1.println("Correlation coefficients between items  -  standardized fillData");
         var1.printtab("    ");
 
         for(var6 = 0; var6 <= this.nItems; ++var6) {
@@ -368,7 +368,7 @@ public class Cronbach extends Scores {
         var1.println(Fmath.truncate(this.standardizedStandardDeviationRhoWithTotals, this.trunc));
         var1.println();
         var1.println("ITEMS: MEANS, STANDARD DEVIATIONS, SKEWNESS AND KURTOSIS");
-        var1.println("Raw data");
+        var1.println("Raw fillData");
         var1.printtab("item ");
         var1.printtab("mean");
         var1.printtab("standard");
@@ -399,7 +399,7 @@ public class Cronbach extends Scores {
 
         var1.println();
         var1.println("ITEMS: MINIMA, MAXIMA, MEDIANS, RANGES AND TOTALS");
-        var1.println("raw data");
+        var1.println("raw fillData");
         var1.printtab("item ");
         var1.printtab("minimum");
         var1.printtab("maximum");
@@ -498,7 +498,7 @@ public class Cronbach extends Scores {
         var1.printtab(Fmath.truncate(this.rawItemTotalsMax, this.trunc));
         var1.println(Fmath.truncate(this.rawItemTotalsRange, this.trunc));
         var1.println();
-        var1.println("Standardized data");
+        var1.println("Standardized fillData");
         var1.println("ITEMS: MEANS, STANDARD DEVIATIONS, SKEWNESS AND KURTOSIS");
         var1.printtab("item ");
         var1.printtab("mean");
@@ -527,7 +527,7 @@ public class Cronbach extends Scores {
 
         var1.println();
         var1.println("ITEMS: MINIMA, MAXIMA, MEDIANS, RANGES AND TOTALS");
-        var1.println("Standardized data");
+        var1.println("Standardized fillData");
         var1.printtab("item ");
         var1.printtab("minimum");
         var1.printtab("maximum");
@@ -625,11 +625,11 @@ public class Cronbach extends Scores {
         var1.println();
         var1.println("DELETION OF ITEMS");
         var1.printtab("                ");
-        var1.printtab("Raw data        ");
+        var1.printtab("Raw fillData        ");
         var1.printtab("                ");
         var1.printtab("                ");
         var1.printtab("                ");
-        var1.println("Standardized data");
+        var1.println("Standardized fillData");
         var1.printtab("Deleted item");
         var1.printtab("Alpha       ");
         var1.printtab("Correlation ");
@@ -724,7 +724,7 @@ public class Cronbach extends Scores {
         var1.println(Fmath.truncate(this.standardizedMeanRhoWithTotals, this.trunc));
         var1.println();
         this.deletedItemDataFile(var34, var8, var33, var9);
-        var1.println("INDIVIDUALS - raw data");
+        var1.println("INDIVIDUALS - raw fillData");
         var1.printtab("person ");
         var1.printtab("mean");
         var1.printtab("standard");
@@ -764,7 +764,7 @@ public class Cronbach extends Scores {
         }
 
         var1.println();
-        var1.println("INDIVIDUALS - standardized data");
+        var1.println("INDIVIDUALS - standardized fillData");
         var1.printtab("person ");
         var1.printtab("mean");
         var1.printtab("standard");
@@ -804,7 +804,7 @@ public class Cronbach extends Scores {
         }
 
         var1.println();
-        var1.println("ALL SCORES - raw data");
+        var1.println("ALL SCORES - raw fillData");
         var1.printtab("mean");
         var1.printtab("standard");
         var1.printtab("minimum");
@@ -824,7 +824,7 @@ public class Cronbach extends Scores {
         var1.printtab(Fmath.truncate(this.rawAllResponsesRange, this.trunc));
         var1.println(Fmath.truncate(this.rawAllResponsesTotal, this.trunc));
         var1.println();
-        var1.println("ALL SCORES - standardized data");
+        var1.println("ALL SCORES - standardized fillData");
         var1.printtab("mean");
         var1.printtab("standard");
         var1.printtab("minimum");
@@ -878,21 +878,21 @@ public class Cronbach extends Scores {
         byte var5 = 36;
         var1.println("RELIABILITY ESTIMATORS");
         var1.println("Cronbach's coefficient alpha");
-        var1.print("Raw data ", var5);
+        var1.print("Raw fillData ", var5);
         var1.println(Fmath.truncate(this.rawAlpha, this.trunc));
-        var1.print("Standardized data ", var5);
+        var1.print("Standardized fillData ", var5);
         var1.println(Fmath.truncate(this.standardizedAlpha, this.trunc));
         var1.println();
         var1.println("Average of the inter-item correlation coefficients, excluding item totals");
-        var1.print("Raw data ", var5);
+        var1.print("Raw fillData ", var5);
         var1.println(Fmath.truncate(this.rawMeanRhoWithoutTotals, this.trunc));
-        var1.print("Standardized data ", var5);
+        var1.print("Standardized fillData ", var5);
         var1.println(Fmath.truncate(this.standardizedMeanRhoWithoutTotals, this.trunc));
         var1.println();
         var1.println("Average of the inter-item correlation coefficients, including item totals");
-        var1.print("Raw data ", var5);
+        var1.print("Raw fillData ", var5);
         var1.println(Fmath.truncate(this.rawMeanRhoWithTotals, this.trunc));
-        var1.print("Standardized data ", var5);
+        var1.print("Standardized fillData ", var5);
         var1.println(Fmath.truncate(this.standardizedMeanRhoWithTotals, this.trunc));
         var1.println();
         var1.println("'NO RESPONSE' DELETIONS AND REPLACEMENTS");
@@ -973,7 +973,7 @@ public class Cronbach extends Scores {
         ++var9;
         ++var10;
         var1.println("CORRELATION COEFFICIENTS");
-        var1.println("Correlation coefficients between items  -  raw data");
+        var1.println("Correlation coefficients between items  -  raw fillData");
         var1.print("    ", var9);
 
         int var11;
@@ -1004,7 +1004,7 @@ public class Cronbach extends Scores {
         var1.print("Standard deviation of the inter-item correlation coefficient (including total) ", 80);
         var1.println(Fmath.truncate(this.rawStandardDeviationRhoWithTotals, this.trunc));
         var1.println();
-        var1.println("Correlation coefficients between items  -  standardized data");
+        var1.println("Correlation coefficients between items  -  standardized fillData");
         var1.print("    ", var9);
 
         for(var11 = 0; var11 <= this.nItems; ++var11) {
@@ -1038,7 +1038,7 @@ public class Cronbach extends Scores {
         }
 
         var1.println("ITEMS: MEANS, STANDARD DEVIATIONS, SKEWNESS AND KURTOSIS");
-        var1.println("Raw data");
+        var1.println("Raw fillData");
         var1.print("item ", var9);
         var1.print("mean", var10);
         var1.print("standard", var10);
@@ -1069,7 +1069,7 @@ public class Cronbach extends Scores {
 
         var1.println();
         var1.println("ITEMS: MINIMA, MAXIMA, MEDIANS, RANGES AND TOTALS");
-        var1.println("Raw data");
+        var1.println("Raw fillData");
         var1.print("item ", var9);
         var1.print("minimum", var10);
         var1.print("maximum", var10);
@@ -1169,7 +1169,7 @@ public class Cronbach extends Scores {
         var1.print(Fmath.truncate(this.rawItemTotalsMax, this.trunc), var10);
         var1.println(Fmath.truncate(this.rawItemTotalsRange, this.trunc));
         var1.println();
-        var1.println("standardized data");
+        var1.println("standardized fillData");
         var1.print("item ", var9);
         var1.print("mean", var10);
         var1.print("standard", var10);
@@ -1298,11 +1298,11 @@ public class Cronbach extends Scores {
         }
 
         var1.print("   ", var12);
-        var1.print("Raw data", var10);
+        var1.print("Raw fillData", var10);
         var1.print("   ", var10);
         var1.print("   ", var10);
         var1.print("   ", var10);
-        var1.println("Standardized data");
+        var1.println("Standardized fillData");
         var1.print("Deleted item", var12);
         var1.print("Alpha", var10);
         var1.print("Correlation", var10);
@@ -1398,7 +1398,7 @@ public class Cronbach extends Scores {
         var1.println();
         this.deletedItemDataFile(var13, var15, var14, var16);
         byte var41 = 12;
-        var1.println("INDIVIDUALS - raw data");
+        var1.println("INDIVIDUALS - raw fillData");
         var1.print("person", var41);
         var1.print("mean", var10);
         var1.print("standard", var10);
@@ -1462,7 +1462,7 @@ public class Cronbach extends Scores {
         }
 
         var1.println();
-        var1.println("INDIVIDUALS - standardized data");
+        var1.println("INDIVIDUALS - standardized fillData");
         var1.print("person ", var41);
         var1.print("mean", var10);
         var1.print("standard", var10);
@@ -1509,7 +1509,7 @@ public class Cronbach extends Scores {
         }
 
         var1.println();
-        var1.println("ALL SCORES - raw data");
+        var1.println("ALL SCORES - raw fillData");
         var1.print("mean", var10);
         var1.print("standard", var10);
         var1.print("minimum", var10);
@@ -1529,7 +1529,7 @@ public class Cronbach extends Scores {
         var1.print(Fmath.truncate(this.rawAllResponsesRange, this.trunc), var10);
         var1.println(Fmath.truncate(this.rawAllResponsesTotal, this.trunc));
         var1.println();
-        var1.println("ALL SCORES - standardized data");
+        var1.println("ALL SCORES - standardized fillData");
         var1.print("mean", var10);
         var1.print("standard", var10);
         var1.print("minimum", var10);

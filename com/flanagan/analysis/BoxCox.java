@@ -153,7 +153,7 @@ public class BoxCox {
         this.originalMaximum = this.sod.maximum();
         this.originalMedian = this.sod.median();
         if (this.originalMinimum == this.originalMaximum) {
-            throw new IllegalArgumentException("A Box-Cox transformation cannot be performed on a data array of identical values");
+            throw new IllegalArgumentException("A Box-Cox transformation cannot be performed on a fillData array of identical values");
         } else {
             this.originalRange = this.originalMaximum - this.originalMinimum;
             this.originalMean = this.sod.mean();
@@ -296,7 +296,7 @@ public class BoxCox {
         }
 
         if (this.originalData == null) {
-            throw new IllegalArgumentException("No data has been entered (via a constructor)");
+            throw new IllegalArgumentException("No fillData has been entered (via a constructor)");
         } else {
             this.inverseData = new double[this.nData];
             double[] var5 = Conv.copy(this.originalData);
@@ -340,9 +340,9 @@ public class BoxCox {
         }
 
         if (this.originalData == null) {
-            throw new IllegalArgumentException("No data has been entered (via a constructor)");
+            throw new IllegalArgumentException("No fillData has been entered (via a constructor)");
         } else if (this.originalMinimum + this.lambdaTwo < 0.0D) {
-            throw new IllegalArgumentException("Negative (data plus lambdaTwo) value, " + (this.originalMinimum + this.lambdaTwo));
+            throw new IllegalArgumentException("Negative (fillData plus lambdaTwo) value, " + (this.originalMinimum + this.lambdaTwo));
         } else {
             this.transformedData = new double[this.nData];
             int var5;
@@ -752,7 +752,7 @@ public class BoxCox {
             this.transform();
         }
 
-        double[][] var1 = PlotGraph.data(2, this.nData);
+        double[][] var1 = PlotGraph.fillData(2, this.nData);
         var1[0] = this.gaussianOrderMedians;
         var1[1] = (new ArrayMaths(this.standardizedTransformedData)).sort().array();
         var1[2] = this.gaussianOrderMedians;
@@ -768,7 +768,7 @@ public class BoxCox {
         var7.setLine(var4);
         var7.setXaxisLegend("Gaussian [0,1] Order Statistic Medians");
         var7.setYaxisLegend("Ordered Response Values");
-        String var5 = "Gausssian probability plot:  Box-Cox transformed data";
+        String var5 = "Gausssian probability plot:  Box-Cox transformed fillData";
         String var6 = "lambdaOne = " + Fmath.truncate(this.lambdaOne, 4) + ",  lambdaTwo = " + Fmath.truncate(this.lambdaTwo, 4) + ",   gradient = " + Fmath.truncate(this.transformedGradient, 4) + ", intercept = " + Fmath.truncate(this.transformedIntercept, 4) + ",  R = " + Fmath.truncate(this.transformedSampleR, 4);
         var7.setGraphTitle(var5);
         var7.setGraphTitle2(var6);
@@ -780,7 +780,7 @@ public class BoxCox {
             this.initialize();
         }
 
-        double[][] var1 = PlotGraph.data(2, this.nData);
+        double[][] var1 = PlotGraph.fillData(2, this.nData);
         var1[0] = this.gaussianOrderMedians;
         var1[1] = (new ArrayMaths(this.standardizedOriginalData)).sort().array();
         var1[2] = this.gaussianOrderMedians;
@@ -796,7 +796,7 @@ public class BoxCox {
         var7.setLine(var4);
         var7.setXaxisLegend("Gaussian [0,1] Order Statistic Medians");
         var7.setYaxisLegend("Ordered Response Values");
-        String var5 = "Gausssian probability plot: original data for a Box-Cox transformation";
+        String var5 = "Gausssian probability plot: original fillData for a Box-Cox transformation";
         String var6 = "gradient = " + Fmath.truncate(this.originalGradient, 4) + ", intercept = " + Fmath.truncate(this.originalIntercept, 4) + ",  R = " + Fmath.truncate(this.originalSampleR, 4);
         var7.setGraphTitle(var5);
         var7.setGraphTitle2(var6);
@@ -839,9 +839,9 @@ public class BoxCox {
         var3.print("  ", var8);
         var3.println("Original   ");
         var3.print("  ", var7);
-        var3.print("scaled data", var8);
+        var3.print("scaled fillData", var8);
         var3.print("  ", var8);
-        var3.println("data   ");
+        var3.println("fillData   ");
         var3.println();
         var3.print("                            ", var7);
         var3.print("Value", var8);

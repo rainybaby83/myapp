@@ -22,7 +22,7 @@ public class Water {
             double var5 = CubicSpline.interpolate(var0, var2, var3, var4);
             return var5;
         } else {
-            throw new IllegalArgumentException("Temperature outside the experimental data limits");
+            throw new IllegalArgumentException("Temperature outside the experimental fillData limits");
         }
     }
 
@@ -35,7 +35,7 @@ public class Water {
             double var5 = CubicSpline.interpolate(var0, var2, var3, var4);
             return var5;
         } else {
-            throw new IllegalArgumentException("Temperature outside the experimental data limits");
+            throw new IllegalArgumentException("Temperature outside the experimental fillData limits");
         }
     }
 

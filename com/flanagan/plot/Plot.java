@@ -154,7 +154,7 @@ public class Plot extends Canvas implements Serializable {
         int var3 = var1.length;
         int var4 = var2.length;
         if (var3 != var4) {
-            throw new IllegalArgumentException("x-data length is not equal to the y-data length");
+            throw new IllegalArgumentException("x-fillData length is not equal to the y-fillData length");
         } else {
             double[][] var5 = new double[2][var3];
 
@@ -356,16 +356,16 @@ public class Plot extends Canvas implements Serializable {
         return var8;
     }
 
-    public static double[][] data(int var0, int var1) {
-        double[][] var2 = new double[2 * var0][var1];
+    public static double[][] fillData(int row, int col) {
+        double[][] datas = new double[2 * row][col];
 
-        for(int var3 = 0; var3 < 2 * var0; ++var3) {
-            for(int var4 = 0; var4 < var1; ++var4) {
-                var2[var3][var4] = dataFill;
+        for(int i = 0; i < 2 * row; ++i) {
+            for(int j = 0; j < col; ++j) {
+                datas[i][j] = dataFill;
             }
         }
 
-        return var2;
+        return datas;
     }
 
     public static void setDataFillValue(double var0) {

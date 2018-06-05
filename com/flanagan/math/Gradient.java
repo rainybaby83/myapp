@@ -440,7 +440,7 @@ public class Gradient {
 
     public double[] splineDeriv_1D_array() {
         if (this.nDim != 1) {
-            throw new IllegalArgumentException("method splineDeriv_1D_array is only applicable if the entered data is a ONE dimensional array");
+            throw new IllegalArgumentException("method splineDeriv_1D_array is only applicable if the entered fillData is a ONE dimensional array");
         } else {
             if (!this.splineDone) {
                 this.splineDerivativesArray();
@@ -452,7 +452,7 @@ public class Gradient {
 
     public double[][] splineDeriv_2D_x_direction() {
         if (this.nDim != 2) {
-            throw new IllegalArgumentException("method splineDeriv_2D_x_direction is only applicable if the entered data is a TWO dimensional array");
+            throw new IllegalArgumentException("method splineDeriv_2D_x_direction is only applicable if the entered fillData is a TWO dimensional array");
         } else {
             if (!this.splineDone) {
                 this.splineDerivativesArray();
@@ -464,7 +464,7 @@ public class Gradient {
 
     public double[][] splineDeriv_2D_y_direction() {
         if (this.nDim != 2) {
-            throw new IllegalArgumentException("method splineDeriv_2D_y_direction is only applicable if the entered data is a TWO dimensional array");
+            throw new IllegalArgumentException("method splineDeriv_2D_y_direction is only applicable if the entered fillData is a TWO dimensional array");
         } else {
             if (!this.splineDone) {
                 this.splineDerivativesArray();
@@ -562,7 +562,7 @@ public class Gradient {
 
     public double[] numDeriv_1D_array() {
         if (this.nDim != 1) {
-            throw new IllegalArgumentException("method numDeriv_1D_array is only applicable if the entered data is a ONE dimensional array");
+            throw new IllegalArgumentException("method numDeriv_1D_array is only applicable if the entered fillData is a ONE dimensional array");
         } else {
             if (!this.numArrayDone) {
                 this.numericalDerivativesArray();
@@ -574,7 +574,7 @@ public class Gradient {
 
     public double[][] numDeriv_2D_x_direction() {
         if (this.nDim != 2) {
-            throw new IllegalArgumentException("method numDeriv_2D_x_direction is only applicable if the entered data is a TWO dimensional array");
+            throw new IllegalArgumentException("method numDeriv_2D_x_direction is only applicable if the entered fillData is a TWO dimensional array");
         } else {
             if (!this.numArrayDone) {
                 this.numericalDerivativesArray();
@@ -586,7 +586,7 @@ public class Gradient {
 
     public double[][] numDeriv_2D_y_direction() {
         if (this.nDim != 2) {
-            throw new IllegalArgumentException("method numDeriv_2D_y_direction is only applicable if the entered data is a TWO dimensional array");
+            throw new IllegalArgumentException("method numDeriv_2D_y_direction is only applicable if the entered fillData is a TWO dimensional array");
         } else {
             if (!this.numArrayDone) {
                 this.numericalDerivativesArray();
