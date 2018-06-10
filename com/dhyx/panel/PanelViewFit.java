@@ -1,11 +1,11 @@
 package com.dhyx.panel;
 
 import com.dhyx.myclass.Const;
+import com.dhyx.myclass.MyFitData;
 import com.dhyx.myclass.MyIconButton;
 import com.dhyx.myclass.MyTable;
 import com.flanagan.analysis.Regression;
 import com.flanagan.physchem.ImmunoAssay;
-import com.flanagan.plot.PlotGraph;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,73 +27,66 @@ public class PanelViewFit extends JDialog {
     private DecimalFormat df = new DecimalFormat("0.0000");
     private PanelNewCurve parent;
     private boolean checkLinear = true, check4PL = true, check5PL = true;
-    private boolean checkLinearR2 =true, check4PLR2 = true, check5PLR2 = true;
-    private MyIconButton btn = new MyIconButton(Const.ICON_DEL, Const.ICON_DEL, Const.ICON_DEL);
+    private boolean checkLinearR2 = true, check4PLR2 = true, check5PLR2 = true;
+    private JPanel panelGragh = new JPanel();
+    private static int HEIGHT_SHORT = 320, HEIGHT_TALL = 700;
 
-    private PlotGraph graph;
 
 
-    PanelViewFit(PanelNewCurve parent, double[] concentrations, double[] values, int xLog, int yLog) {
+    PanelViewFit(PanelNewCurve parent, MyFitData data, int xLog, int yLog) {
 
         //设置窗口弹出的相应属性
         super((Frame) null, "选择一种拟合方法，双击返回结果", true);
         this.parent = parent;
         this.setIconImage(Const.ICON_APP.getImage());
         this.setLayout(null);
-        this.setBounds(0, 0, 1100, 600);
-        this.setLocationRelativeTo(null);
+        this.setBounds(0, 0, 1050, HEIGHT_SHORT);
+        this.moveCenter();
+        this.setBackground(Color.white);
         this.getContentPane().setBackground(Color.white);
+        this.setResizable(false);
 
-
-
-
-
-//----------------for test
-        double[] xArray = {0.5, 1, 2, 4, 20, 100, 250, 500, 750, 1000};
-        double[] yArray = {0.06165, 0.1839, 0.2471, 0.3883, 1.1906, 5.9281, 8.7006, 21.5421, 24.1621, 42.0971};
-
-        concentrations = xArray;
-        values = yArray;
-//------------------------------
-
-
+        panelGragh.setLayout(null);
+        panelGragh.setOpaque(false);
+        panelGragh.setBounds(250, 300, 600, 400);
+        this.add(panelGragh);
 
         //直线拟合处理x对数
         double[] logConcentrations, logValues;
 
         switch (xLog) {
             case 0:
-                logConcentrations = concentrations;
+                logConcentrations = data.c;
                 break;
             case 1:
-                logConcentrations = log10(concentrations);
+                logConcentrations = log10(data.c);
                 break;
             case 2:
-                logConcentrations = logE(concentrations);
+                logConcentrations = logE(data.c);
                 break;
             default:
-                logConcentrations = concentrations;
+                logConcentrations = data.c;
         }
 
         //直线拟合处理y对数
         switch (yLog) {
             case 0:
-                logValues = values;
+                logValues = data.v;
                 break;
             case 1:
-                logValues = log10(values);
+                logValues = log10(data.v);
                 break;
             case 2:
-                logValues = logE(values);
+                logValues = logE(data.v);
                 break;
             default:
-                logValues = values;
+                logValues = data.v;
         }
         assayLinear = new Regression(logConcentrations, logValues);
 
         //将数组的浓度、反应值，写入曲线拟合类
-        assay4PL = new ImmunoAssay(concentrations, values);
-        assay5PL = new ImmunoAssay(concentrations, values);
+        assay4PL = new ImmunoAssay(data.c, data.v);
+        assay5PL = new ImmunoAssay(data.c, data.v);
 
         //初始化表格
         createTable();
@@ -102,8 +95,12 @@ public class PanelViewFit extends JDialog {
 
     //创建表格，设置基本属性
     private void createTable() {
-        tblFit = new MyTable(createTableModel());
-        tblFit.setBounds(40, 20, 1000, 233);
+        tblFit = new MyTable(createTableModel()) {
+        };
+        tblFit.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tblFit.j.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        tblFit.setBounds(40, 20, 950, 233);
         tblFit.setRowHeight(70);
         tblFit.setWidth(40, 200, 80, 80, 80, 80, 80, 80, 80, 150);
         tblFit.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.lightGray));
@@ -240,32 +237,30 @@ public class PanelViewFit extends JDialog {
     }
 
 
-    /**
-     * 左键单击表格中的“查看图形”按钮后，弹出对应的曲线图形
-     *
-     * @param msg 记录上一级调用信息
-     */
+    //左键单击表格中的“查看图形”按钮后，弹出对应的曲线图形
     private void viewGragh(String msg) {
         switch (selectMethod) {
             case 1:
                 assayLinear.plotXY();
+                panelGragh.removeAll();
+                panelGragh.add(assayLinear.graph);
                 break;
             case 2:
-                assay4PL.plot();
+                assay4PL.plotCurve();
+                panelGragh.removeAll();
+                panelGragh.add(assay4PL.graph);
                 break;
             case 3:
-                assay5PL.plot();
+                assay5PL.plotCurve();
+                panelGragh.removeAll();
+                panelGragh.add(assay5PL.graph);
                 break;
             default:
         }
     }
 
 
-    /**
-     * 左键双击表格的某一行，返回拟合的参数
-     *
-     * @param msg 记录上一级调用信息
-     */
+    //关闭本窗口，向上一级窗口传递拟合结果
     private void returnParent(String msg) {
 
         //顺序：拟合方法,公式图片，a,b,c,d,e,R2
@@ -298,6 +293,23 @@ public class PanelViewFit extends JDialog {
     }
 
 
+    private void hideGraph() {
+        setSize(getWidth(), HEIGHT_SHORT);
+        panelGragh.setVisible(false);
+    }
+
+    private void displayGraph() {
+        setSize(getWidth(), HEIGHT_TALL);
+        panelGragh.setVisible(true);
+    }
+
+
+    private void moveCenter() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        this.setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
+                (tk.getScreenSize().height - this.getHeight()) / 2);
+    }
+
     //内部类 图片渲染器
     class imageRenderer extends DefaultTableCellRenderer {
 
@@ -315,6 +327,7 @@ public class PanelViewFit extends JDialog {
     }
 
 
+    //内部类，表格的鼠标单双击监听器
     class tableMouseAdapter extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -331,8 +344,16 @@ public class PanelViewFit extends JDialog {
                     int index = ((DefaultTableModel) tblFit.getModel()).findColumn("查看图形");
                     int clickedIndex = tblFit.getTableHeader().columnAtPoint(e.getPoint());
                     if (clickedIndex == index) {
+                        displayGraph();
                         viewGragh("单击“查看图形”");
+                        moveCenter();
                         logger.trace("点击按钮：查看拟合图形，" + tblFit.getValueAt(nowRow, 1));
+                    } else {
+                        hideGraph();
+                        moveCenter();
+                        panelGragh.removeAll();
+
+
                     }
                 }   // END : if (e.getClickCount() == 1)
 

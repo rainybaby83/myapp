@@ -55,7 +55,7 @@ public class Const {
 
 
     // 系统常用字体
-//    public final static Font FONT_YAHEI_12 = new Font("微软雅黑", Font.PLAIN, 12);
+    public final static Font FONT_YAHEI_12 = new Font("微软雅黑", Font.PLAIN, 12);
     public final static Font SONG_12 = new Font("宋体", Font.PLAIN, 13);
 
 
@@ -176,7 +176,7 @@ public class Const {
     private static TestDataClass[] getArrayFromFile() {
         try {
 
-            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("src/fillData.xlsx")));
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("src/Data.xlsx")));
             XSSFSheet sheet = workbook.getSheetAt(0);
             XSSFRow row = sheet.getRow(0);
 

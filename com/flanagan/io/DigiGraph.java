@@ -163,7 +163,7 @@ public class DigiGraph extends Canvas implements MouseListener {
         this.outputFile = this.imagePath.substring(0, var1) + "_digitized.txt";
         this.outputFile = Db.readLine("Enter output file name ", this.outputFile);
         this.fout = new FileOutput(this.outputFile);
-        this.trunc = Db.readInt("Enter number of decimal places required in output fillData ", this.trunc);
+        this.trunc = Db.readInt("Enter number of decimal places required in output data ", this.trunc);
     }
 
     public void setTruncation(int var1) {
@@ -437,7 +437,7 @@ public class DigiGraph extends Canvas implements MouseListener {
             this.checkForIdenticalPoints();
         }
 
-        String var5 = "Do you wish to increase number of fillData points\n";
+        String var5 = "Do you wish to increase number of data points\n";
         var5 = var5 + "using cubic spline interpolation?";
         boolean var6 = Db.noYes(var5);
         if (var6) {
@@ -478,7 +478,7 @@ public class DigiGraph extends Canvas implements MouseListener {
         this.fout.println();
         if (this.interpOpt) {
             this.fout.println();
-            this.fout.println("Interpolated fillData (cubic spline)");
+            this.fout.println("Interpolated data (cubic spline)");
             this.fout.println();
             this.fout.println("Number of interpolated points: " + this.nInterpPoints);
             this.fout.println();
@@ -594,7 +594,7 @@ public class DigiGraph extends Canvas implements MouseListener {
             var6.setLine(var7);
             int[] var8 = new int[]{4, 0};
             var6.setPoint(var8);
-            var6.plot();
+            var6.setFrame();
         }
 
     }
@@ -614,7 +614,7 @@ public class DigiGraph extends Canvas implements MouseListener {
                     System.out.println("ii " + var3 + "  jj  " + var5);
                     if (this.xPositions[var3] == this.xPositions[var5] && this.yPositions[var3] == this.yPositions[var5]) {
                         System.out.print("Class DigiGraph: two identical points, " + this.xPositions[var3] + ", " + this.yPositions[var3]);
-                        System.out.println(", in fillData array at indices " + var3 + " and " + var5 + ", one point removed");
+                        System.out.println(", in data array at indices " + var3 + " and " + var5 + ", one point removed");
 
                         for(var6 = var5; var6 < var1; ++var6) {
                             this.xPositions[var6 - 1] = this.xPositions[var6];
@@ -670,6 +670,6 @@ public class DigiGraph extends Canvas implements MouseListener {
         var2.setLine(var3);
         int[] var4 = new int[]{4};
         var2.setPoint(var4);
-        var2.plot();
+        var2.setFrame();
     }
 }

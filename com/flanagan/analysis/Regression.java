@@ -15,7 +15,7 @@ import com.flanagan.math.Matrix;
 import com.flanagan.plot.PlotGraph;
 import java.awt.Component;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class Regression {
     protected int nData0 = 0;
@@ -177,6 +177,8 @@ public class Regression {
     protected boolean analyticalDerivative;
     protected double obsnVariance;
     protected static double histTol = 1.0001D;
+    public PlotGraph graph;
+
 
     public Regression() {
         this.nSpecDual = this.dualMethods.length;
@@ -190,8 +192,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "X值";
-        this.yLegend = "Y值";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -298,8 +300,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -414,8 +416,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -530,8 +532,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -676,8 +678,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -825,8 +827,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -949,8 +951,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -1075,8 +1077,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -1229,8 +1231,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -1384,8 +1386,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -1503,8 +1505,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -1656,8 +1658,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -1783,8 +1785,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -1929,8 +1931,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -2062,8 +2064,8 @@ public class Regression {
         this.frechetWeibull = true;
         this.linNonLin = true;
         this.trueFreq = false;
-        this.xLegend = "x axis values";
-        this.yLegend = "y axis values";
+        this.xLegend = "浓度值";
+        this.yLegend = "反应值";
         this.graphTitle = " ";
         this.graphTitle2 = " ";
         this.legendCheck = false;
@@ -4066,20 +4068,22 @@ public class Regression {
                                 var35[3][var27] = var13;
                             }
 
-                            PlotGraph var36 = new PlotGraph(var35);
+                            graph = new PlotGraph(var35);
                             int[] var28 = new int[]{0, 1};
-                            var36.setLine(var28);
+                            graph.setLine(var28);
                             int[] var10000 = new int[]{1, 0};
-                            var36.setPoint(var28);
-                            var36.setXaxisLegend("x-axis values");
-                            var36.setYaxisLegend("y-axis values");
-                            var36.setGraphTitle("Polynomial fit with degree = 0 and a fixed intercept");
-                            var36.setGraphTitle2("points - experimental values; line - fixed intercept value");
-                            var36.plot();
+                            graph.setPoint(var28);
+                            graph.setXaxisLegend("浓度值");
+                            graph.setYaxisLegend("反应值");
+                            graph.setGraphTitle("Polynomial fit with degree = 0 and a fixed intercept");
+                            graph.setGraphTitle2("points - experimental values; line - fixed intercept value");
+                            graph.setFrame();
                             break;
                         default:
                             this.polynomialPlot(this.bestPolynomialDegree, var2);
                     }
+                default:
+
             }
 
             this.suppressErrorMessages = false;
@@ -8881,7 +8885,7 @@ public class Regression {
             var11.setPoint(var12);
             int[] var13 = new int[]{0, 3};
             var11.setLine(var13);
-            var11.plot();
+            var11.setFrame();
         }
 
     }
@@ -9059,8 +9063,8 @@ public class Regression {
         this.plotYY(this.graphTitle);
     }
 
-    protected int plotXY(String var1) {
-        this.graphTitle = var1;
+    protected int plotXY(String graphName) {
+        this.graphTitle = graphName;
         boolean var2 = false;
         if (!this.linNonLin && this.nParam > 0) {
             System.out.println("You attempted to use Regression.plotXY() for a non-linear regression without providing the function reference in the plotXY argument list");
@@ -9068,7 +9072,7 @@ public class Regression {
             byte var4 = -1;
             return var4;
         } else {
-            int var3 = this.plotXYlinear(var1);
+            int var3 = this.plotXYlinear(graphName);
             return var3;
         }
     }
@@ -9143,14 +9147,14 @@ public class Regression {
 
     }
 
-    protected int plotXYlinear(String var1) {
-        this.graphTitle = var1;
-        byte var2 = 0;
+    protected int plotXYlinear(String graphName) {
+        this.graphTitle = graphName;
+        byte status = 0;
         if (this.nXarrays > 1) {
             System.out.println("You attempted to use Regression.plotXY() for a multiple regression");
             System.out.println("No plot attempted");
-            var2 = -2;
-            return var2;
+            status = -2;
+            return status;
         } else {
             byte var3 = 2;
             int var4 = 200;
@@ -9166,8 +9170,8 @@ public class Regression {
             double var6 = Fmath.minimum(this.xDatas[0]);
             double var8 = Fmath.maximum(this.xDatas[0]);
             double var10 = (var8 - var6) / (double)(var4 - 1);
-            String var12 = " ";
-            String var13 = " ";
+            String graphTitle = " ";
+            String graphTitle2 = " ";
 
             int var14;
             for(var14 = 0; var14 < this.nData0; var14++) {
@@ -9184,10 +9188,10 @@ public class Regression {
             if (this.nParam == 0) {
                 switch(this.lastMethod) {
                     case 11:
-                        var12 = "No regression: Minimum Order Statistic Standard Gumbel (y = exp(x)exp(-exp(x))): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - theoretical curve;   no parameters to be estimated";
+                        graphTitle = "No regression: Minimum Order Statistic Standard Gumbel (y = exp(x)exp(-exp(x))): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - theoretical curve;   no parameters to be estimated";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9202,10 +9206,10 @@ public class Regression {
                         }
                         break;
                     case 12:
-                        var12 = "No regression:  Maximum Order Statistic Standard Gumbel (y = exp(-x)exp(-exp(-x))): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - theoretical curve;   no parameters to be estimated";
+                        graphTitle = "No regression:  Maximum Order Statistic Standard Gumbel (y = exp(-x)exp(-exp(-x))): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - theoretical curve;   no parameters to be estimated";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9220,10 +9224,10 @@ public class Regression {
                         }
                         break;
                     case 21:
-                        var12 = "No regression:  Standard Exponential (y = exp(-x)): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - theoretical curve;   no parameters to be estimated";
+                        graphTitle = "No regression:  Standard Exponential (y = exp(-x)): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - theoretical curve;   no parameters to be estimated";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         for(var14 = 0; var14 < var4; var14++) {
@@ -9239,10 +9243,10 @@ public class Regression {
                 label182:
                 switch(this.lastMethod) {
                     case 0:
-                        var12 = "Linear regression  (y = a + b.x): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear regression  (y = a + b.x): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - best fit curve";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9256,10 +9260,10 @@ public class Regression {
                             var14++;
                         }
                     case 1:
-                        var12 = "Linear (polynomial with degree = " + (this.nParam - 1) + ") regression: " + this.graphTitle;
-                        var13 = " points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear (polynomial with degree = " + (this.nParam - 1) + ") regression: " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - best fit curve";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9279,11 +9283,11 @@ public class Regression {
                             var14++;
                         }
                     case 2:
-                        var12 = "Linear regression  (y = a.x): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear regression  (y = a.x): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - best fit curve";
                         if (this.nXarrays == 1) {
                             if (this.weightOpt) {
-                                var13 = var13 + ";   error bars - weighting factors";
+                                graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                             }
 
                             var14 = 0;
@@ -9299,14 +9303,14 @@ public class Regression {
                         } else {
                             System.out.println("Regression.plotXY(linear): lastMethod, " + this.lastMethod + ",cannot be plotted in two dimensions");
                             System.out.println("No plot attempted");
-                            var2 = -1;
+                            status = -1;
                             break;
                         }
                     case 11:
-                        var12 = "Linear regression: Minimum Order Statistic Standard Gumbel (y = a.z where z = exp(x)exp(-exp(x))): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear regression: Minimum Order Statistic Standard Gumbel (y = a.z where z = exp(x)exp(-exp(x))): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - best fit curve";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9320,10 +9324,10 @@ public class Regression {
                             var14++;
                         }
                     case 12:
-                        var12 = "Linear regression:  Maximum Order Statistic Standard Gumbel (y = a.z where z=exp(-x)exp(-exp(-x))): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear regression:  Maximum Order Statistic Standard Gumbel (y = a.z where z=exp(-x)exp(-exp(-x))): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - best fit curve";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9337,10 +9341,10 @@ public class Regression {
                             var14++;
                         }
                     case 46:
-                        var12 = "Linear regression:  Fit to a constant (y = a): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear regression:  Fit to a constant (y = a): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - best fit curve";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9354,10 +9358,10 @@ public class Regression {
                             var14++;
                         }
                     case 47:
-                        var12 = "Linear regression  (y = fixed intercept + b.x): " + this.graphTitle;
-                        var13 = " points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear regression  (y = fixed intercept + b.x): " + this.graphTitle;
+                        graphTitle2 = " points - experimental values;   line - best fit curve";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9371,10 +9375,10 @@ public class Regression {
                             var14++;
                         }
                     case 48:
-                        var12 = "Linear (polynomial with degree = " + this.nParam + ") regression: " + this.graphTitle;
-                        var13 = "Fixed intercept;   points - experimental values;   line - best fit curve";
+                        graphTitle = "Linear (polynomial with degree = " + this.nParam + ") regression: " + this.graphTitle;
+                        graphTitle2 = "Fixed intercept;   points - experimental values;   line - best fit curve";
                         if (this.weightOpt) {
-                            var13 = var13 + ";   error bars - weighting factors";
+                            graphTitle2 = graphTitle2 + ";   error bars - weighting factors";
                         }
 
                         var14 = 0;
@@ -9396,32 +9400,34 @@ public class Regression {
                     default:
                         System.out.println("Regression.plotXY(linear): lastMethod, " + this.lastMethod + ", either not recognised or cannot be plotted in two dimensions");
                         System.out.println("No plot attempted");
-                        var2 = -1;
-                        return var2;
+                        status = -1;
+                        return status;
                 }
             }
 
-            PlotGraph var19 = new PlotGraph(var5);
+            graph = new PlotGraph(var5);
             if (this.plotWindowCloseChoice) {
-                var19.setCloseChoice(2);
+                graph.setCloseChoice(2);
             } else {
-                var19.setCloseChoice(1);
+                graph.setCloseChoice(1);
             }
 
-            var19.setGraphTitle(var12);
-            var19.setGraphTitle2(var13);
-            var19.setXaxisLegend(this.xLegend);
-            var19.setYaxisLegend(this.yLegend);
+            graph.setGraphTitle(graphTitle);
+            graph.setGraphTitle2(graphTitle2);
+            graph.setXaxisLegend(this.xLegend);
+            graph.setYaxisLegend(this.yLegend);
             int[] var18 = new int[]{1, 0};
-            var19.setPoint(var18);
+            graph.setPoint(var18);
             int[] var16 = new int[]{0, 3};
-            var19.setLine(var16);
+            graph.setLine(var16);
             if (this.weightOpt) {
-                var19.setErrorBars(0, this.weight);
+                graph.setErrorBars(0, this.weight);
             }
 
-            var19.plot();
-            return var2;
+            //Regression.plotXY()的最后执行处
+            graph.setBounds(0,0, graph.getGraphWidth(), graph.getGraphHeight());
+
+            return status;
         }
     }
 
@@ -9574,7 +9580,7 @@ public class Regression {
                     var25.setErrorBars(0, this.weight);
                 }
 
-                var25.plot();
+                var25.setFrame();
             }
 
             return var6;
@@ -9729,7 +9735,7 @@ public class Regression {
                     var25.setErrorBars(0, this.weight);
                 }
 
-                var25.plot();
+                var25.setFrame();
             }
         }
 

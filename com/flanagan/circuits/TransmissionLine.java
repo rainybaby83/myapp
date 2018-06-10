@@ -710,7 +710,7 @@ public class TransmissionLine {
         var7.setPoint(var6);
         var7.setXaxisLegend("distance / metres");
         var7.setYaxisLegend("Voltage / V and Current / A");
-        var7.plot();
+        var7.setFrame();
     }
 
     public TransmissionLine copy() {

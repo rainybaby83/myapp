@@ -225,7 +225,7 @@ public class PropIntDeriv extends BlackBox {
         var15.setXaxisUnitsName("s");
         var15.setYaxisLegend("Output");
         var15.setPoint(0);
-        var15.plot();
+        var15.setFrame();
     }
 
     public void stepInput(double var1) {
@@ -263,7 +263,7 @@ public class PropIntDeriv extends BlackBox {
             var13.setXaxisUnitsName("s");
             var13.setYaxisLegend("Output");
             var13.setPoint(0);
-            var13.plot();
+            var13.setFrame();
         }
 
     }

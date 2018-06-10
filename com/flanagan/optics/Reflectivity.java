@@ -1602,7 +1602,7 @@ public class Reflectivity {
     public void plotReflectivities(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             String var2 = " Reflectivities";
             String var3 = "Reflectivity";
@@ -1619,7 +1619,7 @@ public class Reflectivity {
     public void plotTransmissivities(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             String var2 = " Transmissivities";
             String var3 = "Transmissivity";
@@ -1636,7 +1636,7 @@ public class Reflectivity {
     public void plotPowerLosses(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             String var2 = " Power Losses in decibels relative to an incident power of 1 mW";
             String var3 = "Power Losses";
@@ -1653,7 +1653,7 @@ public class Reflectivity {
     public void plotTransmissionAngles(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             String var2 = " Transmission angles (degrees)";
             String var3 = "Transmission angle";
@@ -1670,7 +1670,7 @@ public class Reflectivity {
     public void plotAbsTEreflectionCoefficients(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.teFraction == 0.0D) {
                 System.out.println("No TE transmission coefficient plot displayed as no light in the TE mode");
@@ -1700,7 +1700,7 @@ public class Reflectivity {
     public void plotAbsTMreflectionCoefficients(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.tmFraction == 0.0D) {
                 System.out.println("No TM transmission coefficient plot displayed as no light in the TM mode");
@@ -1730,7 +1730,7 @@ public class Reflectivity {
     public void plotAbsTEtransmissionCoefficients(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.teFraction == 0.0D) {
                 System.out.println("No TE transmission coefficient plot displayed as no light in the TE mode");
@@ -1760,7 +1760,7 @@ public class Reflectivity {
     public void plotAbsTMtransmissionCoefficients(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.tmFraction == 0.0D) {
                 System.out.println("No TM transmission coefficient plot displayed as no light in the TM mode");
@@ -1801,7 +1801,7 @@ public class Reflectivity {
     public void plotEvanescentFields(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             String var2 = " Integrated Evanescent Field Intensities to a depth of " + this.fieldDistance + " metres";
             String var3 = "Evanescent Field intensity";
@@ -1818,7 +1818,7 @@ public class Reflectivity {
     public void plotPenetrationDepths(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             String var2 = " Evanescent Field Penetration Depths";
             String var3 = "Penetration Depth";
@@ -1835,7 +1835,7 @@ public class Reflectivity {
     public void plotTEreflectionPhaseShiftDeg(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.teFraction == 0.0D) {
                 System.out.println("No TE phase shift plot displayed as no light in the TE mode");
@@ -1857,7 +1857,7 @@ public class Reflectivity {
     public void plotTMreflectionPhaseShiftDeg(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.tmFraction == 0.0D) {
                 System.out.println("No TM phase shift plot displayed as no light in the TM mode");
@@ -1879,7 +1879,7 @@ public class Reflectivity {
     public void plotTEreflectionPhaseShiftRad(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.teFraction == 0.0D) {
                 System.out.println("No TE phase shift plot displayed as no light in the TE mode");
@@ -1901,7 +1901,7 @@ public class Reflectivity {
     public void plotTMreflectionPhaseShiftRad(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.tmFraction == 0.0D) {
                 System.out.println("No TM phase shift plot displayed as no light in the TM mode");
@@ -1923,7 +1923,7 @@ public class Reflectivity {
     public void plotTEtransmissionPhaseShiftDeg(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.teFraction == 0.0D) {
                 System.out.println("No TE phase shift plot displayed as no light in the TE mode");
@@ -1945,7 +1945,7 @@ public class Reflectivity {
     public void plotTMtransmissionPhaseShiftDeg(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.tmFraction == 0.0D) {
                 System.out.println("No TM phase shift plot displayed as no light in the TM mode");
@@ -1967,7 +1967,7 @@ public class Reflectivity {
     public void plotTEtransmissionPhaseShiftRad(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.teFraction == 0.0D) {
                 System.out.println("No TE phase shift plot displayed as no light in the TE mode");
@@ -1989,7 +1989,7 @@ public class Reflectivity {
     public void plotTMtransmissionPhaseShiftRad(String var1) {
         this.checkWhichCalculation();
         if (this.singleReflectCalculated) {
-            throw new IllegalArgumentException("Plot methods require more than one fillData point");
+            throw new IllegalArgumentException("Plot methods require more than one data point");
         } else {
             if (this.tmFraction == 0.0D) {
                 System.out.println("No TM phase shift plot displayed as no light in the TM mode");
@@ -2099,7 +2099,7 @@ public class Reflectivity {
 
         var18.setLine(3);
         var18.setPoint(var10);
-        var18.plot();
+        var18.setFrame();
     }
 
     public void checkWhichCalculation() {
@@ -2582,7 +2582,7 @@ public class Reflectivity {
     public void fitReflectivities(double[] var1, double[] var2) {
         this.numberOfDataPoints = var1.length;
         if (this.numberOfDataPoints != var2.length) {
-            throw new IllegalArgumentException("Number of fillData points, " + this.numberOfDataPoints + " is not equal to the number of errors (weights), " + var2.length + ".");
+            throw new IllegalArgumentException("Number of data points, " + this.numberOfDataPoints + " is not equal to the number of errors (weights), " + var2.length + ".");
         } else {
             if (this.incidentAngleSet) {
                 if (this.numberOfDataPoints != this.numberOfIncidentAngles) {
@@ -2640,7 +2640,7 @@ public class Reflectivity {
     public void fitTransmissivities(double[] var1, double[] var2) {
         this.numberOfDataPoints = var1.length;
         if (this.numberOfDataPoints != var2.length) {
-            throw new IllegalArgumentException("Number of fillData points, " + this.numberOfDataPoints + " is not equal to the number of errors (weights), " + var2.length + ".");
+            throw new IllegalArgumentException("Number of data points, " + this.numberOfDataPoints + " is not equal to the number of errors (weights), " + var2.length + ".");
         } else {
             if (this.incidentAngleSet) {
                 if (this.numberOfDataPoints != this.numberOfIncidentAngles) {
@@ -2715,7 +2715,7 @@ public class Reflectivity {
     public void fitEvanescentField(double[] var1, double[] var2, double var3) {
         this.numberOfDataPoints = var1.length;
         if (this.numberOfDataPoints != var2.length) {
-            throw new IllegalArgumentException("Number of fillData points, " + this.numberOfDataPoints + " is not equal to the number of errors (weights), " + var2.length + ".");
+            throw new IllegalArgumentException("Number of data points, " + this.numberOfDataPoints + " is not equal to the number of errors (weights), " + var2.length + ".");
         } else {
             if (this.incidentAngleSet) {
                 if (this.numberOfDataPoints != this.numberOfIncidentAngles) {
@@ -2785,7 +2785,7 @@ public class Reflectivity {
 
         this.degreesOfFreedom = this.numberOfDataPoints - this.numberOfEstimatedParameters;
         if (this.degreesOfFreedom < 1) {
-            throw new IllegalArgumentException("Number of parameters to be estimated, " + this.numberOfEstimatedParameters + ", is greater than or equal to the number of fillData points, " + this.numberOfDataPoints + ".");
+            throw new IllegalArgumentException("Number of parameters to be estimated, " + this.numberOfEstimatedParameters + ", is greater than or equal to the number of data points, " + this.numberOfDataPoints + ".");
         } else {
             double[] var5 = new double[this.numberOfEstimatedParameters];
             double[] var6 = new double[this.numberOfEstimatedParameters];
@@ -3005,6 +3005,6 @@ public class Reflectivity {
         var14.setPoint(var10);
         int[] var11 = new int[]{0, 3};
         var14.setLine(var11);
-        var14.plot();
+        var14.setFrame();
     }
 }

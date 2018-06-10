@@ -419,7 +419,7 @@ public class PCA extends Scores {
         var3.setYaxisLegend("Eigenvalues");
         var3.setLine(3);
         var3.setPoint(1);
-        var3.plot();
+        var3.setFrame();
     }
 
     public void screePlot() {
@@ -452,14 +452,14 @@ public class PCA extends Scores {
             var6.setGraphTitle("Principal Component Analysis Scree Plot with Parallel Analysis using uniform deviates (" + this.nMonteCarlo + " simulations)");
         }
 
-        var6.setGraphTitle2("Closed squares - fillData eigenvalues; open circles = Monte Carlo eigenvalue " + this.percentile + "% percentiles; error bars = standard deviations about the Monte carlo means (crosses)");
+        var6.setGraphTitle2("Closed squares - data eigenvalues; open circles = Monte Carlo eigenvalue " + this.percentile + "% percentiles; error bars = standard deviations about the Monte carlo means (crosses)");
         var6.setXaxisLegend("Component");
         var6.setYaxisLegend("Eigenvalue");
         int[] var4 = new int[]{3, 0, 3};
         var6.setLine(var4);
         int[] var5 = new int[]{5, 1, 7};
         var6.setPoint(var5);
-        var6.plot();
+        var6.setFrame();
     }
 
     public void setVarimaxTolerance(double var1) {
@@ -618,7 +618,7 @@ public class PCA extends Scores {
                     System.out.println("Tolerance = " + this.varimaxTolerance + ",     Comparison value = " + Math.abs(var32 - var32));
                     System.out.println("Current values returned");
                     if (super.sameCheck > 0) {
-                        System.out.println("Presence of identical element row/s and/or column/s in the fillData probably impeding convergence");
+                        System.out.println("Presence of identical element row/s and/or column/s in the data probably impeding convergence");
                         System.out.println("Returned values are likely to be correct");
                     }
                 }

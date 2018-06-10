@@ -1479,7 +1479,7 @@ public class BlackBox {
         var18.setYaxisUnitsName("dB");
         var18.setPoint(0);
         var18.setLine(3);
-        var18.plot();
+        var18.setFrame();
 
         for(int var17 = 0; var17 < var5; ++var17) {
             var14 = Math.pow(10.0D, var7[var17]);
@@ -1495,7 +1495,7 @@ public class BlackBox {
         var19.setYaxisUnitsName("degrees");
         var19.setPoint(0);
         var18.setLine(3);
-        var19.plot();
+        var19.setFrame();
     }
 
     public double getCurrentOutputT(double var1, double var3) {
@@ -1644,7 +1644,7 @@ public class BlackBox {
             var20.setYaxisLegend("Output");
             var20.setPoint(0);
             var20.setLine(3);
-            var20.plot();
+            var20.setFrame();
         } else {
             if (!this.padeAdded) {
                 this.transferPolesZeros();
@@ -1781,7 +1781,7 @@ public class BlackBox {
 
         var26.setXlowFac(0.0D);
         var26.setYlowFac(0.0D);
-        var26.plot();
+        var26.setFrame();
     }
 
     public static Complex timeTerm(double var0, Complex var2, Complex var3, Complex var4) {

@@ -305,8 +305,8 @@ public class PolylineSimplification {
             var4.setXaxisLegend("x-coordinate");
             var4.setYaxisLegend("y-coordinate");
             var4.setGraphTitle("Polyline Simplification: tolerance = " + this.tolerance);
-            var4.setGraphTitle2("circles = original fillData, squares = simplified curve");
-            var4.plot();
+            var4.setGraphTitle2("circles = original data, squares = simplified curve");
+            var4.setFrame();
         }
     }
 }

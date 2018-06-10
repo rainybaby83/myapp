@@ -278,9 +278,9 @@ public class CurveSmooth {
         this.nPoints = this.xData.length;
         int var1 = this.yData.length;
         if (var1 != this.nPoints) {
-            throw new IllegalArgumentException("The length of the x fillData array, " + this.nPoints + ", must be the same as the length of the y fillData array, " + var1);
+            throw new IllegalArgumentException("The length of the x data array, " + this.nPoints + ", must be the same as the length of the y data array, " + var1);
         } else if (var1 < 5) {
-            throw new IllegalArgumentException("There must be at least five fillData points");
+            throw new IllegalArgumentException("There must be at least five data points");
         } else {
             this.minima = new double[this.nMethods + 1][2][];
             this.maxima = new double[this.nMethods + 1][2][];
@@ -775,11 +775,11 @@ public class CurveSmooth {
         PlotGraph var13 = new PlotGraph(var1);
         var13.setPoint(var10);
         var13.setLine(var11);
-        var13.setGraphTitle("Original (circles) and smoothed (squares) fillData");
+        var13.setGraphTitle("Original (circles) and smoothed (squares) data");
         var13.setGraphTitle2(var2);
         var13.setXaxisLegend("x values");
         var13.setYaxisLegend("y values");
-        var13.plot();
+        var13.setFrame();
     }
 
     public double[] getSmoothedValues() {

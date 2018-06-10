@@ -81,7 +81,7 @@ public class PlanarWaveguide {
     public void enterTEmodeData(double var1, double var3, double var5) {
         if (this.setMeasurementsTE) {
             if (this.setErrorsTE) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var7 = this.numberOfTEmeasurements + 1;
@@ -116,7 +116,7 @@ public class PlanarWaveguide {
     public void enterTEmodeData(double var1, double var3, double var5, double var7) {
         if (this.setMeasurementsTE) {
             if (!this.setErrorsTE) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var9 = this.numberOfTEmeasurements + 1;
@@ -162,7 +162,7 @@ public class PlanarWaveguide {
                 int var7;
                 if (this.setMeasurementsTE) {
                     if (this.setErrorsTE) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var7 = this.numberOfTEmeasurements + var4;
@@ -216,7 +216,7 @@ public class PlanarWaveguide {
                 int var8;
                 if (this.setMeasurementsTE) {
                     if (!this.setErrorsTE) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var8 = this.numberOfTEmeasurements + var5;
@@ -261,7 +261,7 @@ public class PlanarWaveguide {
     public void enterTMmodeData(double var1, double var3, double var5) {
         if (this.setMeasurementsTM) {
             if (this.setErrorsTM) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var7 = this.numberOfTMmeasurements + 1;
@@ -296,7 +296,7 @@ public class PlanarWaveguide {
     public void enterTMmodeData(double var1, double var3, double var5, double var7) {
         if (this.setMeasurementsTM) {
             if (!this.setErrorsTM) {
-                throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
             }
 
             int var9 = this.numberOfTMmeasurements + 1;
@@ -342,7 +342,7 @@ public class PlanarWaveguide {
                 int var7;
                 if (this.setMeasurementsTM) {
                     if (this.setErrorsTM) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var7 = this.numberOfTMmeasurements + var4;
@@ -396,7 +396,7 @@ public class PlanarWaveguide {
                 int var8;
                 if (this.setMeasurementsTM) {
                     if (!this.setErrorsTM) {
-                        throw new IllegalArgumentException("All Entered fillData must either all have associated errors entered or all have no associated errors entered");
+                        throw new IllegalArgumentException("All Entered data must either all have associated errors entered or all have no associated errors entered");
                     }
 
                     var8 = this.numberOfTMmeasurements + var5;
@@ -508,7 +508,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTEmeasurements == 0) {
-            System.out.println("Method: getTEmodeCoreFilmRefractiveIndices - NO TE mode fillData entered - NO refractive indices returned");
+            System.out.println("Method: getTEmodeCoreFilmRefractiveIndices - NO TE mode data entered - NO refractive indices returned");
         }
 
         return this.coreFilmTEmodeRefractiveIndices;
@@ -520,7 +520,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTMmeasurements == 0) {
-            System.out.println("Method: getTMmodeCoreFilmRefractiveIndices - NO TM mode fillData entered - NO refractive indices returned");
+            System.out.println("Method: getTMmodeCoreFilmRefractiveIndices - NO TM mode data entered - NO refractive indices returned");
         }
 
         return this.coreFilmTMmodeRefractiveIndices;
@@ -532,7 +532,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTEmeasurements == 0) {
-            System.out.println("Method: getMeanTEmodeCoreFilmRefractiveIndices - NO TE mode fillData entered - NO refractive index returned");
+            System.out.println("Method: getMeanTEmodeCoreFilmRefractiveIndices - NO TE mode data entered - NO refractive index returned");
         }
 
         return this.meanTEmodeCoreFilmRefractiveIndex;
@@ -544,7 +544,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTMmeasurements == 0) {
-            System.out.println("Method: getMeanTMmodeCoreFilmRefractiveIndices - NO TM mode fillData entered - NO refractive index returned");
+            System.out.println("Method: getMeanTMmodeCoreFilmRefractiveIndices - NO TM mode data entered - NO refractive index returned");
         }
 
         return this.meanTMmodeCoreFilmRefractiveIndex;
@@ -572,7 +572,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTEmeasurements == 0) {
-            System.out.println("Method: getStandardDeviationTEmodeCoreFilmRefractiveIndex - NO TE mode fillData entered - NO standard deviation returned");
+            System.out.println("Method: getStandardDeviationTEmodeCoreFilmRefractiveIndex - NO TE mode data entered - NO standard deviation returned");
         }
 
         if (this.numberOfTEmeasurements == 1) {
@@ -588,7 +588,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTMmeasurements == 0) {
-            System.out.println("Method: getStandardDeviationTMmodeCoreFilmRefractiveIndex - NO TM mode fillData entered - NO standard deviation returned");
+            System.out.println("Method: getStandardDeviationTMmodeCoreFilmRefractiveIndex - NO TM mode data entered - NO standard deviation returned");
         }
 
         if (this.numberOfTMmeasurements == 1) {
@@ -613,7 +613,7 @@ public class PlanarWaveguide {
     public double[][] getTEmodeExperimentalEffectiveRefractiveIndices() {
         double[][] var1 = (double[][])null;
         if (this.numberOfTEmeasurements == 0) {
-            System.out.println("Method: getTEmodeExperimentalEffectiveRefractiveIndices - NO TE mode fillData entered - NO effective refractive indices returned");
+            System.out.println("Method: getTEmodeExperimentalEffectiveRefractiveIndices - NO TE mode data entered - NO effective refractive indices returned");
         } else {
             var1 = new double[2][this.numberOfTEmeasurements];
             var1[0] = this.thicknessesUsedTE;
@@ -629,7 +629,7 @@ public class PlanarWaveguide {
     public double[][] getTEmodeEffectiveRefractiveIndicesErrors() {
         double[][] var1 = (double[][])null;
         if (this.numberOfTEmeasurements == 0) {
-            System.out.println("Method: getTEmodeExperimentalEffectiveRefractiveIndices - NO TE mode fillData entered - NO errors returned");
+            System.out.println("Method: getTEmodeExperimentalEffectiveRefractiveIndices - NO TE mode data entered - NO errors returned");
         } else if (!this.setErrorsTE) {
             System.out.println("Method: getTEmodeExperimentalEffectiveRefractiveIndices - NO TE mode errors entered - NO errors returned");
         } else {
@@ -647,7 +647,7 @@ public class PlanarWaveguide {
     public double[][] getTMmodeExperimentalEffectiveRefractiveIndices() {
         double[][] var1 = (double[][])null;
         if (this.numberOfTMmeasurements == 0) {
-            System.out.println("Method: getTMmodeExperimentalEffectiveRefractiveIndices - NO TM mode fillData entered - NO effective refractive indices returned");
+            System.out.println("Method: getTMmodeExperimentalEffectiveRefractiveIndices - NO TM mode data entered - NO effective refractive indices returned");
         } else {
             var1 = new double[2][this.numberOfTMmeasurements];
             var1[0] = this.thicknessesUsedTM;
@@ -663,7 +663,7 @@ public class PlanarWaveguide {
     public double[][] getTMmodeEffectiveRefractiveIndicesErrors() {
         double[][] var1 = (double[][])null;
         if (this.numberOfTMmeasurements == 0) {
-            System.out.println("Method: getTMmodeExperimentalEffectiveRefractiveIndices - NO TM mode fillData entered - NO errors returned");
+            System.out.println("Method: getTMmodeExperimentalEffectiveRefractiveIndices - NO TM mode data entered - NO errors returned");
         } else if (!this.setErrorsTM) {
             System.out.println("Method: getTMmodeExperimentalEffectiveRefractiveIndices - NO TM mode errors entered - NO errors returned");
         } else {
@@ -684,7 +684,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTEmeasurements == 0) {
-            System.out.println("Method: getStandardDeviationTEmodeCoreFilmRefractiveIndices - NO TE mode fillData entered - NO effective refractive indices returned");
+            System.out.println("Method: getStandardDeviationTEmodeCoreFilmRefractiveIndices - NO TE mode data entered - NO effective refractive indices returned");
         }
 
         double[][] var1 = new double[2][this.numberOfTEmeasurements];
@@ -719,7 +719,7 @@ public class PlanarWaveguide {
         }
 
         if (this.numberOfTMmeasurements == 0) {
-            System.out.println("Method: getStandardDeviationTMmodeCoreFilmRefractiveIndices - NO TM mode fillData entered - NO effective refractive indices returned");
+            System.out.println("Method: getStandardDeviationTMmodeCoreFilmRefractiveIndices - NO TM mode data entered - NO effective refractive indices returned");
         }
 
         double[][] var1 = new double[2][this.numberOfTMmeasurements];
@@ -750,7 +750,7 @@ public class PlanarWaveguide {
 
     public void calcCoreFilmRefractiveIndices() {
         if (!this.setMeasurements) {
-            throw new IllegalArgumentException("Either no thickness, angle/effective refractive index, mode number fillData has been entered or a key subclass variable, e.g. coupling prism corner angle has not been entered");
+            throw new IllegalArgumentException("Either no thickness, angle/effective refractive index, mode number data has been entered or a key subclass variable, e.g. coupling prism corner angle has not been entered");
         } else if (!this.setWavelength) {
             throw new IllegalArgumentException("No wavelength has been entered");
         } else if (!this.setSubstrate) {
@@ -861,7 +861,7 @@ public class PlanarWaveguide {
 
             this.maximumTMmodeEffectiveRefractiveIndex = this.upperBound;
             if (this.numberOfMeasurements == 0) {
-                throw new IllegalArgumentException("All fillData points rejected as lying outside the physically meaningful bounds");
+                throw new IllegalArgumentException("All data points rejected as lying outside the physically meaningful bounds");
             } else {
                 if (this.fixedPrismToWaveguideGap) {
                     this.calcCoreFilmRefractiveIndicesFixedGap();
@@ -1159,7 +1159,7 @@ public class PlanarWaveguide {
         var10.setGraphTitle2(var8);
         var10.setXaxisLegend("Log10( Core Film Thickness / metres )");
         var10.setYaxisLegend("Effective Refractive Index (kz/ko)");
-        var10.plot();
+        var10.setFrame();
         return var9;
     }
 
@@ -1183,7 +1183,7 @@ public class PlanarWaveguide {
         var10.setGraphTitle2(var8);
         var10.setXaxisLegend("Log10( Core Film Thickness / metres )");
         var10.setYaxisLegend("Effective Refractive Index (kz/ko)");
-        var10.plot();
+        var10.setFrame();
         return var9;
     }
 
@@ -1413,12 +1413,12 @@ public class PlanarWaveguide {
         var34.setGraphTitle(var1);
         var34.setXaxisLegend("Log10( Core Film Thickness / metres )");
         var34.setYaxisLegend("Effective Refractive Index (kz/ko)");
-        var34.plot();
+        var34.setFrame();
     }
 
     public void calcSuperstrateRefractiveIndex() {
         if (!this.setMeasurements) {
-            throw new IllegalArgumentException("Either no thickness, angle/effective refractive index, mode number fillData has been entered or a key subclass variable, e.g. coupling prism corner angle has not been entered");
+            throw new IllegalArgumentException("Either no thickness, angle/effective refractive index, mode number data has been entered or a key subclass variable, e.g. coupling prism corner angle has not been entered");
         } else if (!this.setWavelength) {
             throw new IllegalArgumentException("No wavelength has been entered");
         } else if (!this.setSubstrate) {
@@ -1531,7 +1531,7 @@ public class PlanarWaveguide {
 
             this.minimumTMmodeEffectiveRefractiveIndex = this.upperBound;
             if (this.numberOfMeasurements == 0) {
-                throw new IllegalArgumentException("All fillData points rejected as lying outside the physically meaningful bounds");
+                throw new IllegalArgumentException("All data points rejected as lying outside the physically meaningful bounds");
             } else {
                 if (this.numberOfTEmeasurements > 0) {
                     this.calcTEmodeSuperstrateRefractiveIndices();

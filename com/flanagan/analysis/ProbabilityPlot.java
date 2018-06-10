@@ -1026,7 +1026,7 @@ public class ProbabilityPlot {
         this.lastMethod = 0;
         this.gaussianNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var2 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -1136,7 +1136,7 @@ public class ProbabilityPlot {
                 var22.setYaxisLegend("Ordered Data Values");
                 var22.setGraphTitle(this.titleStart + "Gaussian probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.gaussianLine[1], 4) + ", intercept = " + Fmath.truncate(this.gaussianLine[0], 4) + ",  R = " + Fmath.truncate(this.gaussianCorrCoeff, 4));
                 var22.setGraphTitle2("  mu = " + Fmath.truncate(this.gaussianParam[0], 4) + ", sigma = " + Fmath.truncate(this.gaussianParam[1], 4));
-                var22.plot();
+                var22.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -1353,7 +1353,7 @@ public class ProbabilityPlot {
         this.lastMethod = 14;
         this.gaussianStandardNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             this.gaussianStandardOrderMedians = Stat.gaussianOrderStatisticMedians(this.numberOfDataPoints);
             Regression var2 = new Regression(this.gaussianStandardOrderMedians, this.sortedData, this.sortedWeights);
@@ -1393,7 +1393,7 @@ public class ProbabilityPlot {
                 var7.setXaxisLegend("Standard Gaussian Order Statistic Medians");
                 var7.setYaxisLegend("Ordered Data Values");
                 var7.setGraphTitle("Standard Gaussian probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.gaussianStandardLine[1], 4) + ", intercept = " + Fmath.truncate(this.gaussianStandardLine[0], 4) + ",  R = " + Fmath.truncate(this.gaussianStandardCorrCoeff, 4));
-                var7.plot();
+                var7.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -1536,7 +1536,7 @@ public class ProbabilityPlot {
         this.lastMethod = 8;
         this.logisticNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -1611,7 +1611,7 @@ public class ProbabilityPlot {
                 var10.setYaxisLegend("Ordered Data Values");
                 var10.setGraphTitle("Logistic probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.logisticLine[1], 4) + ", intercept = " + Fmath.truncate(this.logisticLine[0], 4) + ",  R = " + Fmath.truncate(this.logisticCorrCoeff, 4));
                 var10.setGraphTitle2("  mu = " + Fmath.truncate(this.logisticParam[0], 4) + ", beta = " + Fmath.truncate(this.logisticParam[1], 4));
-                var10.plot();
+                var10.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -1731,7 +1731,7 @@ public class ProbabilityPlot {
         this.lastMethod = 1;
         this.weibullNumberOfParameters = 3;
         if (this.numberOfDataPoints < 4) {
-            throw new IllegalArgumentException("There must be at least four fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least four data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -1870,7 +1870,7 @@ public class ProbabilityPlot {
                 var21.setYaxisLegend("Ordered Data Values");
                 var21.setGraphTitle("Weibull probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.weibullLine[1], 4) + ", intercept = " + Fmath.truncate(this.weibullLine[0], 4) + ",  R = " + Fmath.truncate(this.weibullCorrCoeff, 4));
                 var21.setGraphTitle2("  mu = " + Fmath.truncate(this.weibullParam[0], 4) + ", sigma = " + Fmath.truncate(this.weibullParam[1], 4) + ", gamma = " + Fmath.truncate(this.weibullParam[2], 4));
-                var21.plot();
+                var21.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -2014,7 +2014,7 @@ public class ProbabilityPlot {
 
         this.weibullTwoParNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2128,7 +2128,7 @@ public class ProbabilityPlot {
                 var21.setYaxisLegend("Ordered Data Values");
                 var21.setGraphTitle("Two Parameter Weibull probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.weibullTwoParLine[1], 4) + ", intercept = " + Fmath.truncate(this.weibullTwoParLine[0], 4) + ",  R = " + Fmath.truncate(this.weibullTwoParCorrCoeff, 4));
                 var21.setGraphTitle2("  mu = 0, sigma = " + Fmath.truncate(this.weibullTwoParParam[0], 4) + ", gamma = " + Fmath.truncate(this.weibullTwoParParam[1], 4));
-                var21.plot();
+                var21.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -2251,7 +2251,7 @@ public class ProbabilityPlot {
 
         this.weibullStandardNumberOfParameters = 1;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2348,7 +2348,7 @@ public class ProbabilityPlot {
                 var21.setYaxisLegend("Ordered Data Values");
                 var21.setGraphTitle("Standard Weibull probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.weibullStandardLine[1], 4) + ", intercept = " + Fmath.truncate(this.weibullStandardLine[0], 4) + ",  R = " + Fmath.truncate(this.weibullStandardCorrCoeff, 4));
                 var21.setGraphTitle2("  mu = 0, sigma = 1, gamma = " + Fmath.truncate(this.weibullStandardParam[0], 4));
-                var21.plot();
+                var21.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -2455,7 +2455,7 @@ public class ProbabilityPlot {
         this.lastMethod = 2;
         this.exponentialNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2526,7 +2526,7 @@ public class ProbabilityPlot {
                 var10.setYaxisLegend("Ordered Data Values");
                 var10.setGraphTitle("Exponential probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.exponentialLine[1], 4) + ", intercept = " + Fmath.truncate(this.exponentialLine[0], 4) + ",  R = " + Fmath.truncate(this.exponentialCorrCoeff, 4));
                 var10.setGraphTitle2("  mu = " + Fmath.truncate(this.exponentialParam[0], 4) + ", sigma = " + Fmath.truncate(this.exponentialParam[1], 4));
-                var10.plot();
+                var10.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -2646,7 +2646,7 @@ public class ProbabilityPlot {
         this.lastMethod = 7;
         this.frechetNumberOfParameters = 3;
         if (this.numberOfDataPoints < 4) {
-            throw new IllegalArgumentException("There must be at least four fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least four data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -2778,7 +2778,7 @@ public class ProbabilityPlot {
                 var21.setYaxisLegend("Ordered Data Values");
                 var21.setGraphTitle("Frechet probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.frechetLine[1], 4) + ", intercept = " + Fmath.truncate(this.frechetLine[0], 4) + ",  R = " + Fmath.truncate(this.frechetCorrCoeff, 4));
                 var21.setGraphTitle2("  mu = " + Fmath.truncate(this.frechetParam[0], 4) + ", sigma = " + Fmath.truncate(this.frechetParam[1], 4) + ", gamma = " + Fmath.truncate(this.frechetParam[2], 4));
-                var21.plot();
+                var21.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -2917,7 +2917,7 @@ public class ProbabilityPlot {
         this.lastMethod = 16;
         this.frechetTwoParNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3024,7 +3024,7 @@ public class ProbabilityPlot {
                 var21.setYaxisLegend("Ordered Data Values");
                 var21.setGraphTitle("Two parameter Frechet probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.frechetTwoParLine[1], 4) + ", intercept = " + Fmath.truncate(this.frechetTwoParLine[0], 4) + ",  R = " + Fmath.truncate(this.frechetTwoParCorrCoeff, 4));
                 var21.setGraphTitle2("  sigma = " + Fmath.truncate(this.frechetTwoParParam[1], 4) + ", gamma = " + Fmath.truncate(this.frechetTwoParParam[2], 4));
-                var21.plot();
+                var21.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -3158,7 +3158,7 @@ public class ProbabilityPlot {
         this.lastMethod = 17;
         this.frechetStandardNumberOfParameters = 1;
         if (this.numberOfDataPoints < 2) {
-            throw new IllegalArgumentException("There must be at least two fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least two data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3250,7 +3250,7 @@ public class ProbabilityPlot {
                 var21.setYaxisLegend("Ordered Data Values");
                 var21.setGraphTitle("Standard Frechet probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.frechetStandardLine[1], 4) + ", intercept = " + Fmath.truncate(this.frechetStandardLine[0], 4) + ",  R = " + Fmath.truncate(this.frechetStandardCorrCoeff, 4));
                 var21.setGraphTitle2("  gamma = " + Fmath.truncate(this.frechetStandardParam[0], 4));
-                var21.plot();
+                var21.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -3385,7 +3385,7 @@ public class ProbabilityPlot {
         this.lastMethod = 5;
         this.gumbelMinNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3455,7 +3455,7 @@ public class ProbabilityPlot {
                 var10.setYaxisLegend("Ordered Data Values");
                 var10.setGraphTitle("Gumbel (minimum order statistic) probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.gumbelMinLine[1], 4) + ", intercept = " + Fmath.truncate(this.gumbelMinLine[0], 4) + ",  R = " + Fmath.truncate(this.gumbelMinCorrCoeff, 4));
                 var10.setGraphTitle2("  mu = " + Fmath.truncate(this.gumbelMinParam[0], 4) + ", sigma = " + Fmath.truncate(this.gumbelMinParam[1], 4));
-                var10.plot();
+                var10.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -3574,7 +3574,7 @@ public class ProbabilityPlot {
         this.lastMethod = 6;
         this.gumbelMaxNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3643,7 +3643,7 @@ public class ProbabilityPlot {
                 var10.setYaxisLegend("Ordered Data Values");
                 var10.setGraphTitle("Gumbel (maximum order statistic) probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.gumbelMaxLine[1], 4) + ", intercept = " + Fmath.truncate(this.gumbelMaxLine[0], 4) + ",  R = " + Fmath.truncate(this.gumbelMaxCorrCoeff, 4));
                 var10.setGraphTitle2("  mu = " + Fmath.truncate(this.gumbelMaxParam[0], 4) + ", sigma = " + Fmath.truncate(this.gumbelMaxParam[1], 4));
-                var10.plot();
+                var10.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -3761,7 +3761,7 @@ public class ProbabilityPlot {
         this.lastMethod = 3;
         this.rayleighNumberOfParameters = 1;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -3829,7 +3829,7 @@ public class ProbabilityPlot {
                 var10.setYaxisLegend("Ordered Data Values");
                 var10.setGraphTitle("Rayleigh probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.rayleighLine[1], 4) + ", intercept = " + Fmath.truncate(this.rayleighLine[0], 4) + ",  R = " + Fmath.truncate(this.rayleighCorrCoeff, 4));
                 var10.setGraphTitle2("  beta = " + Fmath.truncate(this.rayleighParam[0], 4));
-                var10.plot();
+                var10.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -3932,7 +3932,7 @@ public class ProbabilityPlot {
         this.lastMethod = 4;
         this.paretoNumberOfParameters = 2;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             Regression var1 = new Regression(this.sortedData, this.sortedData, this.sortedWeights);
             if (this.suppressErrorMessages) {
@@ -4005,7 +4005,7 @@ public class ProbabilityPlot {
                 var10.setYaxisLegend("Ordered Data Values");
                 var10.setGraphTitle("Pareto probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.paretoLine[1], 4) + ", intercept = " + Fmath.truncate(this.paretoLine[0], 4) + ",  R = " + Fmath.truncate(this.paretoCorrCoeff, 4));
                 var10.setGraphTitle2("  alpha = " + Fmath.truncate(this.paretoParam[0], 4) + ", beta = " + Fmath.truncate(this.paretoParam[1], 4));
-                var10.plot();
+                var10.setFrame();
                 this.probPlotDone = true;
             }
 
@@ -4115,7 +4115,7 @@ public class ProbabilityPlot {
         this.fDistributionNu2 = var2;
         this.fDistributionNumberOfParameters = 0;
         if (this.numberOfDataPoints < 3) {
-            throw new IllegalArgumentException("There must be at least three fillData points - preferably considerably more");
+            throw new IllegalArgumentException("There must be at least three data points - preferably considerably more");
         } else {
             this.fDistributionOrderMedians = Stat.fDistributionOrderStatisticMedians(var1, var2, this.numberOfDataPoints);
             Regression var3 = new Regression(this.fDistributionOrderMedians, this.sortedData, this.sortedWeights);
@@ -4157,7 +4157,7 @@ public class ProbabilityPlot {
                 var8.setYaxisLegend("Ordered Data Values");
                 var8.setGraphTitle("F-distribution probability plot, " + this.title + ":   gradient = " + Fmath.truncate(this.fDistributionLine[1], 4) + ", intercept = " + Fmath.truncate(this.fDistributionLine[0], 4) + ",  R = " + Fmath.truncate(this.fDistributionCorrCoeff, 4));
                 var8.setGraphTitle2("  nu1 = " + var1 + ", nu2 = " + var2);
-                var8.plot();
+                var8.setFrame();
                 this.probPlotDone = true;
             }
 

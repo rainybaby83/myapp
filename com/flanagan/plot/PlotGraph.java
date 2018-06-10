@@ -13,14 +13,15 @@ import javax.swing.*;
 
 public class PlotGraph extends Plot implements Serializable {
     protected static final long serialVersionUID = 1L;
-    protected int graphWidth = 800;
-    protected int graphHeight = 600;
+    protected int graphWidth = 600;
+    protected int graphHeight = 400;
     protected int closeChoice = 1;
-    public JFrame window = new JFrame("Michael T Flanagan's plotting program - PlotGraph");
+    protected JFrame window = new JFrame("");
 
 
-    public PlotGraph(double[][] var1) {
-        super(var1);
+
+    public PlotGraph(double[][] datas) {
+        super(datas);
     }
 
     public PlotGraph(double[] var1, double[] var2) {
@@ -29,16 +30,16 @@ public class PlotGraph extends Plot implements Serializable {
 
     public void rescaleY(double var1) {
         this.graphHeight = (int)Math.round((double)this.graphHeight * var1);
-        super.yLen = (int)Math.round((double)super.yLen * var1);
+        super.yLength = (int)Math.round((double)super.yLength * var1);
         super.yTop = (int)Math.round((double)super.yTop * var1);
-        super.yBot = super.yTop + super.yLen;
+        super.yBottom = super.yTop + super.yLength;
     }
 
     public void rescaleX(double var1) {
         this.graphWidth = (int)Math.round((double)this.graphWidth * var1);
-        super.xLen = (int)Math.round((double)super.xLen * var1);
-        super.xBot = (int)Math.round((double)super.xBot * var1);
-        super.xTop = super.xBot + super.xLen;
+        super.xLength = (int)Math.round((double)super.xLength * var1);
+        super.xBottom = (int)Math.round((double)super.xBottom * var1);
+        super.xTop = super.xBottom + super.xLength;
     }
 
     public int getGraphWidth() {
@@ -76,7 +77,9 @@ public class PlotGraph extends Plot implements Serializable {
         this.graph(var1);
     }
 
-    public void plot() {
+
+
+    public void setFrame() {
         this.setSize(this.graphWidth, this.graphHeight);
         this.window.getContentPane().setBackground(Color.white);
         if (this.closeChoice == 1) {

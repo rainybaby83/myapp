@@ -50,7 +50,7 @@ public class RefractiveIndex {
             var12.reset(var8, imagPlusMinus * var10);
             return var12;
         } else {
-            throw new IllegalArgumentException("Wavelength is outside the limits (187.86nm - 1937.2nm) of the tabulated fillData");
+            throw new IllegalArgumentException("Wavelength is outside the limits (187.86nm - 1937.2nm) of the tabulated data");
         }
     }
 
@@ -68,7 +68,7 @@ public class RefractiveIndex {
             var12.reset(var8, imagPlusMinus * var10);
             return var12;
         } else {
-            throw new IllegalArgumentException("Wavelength is outside the limits (187.86nm - 1937.2nm) of the tabulated fillData");
+            throw new IllegalArgumentException("Wavelength is outside the limits (187.86nm - 1937.2nm) of the tabulated data");
         }
     }
 
@@ -84,7 +84,7 @@ public class RefractiveIndex {
             var10 = CubicSpline.interpolate(var0, var2, var3, var4);
         } else {
             System.out.println("Wavelength passed (" + var0 * 1.0E7D + "nm) to RefractiveIndex.quartz() is outside");
-            System.out.println("the experimental fillData limits (185.0 nm - 656.0 nm).   Extrapolation used");
+            System.out.println("the experimental data limits (185.0 nm - 656.0 nm).   Extrapolation used");
             System.out.println("the Caunchy equation which may not be valid at the wavelength requested,");
             System.out.println(" especially if the wavelength is within an absorption band");
             var10 = 1.0D + var5 * (1.0D + var7 / Math.pow(var0, 2.0D));
@@ -105,7 +105,7 @@ public class RefractiveIndex {
             var10 = CubicSpline.interpolate(var0, var2, var3, var4);
         } else {
             System.out.println("Wavelength passed (" + var0 * 1.0E7D + "nm) to RefractiveIndex.crownGlass() is outside");
-            System.out.println("the experimental fillData limits (365.02 nm - 1014.0 nm).   Extrapolation used");
+            System.out.println("the experimental data limits (365.02 nm - 1014.0 nm).   Extrapolation used");
             System.out.println("the Caunchy equation which may not be valid at the wavelength requested,");
             System.out.println(" especially if the wavelength is within an absorption band");
             var10 = 1.0D + var5 * (1.0D + var7 / Math.pow(var0, 2.0D));
@@ -126,7 +126,7 @@ public class RefractiveIndex {
             var10 = CubicSpline.interpolate(var0, var2, var3, var4);
         } else {
             System.out.println("Wavelength passed (" + var0 * 1.0E7D + "nm) to RefractiveIndex.floatGlass() is outside");
-            System.out.println("the experimental fillData limits (543.5 nm - 632.8 nm).   Extrapolation used");
+            System.out.println("the experimental data limits (543.5 nm - 632.8 nm).   Extrapolation used");
             System.out.println("the Caunchy equation which may not be valid at the wavelength requested,");
             System.out.println(" especially if the wavelength is within an absorption band");
             var10 = 1.0D + var5 * (1.0D + var7 / Math.pow(var0, 2.0D));
@@ -147,7 +147,7 @@ public class RefractiveIndex {
             var10 = CubicSpline.interpolate(var0, var2, var3, var4);
         } else {
             System.out.println("Wavelength passed (" + var0 * 1.0E7D + "nm) to RefractiveIndex.microSlideGlass() is outside");
-            System.out.println("the experimental fillData limits (543.5 nm - 632.8 nm).   Extrapolation used");
+            System.out.println("the experimental data limits (543.5 nm - 632.8 nm).   Extrapolation used");
             System.out.println("the Caunchy equation which may not be valid at the wavelength requested,");
             System.out.println(" especially if the wavelength is within an absorption band");
             var10 = 1.0D + var5 * (1.0D + var7 / Math.pow(var0, 2.0D));
@@ -168,7 +168,7 @@ public class RefractiveIndex {
             var10 = CubicSpline.interpolate(var0, var2, var3, var4);
         } else {
             System.out.println("Wavelength passed (" + var0 * 1.0E7D + "nm) to RefrIndex.polymethacrylate() is outside");
-            System.out.println("the experimental fillData limits (435.8 nm - 589.3 nm).   Extrapolation used");
+            System.out.println("the experimental data limits (435.8 nm - 589.3 nm).   Extrapolation used");
             System.out.println("the Caunchy equation which may not be valid at the wavelength requested,");
             System.out.println(" especially if the wavelength is within an absorption band");
             var10 = 1.0D + var5 * (1.0D + var7 / Math.pow(var0, 2.0D));
@@ -183,7 +183,7 @@ public class RefractiveIndex {
         var0 *= 100.0D;
         if (var0 < 2.498E-5D || var0 > 7.594E-5D) {
             System.out.println("Wavelength passed (" + var0 * 1.0E7D + "nm) to RefractiveIndex.air() is outside");
-            System.out.println("the experimental fillData limits (249.8 nm - 759.4 nm).   Extrapolation using");
+            System.out.println("the experimental data limits (249.8 nm - 759.4 nm).   Extrapolation using");
             System.out.println("the Caunchy equation may not be valid at the wavelength requested,");
             System.out.println(" especially if the wavelength is within an absorption band");
         }
@@ -214,10 +214,10 @@ public class RefractiveIndex {
                 double var16 = var18.interpolate(var0);
                 return var16;
             } else {
-                throw new IllegalArgumentException("Temperature " + var2 + " is out of experimental fillData bounds; " + var5[0] + " to " + var5[var14 - 1]);
+                throw new IllegalArgumentException("Temperature " + var2 + " is out of experimental data bounds; " + var5[0] + " to " + var5[var14 - 1]);
             }
         } else {
-            throw new IllegalArgumentException("Wavelength " + var0 + " is out of experimental fillData bounds: " + var4[0] + " to " + var4[var13 - 1]);
+            throw new IllegalArgumentException("Wavelength " + var0 + " is out of experimental data bounds: " + var4[0] + " to " + var4[var13 - 1]);
         }
     }
 
@@ -283,13 +283,13 @@ public class RefractiveIndex {
                     var46 = Math.sqrt(var38);
                     return var46;
                 } else {
-                    throw new IllegalArgumentException("Concentration" + var54 + " is outside the experimental fillData limits");
+                    throw new IllegalArgumentException("Concentration" + var54 + " is outside the experimental data limits");
                 }
             } else {
-                throw new IllegalArgumentException("Temperature " + var4 + " is outside the experimental fillData limits (0 C - 100 C)");
+                throw new IllegalArgumentException("Temperature " + var4 + " is outside the experimental data limits (0 C - 100 C)");
             }
         } else {
-            throw new IllegalArgumentException("Wavelength outside the experimental fillData limits (404.6nm - 706.52nm)");
+            throw new IllegalArgumentException("Wavelength outside the experimental data limits (404.6nm - 706.52nm)");
         }
     }
 

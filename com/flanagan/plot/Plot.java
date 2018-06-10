@@ -8,10 +8,9 @@ package com.flanagan.plot;
 import com.flanagan.interpolation.CubicSpline;
 import com.flanagan.math.ArrayMaths;
 import com.flanagan.math.Fmath;
-import java.awt.Canvas;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.Serializable;
 
 public class Plot extends Canvas implements Serializable {
@@ -33,12 +32,12 @@ public class Plot extends Canvas implements Serializable {
     protected boolean[] minMaxOpt = null;
     protected boolean[] trimOpt = null;
     protected int fontSize = 14;
-    protected int xLen = 625;
-    protected int yLen = 375;
-    protected int xBot = 100;
+    protected int xLength = 500;
+    protected int yLength = 300;
+    protected int xBottom = 50;
     protected int xTop;
-    protected int yTop;
-    protected int yBot;
+    protected int yTop = 10;
+    protected int yBottom;
     protected double xLow;
     protected double xHigh;
     protected double yLow;
@@ -75,9 +74,8 @@ public class Plot extends Canvas implements Serializable {
     protected static double dataFill = 0.0D / 0.0;
 
     public Plot(double[][] var1) {
-        this.xTop = this.xBot + this.xLen;
-        this.yTop = 110;
-        this.yBot = this.yTop + this.yLen;
+        this.xTop = this.xBottom + this.xLength;
+        this.yBottom = this.yTop + this.yLength;
         this.xLow = 0.0D;
         this.xHigh = 0.0D;
         this.yLow = 0.0D;
@@ -112,12 +110,12 @@ public class Plot extends Canvas implements Serializable {
         this.yAxisChar = new String[50];
         this.axisTicks = new int[50];
         this.initialise(var1);
+        this.setBackground(Color.white);
     }
 
     public Plot(double[] var1, double[] var2) {
-        this.xTop = this.xBot + this.xLen;
-        this.yTop = 110;
-        this.yBot = this.yTop + this.yLen;
+        this.xTop = this.xBottom + this.xLength;
+        this.yBottom = this.yTop + this.yLength;
         this.xLow = 0.0D;
         this.xHigh = 0.0D;
         this.yLow = 0.0D;
@@ -154,7 +152,7 @@ public class Plot extends Canvas implements Serializable {
         int var3 = var1.length;
         int var4 = var2.length;
         if (var3 != var4) {
-            throw new IllegalArgumentException("x-fillData length is not equal to the y-fillData length");
+            throw new IllegalArgumentException("x-data length is not equal to the y-data length");
         } else {
             double[][] var5 = new double[2][var3];
 
@@ -164,6 +162,7 @@ public class Plot extends Canvas implements Serializable {
             }
 
             this.initialise(var5);
+            this.setBackground(Color.white);
         }
     }
 
@@ -364,9 +363,9 @@ public class Plot extends Canvas implements Serializable {
                 datas[i][j] = dataFill;
             }
         }
-
         return datas;
     }
+
 
     public static void setDataFillValue(double var0) {
         dataFill = var0;
@@ -403,15 +402,15 @@ public class Plot extends Canvas implements Serializable {
     }
 
     public int getXaxisLen() {
-        return this.xLen;
+        return this.xLength;
     }
 
     public int getYaxisLen() {
-        return this.yLen;
+        return this.yLength;
     }
 
     public int getXlow() {
-        return this.xBot;
+        return this.xBottom;
     }
 
     public int getYhigh() {
@@ -467,17 +466,17 @@ public class Plot extends Canvas implements Serializable {
     }
 
     public void setXaxisLen(int var1) {
-        this.xLen = var1;
+        this.xLength = var1;
         this.update();
     }
 
     public void setYaxisLen(int var1) {
-        this.yLen = var1;
+        this.yLength = var1;
         this.update();
     }
 
     public void setXlow(int var1) {
-        this.xBot = var1;
+        this.xBottom = var1;
         this.update();
     }
 
@@ -516,8 +515,8 @@ public class Plot extends Canvas implements Serializable {
     }
 
     protected void update() {
-        this.xTop = this.xBot + this.xLen;
-        this.yBot = this.yTop + this.yLen;
+        this.xTop = this.xBottom + this.xLength;
+        this.yBottom = this.yTop + this.yLength;
     }
 
     public void setLine(int[] var1) {
@@ -1245,7 +1244,7 @@ public class Plot extends Canvas implements Serializable {
     public boolean printCheck(boolean var1, int var2, int var3, int var4, int var5) {
         boolean var6 = true;
         if (var1) {
-            if (var2 < this.xBot) {
+            if (var2 < this.xBottom) {
                 var6 = false;
             }
 
@@ -1253,7 +1252,7 @@ public class Plot extends Canvas implements Serializable {
                 var6 = false;
             }
 
-            if (var3 < this.xBot) {
+            if (var3 < this.xBottom) {
                 var6 = false;
             }
 
@@ -1261,7 +1260,7 @@ public class Plot extends Canvas implements Serializable {
                 var6 = false;
             }
 
-            if (var4 > this.yBot) {
+            if (var4 > this.yBottom) {
                 var6 = false;
             }
 
@@ -1269,7 +1268,7 @@ public class Plot extends Canvas implements Serializable {
                 var6 = false;
             }
 
-            if (var5 > this.yBot) {
+            if (var5 > this.yBottom) {
                 var6 = false;
             }
 
@@ -1281,9 +1280,9 @@ public class Plot extends Canvas implements Serializable {
         return var6;
     }
 
-    public void graph(Graphics var1) {
-        var1.setFont(new Font("serif", 0, this.fontSize));
-        FontMetrics var2 = var1.getFontMetrics();
+    public void graph(Graphics graphics) {
+        graphics.setFont(new Font("serif", 0, this.fontSize));
+        FontMetrics var2 = graphics.getFontMetrics();
         this.axesScaleOffset();
         String var3 = offsetString(this.xOffset);
         String var4 = offsetString(this.yOffset);
@@ -1336,115 +1335,119 @@ public class Plot extends Canvas implements Serializable {
             }
         }
 
-        double var18 = (double)(this.xTop - this.xBot);
-        double var20 = (double)(this.yBot - this.yTop);
+        double var18 = (double)(this.xTop - this.xBottom);
+        double var20 = (double)(this.yBottom - this.yTop);
         String var22 = " + ";
         String var23 = " - ";
         String var24 = var23;
-        var1.drawString(this.graphTitle + " ", 15, 15);
-        var1.drawString(this.graphTitle2 + " ", 15, 35);
-        if (this.xOffset < 0.0D) {
-            var24 = var22;
-            this.xOffset = -this.xOffset;
-        }
-
-        boolean var25 = false;
-        String var26 = "";
-        String var27 = "";
-        String var28 = "";
-        String var29 = "";
-        int var66;
-        if (this.xFac == 0 && this.xOffset == 0.0D) {
-            var1.drawString(this.xAxisLegend + var12 + this.xAxisUnits + var13, this.xBot - 4, this.yBot + 32);
-        } else if (this.xOffset == 0.0D) {
-            var26 = this.xAxisLegend + var12 + this.xAxisUnits + var14;
-            var66 = var2.stringWidth(var26);
-            var1.drawString(var26, this.xBot - 4, this.yBot + 42);
-            var28 = String.valueOf(-this.xFac - 1);
-            var1.drawString(var28, this.xBot - 4 + var66 + 1, this.yBot + 32);
-            var66 += var2.stringWidth(var28);
-            var1.drawString(var13, this.xBot - 4 + var66 + 1, this.yBot + 42);
-        } else if (this.xFac == 0) {
-            var1.drawString(this.xAxisLegend + var24 + var3 + var12 + this.xAxisUnits + var13, this.xBot - 4, this.yBot + 30);
-        } else {
-            var26 = this.xAxisLegend + var24 + var3 + var12 + this.xAxisUnits + var14;
-            var66 = var2.stringWidth(var26);
-            var1.drawString(var26, this.xBot - 4, this.yBot + 37);
-            var28 = String.valueOf(-this.xFac - 1);
-            var1.drawString(var28, this.xBot - 4 + var66 + 1, this.yBot + 32);
-            var66 += var2.stringWidth(var28);
-            var1.drawString(var13, this.xBot - 4 + var66 + 1, this.yBot + 37);
-        }
-
-        var24 = var23;
-        if (this.yOffset < 0.0D) {
-            var24 = var22;
-            this.yOffset = -this.yOffset;
-        }
-
-        if (this.yFac == 0 && this.yOffset == 0.0D) {
-            var1.drawString(this.yAxisLegend + " ", 15, this.yTop - 25);
-            var1.drawString(var15 + this.yAxisUnits + var16, 15, this.yTop - 10);
-        } else if (this.yOffset == 0.0D) {
-            var1.drawString(this.yAxisLegend, 15, this.yTop - 35);
-            var28 = var15 + this.yAxisUnits + var17;
-            var1.drawString(var28, 15, this.yTop - 15);
-            var66 = var2.stringWidth(var28);
-            var29 = String.valueOf(-this.yFac - 1);
-            var1.drawString(var29, 15 + var66 + 1, this.yTop - 20);
-            var66 += var2.stringWidth(var29);
-            var1.drawString(var16, 15 + var66 + 1, this.yTop - 15);
-        } else if (this.yFac == 0) {
-            var1.drawString(this.yAxisLegend + var24 + var4, 15, this.yTop - 25);
-            var1.drawString(var15 + this.yAxisUnits + var16, 15, this.yTop - 10);
-        } else {
-            var27 = this.yAxisLegend + var24 + var4;
-            var1.drawString(var27, 15, this.yTop - 35);
-            var28 = var15 + this.yAxisUnits + var17;
-            var1.drawString(var28, 15, this.yTop - 15);
-            var66 = var2.stringWidth(var28);
-            var29 = String.valueOf(-this.yFac - 1);
-            var1.drawString(var29, 15 + var66 + 1, this.yTop - 20);
-            var66 += var2.stringWidth(var29);
-            var1.drawString(var16, 15 + var66 + 1, this.yTop - 15);
-        }
-
-        boolean var30 = false;
-        boolean var31 = false;
-        boolean var32 = false;
-        boolean var33 = false;
+//        graphics.drawString(this.graphTitle + " ", 15, 15);
+//        graphics.drawString(this.graphTitle2 + " ", 15, 35);
+//        if (this.xOffset < 0.0D) {
+//            var24 = var22;
+//            this.xOffset = -this.xOffset;
+//        }
+//
+//        boolean var25 = false;
+//        String var26 = "";
+//        String var27 = "";
+//        String var28 = "";
+//        String var29 = "";
+//        int var66;
+//        //画X轴图例
+//        if (this.xFac == 0 && this.xOffset == 0.0D) {
+//            graphics.drawString(this.xAxisLegend + var12 + this.xAxisUnits + var13, xBottom - 4, this.yBottom + 32);
+//        } else if (this.xOffset == 0.0D) {
+//            var26 = this.xAxisLegend + var12 + this.xAxisUnits + var14;
+//            var66 = var2.stringWidth(var26);
+//            graphics.drawString(var26, this.xBottom - 4, this.yBottom + 42);
+//            var28 = String.valueOf(-this.xFac - 1);
+//            graphics.drawString(var28, this.xBottom - 4 + var66 + 1, this.yBottom + 32);
+//            var66 += var2.stringWidth(var28);
+//            graphics.drawString(var13, this.xBottom - 4 + var66 + 1, this.yBottom + 42);
+//        } else if (this.xFac == 0) {
+//            graphics.drawString(this.xAxisLegend + var24 + var3 + var12 + this.xAxisUnits + var13, this.xBottom - 4, this.yBottom + 30);
+//        } else {
+//            var26 = this.xAxisLegend + var24 + var3 + var12 + this.xAxisUnits + var14;
+//            var66 = var2.stringWidth(var26);
+//            graphics.drawString(var26, this.xBottom - 4, this.yBottom + 37);
+//            var28 = String.valueOf(-this.xFac - 1);
+//            graphics.drawString(var28, this.xBottom - 4 + var66 + 1, this.yBottom + 32);
+//            var66 += var2.stringWidth(var28);
+//            graphics.drawString(var13, this.xBottom - 4 + var66 + 1, this.yBottom + 37);
+//        }
+//
+//        var24 = var23;
+//        if (this.yOffset < 0.0D) {
+//            var24 = var22;
+//            this.yOffset = -this.yOffset;
+//        }
+//
+//        //画Y轴图例
+//        if (this.yFac == 0 && this.yOffset == 0.0D) {
+//            graphics.drawString(this.yAxisLegend + " ", 15, this.yTop - 25);
+//            graphics.drawString(var15 + this.yAxisUnits + var16, 15, this.yTop - 10);
+//        } else if (this.yOffset == 0.0D) {
+//            graphics.drawString(this.yAxisLegend, 15, this.yTop - 35);
+//            var28 = var15 + this.yAxisUnits + var17;
+//            graphics.drawString(var28, 15, this.yTop - 15);
+//            var66 = var2.stringWidth(var28);
+//            var29 = String.valueOf(-this.yFac - 1);
+//            graphics.drawString(var29, 15 + var66 + 1, this.yTop - 20);
+//            var66 += var2.stringWidth(var29);
+//            graphics.drawString(var16, 15 + var66 + 1, this.yTop - 15);
+//        } else if (this.yFac == 0) {
+//            graphics.drawString(this.yAxisLegend + var24 + var4, 15, this.yTop - 25);
+//            graphics.drawString(var15 + this.yAxisUnits + var16, 15, this.yTop - 10);
+//        } else {
+//            var27 = this.yAxisLegend + var24 + var4;
+//            graphics.drawString(var27, 15, this.yTop - 35);
+//            var28 = var15 + this.yAxisUnits + var17;
+//            graphics.drawString(var28, 15, this.yTop - 15);
+//            var66 = var2.stringWidth(var28);
+//            var29 = String.valueOf(-this.yFac - 1);
+//            graphics.drawString(var29, 15 + var66 + 1, this.yTop - 20);
+//            var66 += var2.stringWidth(var29);
+//            graphics.drawString(var16, 15 + var66 + 1, this.yTop - 15);
+//        }
+//
+//        boolean var30 = false;
+//        boolean var31 = false;
+//        boolean var32 = false;
+//        boolean var33 = false;
         double var34 = 0.0D;
         double var36 = this.xHigh - this.xLow;
         double var38 = this.yHigh - this.yLow;
-        var1.drawLine(this.xBot, this.yBot, this.xTop, this.yBot);
-        var1.drawLine(this.xBot, this.yTop, this.xTop, this.yTop);
-        var1.drawLine(this.xBot, this.yBot, this.xBot, this.yTop);
-        var1.drawLine(this.xTop, this.yBot, this.xTop, this.yTop);
+
+        //画4条边界
+        graphics.drawLine(this.xBottom, this.yBottom, this.xTop, this.yBottom);
+        graphics.drawLine(this.xBottom, this.yTop, this.xTop, this.yTop);
+        graphics.drawLine(this.xBottom, this.yBottom, this.xBottom, this.yTop);
+        graphics.drawLine(this.xTop, this.yBottom, this.xTop, this.yTop);
         byte var67;
         int var68;
         int var69;
         int var70;
         if (this.xZero) {
             var67 = 8;
-            var70 = this.xBot + (int)((0.0D - this.xLow) / var36 * var18);
-            var1.drawLine(var70, this.yTop, var70, this.yTop + 8);
-            var1.drawLine(var70, this.yBot, var70, this.yBot - 8);
+            var70 = this.xBottom + (int)((0.0D - this.xLow) / var36 * var18);
+            graphics.drawLine(var70, this.yTop, var70, this.yTop + 8);
+            graphics.drawLine(var70, this.yBottom, var70, this.yBottom - 8);
 
-            for(var68 = this.yTop; var68 + var67 < this.yBot; var68 = var69 + var67) {
+            for(var68 = this.yTop; var68 + var67 < this.yBottom; var68 = var69 + var67) {
                 var69 = var68 + var67;
-                var1.drawLine(var70, var68, var70, var69);
+                graphics.drawLine(var70, var68, var70, var69);
             }
         }
 
         if (this.yZero) {
             var67 = 8;
-            var70 = this.yBot - (int)((0.0D - this.yLow) / var38 * var20);
-            var1.drawLine(this.xBot, var70, this.xBot + 8, var70);
-            var1.drawLine(this.xTop, var70, this.xTop - 8, var70);
+            var70 = this.yBottom - (int)((0.0D - this.yLow) / var38 * var20);
+            graphics.drawLine(this.xBottom, var70, this.xBottom + 8, var70);
+            graphics.drawLine(this.xTop, var70, this.xTop - 8, var70);
 
-            for(var68 = this.xBot; var68 + var67 < this.xTop; var68 = var69 + var67) {
+            for(var68 = this.xBottom; var68 + var67 < this.xTop; var68 = var69 + var67) {
                 var69 = var68 + var67;
-                var1.drawLine(var68, var70, var69, var70);
+                graphics.drawLine(var68, var70, var69, var70);
             }
         }
 
@@ -1452,10 +1455,10 @@ public class Plot extends Canvas implements Serializable {
 
         int var41;
         for(var41 = 0; var41 < this.xTicks; ++var41) {
-            int var71 = this.xBot + (int)((this.xAxisNo[var41] - this.xLow) / var36 * var18);
-            var1.drawLine(var71, this.yBot, var71, this.yBot - 8);
-            var1.drawLine(var71, this.yTop, var71, this.yTop + 8);
-            var1.drawString(this.xAxisChar[var41] + " ", var71 - 4, this.yBot + 18);
+            int var71 = this.xBottom + (int)((this.xAxisNo[var41] - this.xLow) / var36 * var18);
+            graphics.drawLine(var71, this.yBottom, var71, this.yBottom - 8);
+            graphics.drawLine(var71, this.yTop, var71, this.yTop + 8);
+            graphics.drawString(this.xAxisChar[var41] + " ", var71 - 4, this.yBottom + 18);
         }
 
         boolean var72 = false;
@@ -1469,15 +1472,15 @@ public class Plot extends Canvas implements Serializable {
         }
 
         var43 = (var42 - 3) * 5;
-        double var44 = (double)(-this.yTop + this.yBot) / (double)(this.yTicks - 1);
+        double var44 = (double)(-this.yTop + this.yBottom) / (double)(this.yTicks - 1);
 
         int var46;
         for(var46 = 0; var46 < this.yTicks; ++var46) {
-            var41 = this.yBot - (int)Math.round((double)var46 * var44);
-            var41 = this.yBot - (int)((this.yAxisNo[var46] - this.yLow) / var38 * var20);
-            var1.drawLine(this.xBot, var41, this.xBot + 8, var41);
-            var1.drawLine(this.xTop, var41, this.xTop - 8, var41);
-            var1.drawString(this.yAxisChar[var46] + " ", this.xBot - 30 - var43, var41 + 4);
+            var41 = this.yBottom - (int)Math.round((double)var46 * var44);
+            var41 = this.yBottom - (int)((this.yAxisNo[var46] - this.yLow) / var38 * var20);
+            graphics.drawLine(this.xBottom, var41, this.xBottom + 8, var41);
+            graphics.drawLine(this.xTop, var41, this.xTop - 8, var41);
+            graphics.drawString(this.yAxisChar[var46] + " ", this.xBottom - 30 - var43, var41 + 4);
         }
 
         var46 = 0;
@@ -1528,12 +1531,12 @@ public class Plot extends Canvas implements Serializable {
 
                 var64.resetData(var62, var63);
                 var64.calcDeriv();
-                var76 = this.xBot + (int)((var62[0] - this.xLow) / var36 * var18);
-                var78 = this.yBot - (int)((var63[0] - this.yLow) / var38 * var20);
+                var76 = this.xBottom + (int)((var62[0] - this.xLow) / var36 * var18);
+                var78 = this.yBottom - (int)((var63[0] - this.yLow) / var38 * var20);
 
                 for(var65 = 1; var65 < this.niPoints; ++var65) {
-                    var77 = this.xBot + (int)((var59[var65] - this.xLow) / var36 * var18);
-                    var79 = this.yBot - (int)((var64.interpolate(var59[var65]) - this.yLow) / var38 * var20);
+                    var77 = this.xBottom + (int)((var59[var65] - this.xLow) / var36 * var18);
+                    var79 = this.yBottom - (int)((var64.interpolate(var59[var65]) - this.yLow) / var38 * var20);
                     var60 = this.printCheck(this.trimOpt[var61], var76, var77, var78, var79);
                     if (var60) {
                         if (this.lineOpt[var61] == 2) {
@@ -1549,7 +1552,7 @@ public class Plot extends Canvas implements Serializable {
                         }
 
                         if (var47) {
-                            var1.drawLine(var76, var78, var77, var79);
+                            graphics.drawLine(var76, var78, var77, var79);
                         }
                     }
 
@@ -1579,12 +1582,12 @@ public class Plot extends Canvas implements Serializable {
                 var59[this.niPoints - 1] = var63[var82 - 1];
                 var64.resetData(var63, var62);
                 var64.calcDeriv();
-                var76 = this.xBot + (int)((var62[0] - this.xLow) / var36 * var18);
-                var78 = this.yBot - (int)((var63[0] - this.yLow) / var38 * var20);
+                var76 = this.xBottom + (int)((var62[0] - this.xLow) / var36 * var18);
+                var78 = this.yBottom - (int)((var63[0] - this.yLow) / var38 * var20);
 
                 for(var65 = 1; var65 < this.niPoints; ++var65) {
-                    var79 = this.yBot + (int)((var59[var65] - this.yLow) / var38 * var20);
-                    var77 = this.xBot - (int)((var64.interpolate(var59[var65]) - this.xLow) / var36 * var18);
+                    var79 = this.yBottom + (int)((var59[var65] - this.yLow) / var38 * var20);
+                    var77 = this.xBottom - (int)((var64.interpolate(var59[var65]) - this.xLow) / var36 * var18);
                     var60 = this.printCheck(this.trimOpt[var61], var76, var77, var78, var79);
                     if (var60) {
                         if (this.lineOpt[var61] == 2) {
@@ -1600,7 +1603,7 @@ public class Plot extends Canvas implements Serializable {
                         }
 
                         if (var47) {
-                            var1.drawLine(var76, var78, var77, var79);
+                            graphics.drawLine(var76, var78, var77, var79);
                         }
                     }
 
@@ -1613,15 +1616,15 @@ public class Plot extends Canvas implements Serializable {
             if (this.lineOpt[var61] == 3) {
                 var46 = 0;
                 var47 = true;
-                var76 = this.xBot + (int)((this.data[var48][0] - this.xLow) / var36 * var18);
-                var78 = this.yBot - (int)((this.data[var48 + 1][0] - this.yLow) / var38 * var20);
+                var76 = this.xBottom + (int)((this.data[var48][0] - this.xLow) / var36 * var18);
+                var78 = this.yBottom - (int)((this.data[var48 + 1][0] - this.yLow) / var38 * var20);
 
                 for(var83 = 1; var83 < var82; ++var83) {
-                    var77 = this.xBot + (int)((this.data[var48][var83] - this.xLow) / var36 * var18);
-                    var79 = this.yBot - (int)((this.data[var48 + 1][var83] - this.yLow) / var38 * var20);
+                    var77 = this.xBottom + (int)((this.data[var48][var83] - this.xLow) / var36 * var18);
+                    var79 = this.yBottom - (int)((this.data[var48 + 1][var83] - this.yLow) / var38 * var20);
                     var60 = this.printCheck(this.trimOpt[var61], var76, var77, var78, var79);
                     if (var60) {
-                        var1.drawLine(var76, var78, var77, var79);
+                        graphics.drawLine(var76, var78, var77, var79);
                     }
 
                     var76 = var77;
@@ -1632,8 +1635,8 @@ public class Plot extends Canvas implements Serializable {
             if (this.lineOpt[var61] == 4) {
                 var46 = 0;
                 var47 = true;
-                var76 = this.xBot + (int)((this.data[var48][0] - this.xLow) / var36 * var18);
-                var78 = this.yBot - (int)((this.data[var48 + 1][0] - this.yLow) / var38 * var20);
+                var76 = this.xBottom + (int)((this.data[var48][0] - this.xLow) / var36 * var18);
+                var78 = this.yBottom - (int)((this.data[var48 + 1][0] - this.yLow) / var38 * var20);
 
                 for(var83 = 1; var83 < var82; ++var83) {
                     ++var46;
@@ -1646,11 +1649,11 @@ public class Plot extends Canvas implements Serializable {
                         }
                     }
 
-                    var77 = this.xBot + (int)((this.data[var48][var83] - this.xLow) / var36 * var18);
-                    var79 = this.yBot - (int)((this.data[var48 + 1][var83] - this.yLow) / var38 * var20);
+                    var77 = this.xBottom + (int)((this.data[var48][var83] - this.xLow) / var36 * var18);
+                    var79 = this.yBottom - (int)((this.data[var48 + 1][var83] - this.yLow) / var38 * var20);
                     this.printCheck(this.trimOpt[var61], var76, var77, var78, var79);
                     if (var47) {
-                        var1.drawLine(var76, var78, var77, var79);
+                        graphics.drawLine(var76, var78, var77, var79);
                     }
 
                     var76 = var77;
@@ -1662,56 +1665,56 @@ public class Plot extends Canvas implements Serializable {
                 for(var83 = 0; var83 < var82; ++var83) {
                     int var80 = this.pointSize[var61];
                     int var81 = var80 / 2;
-                    int var73 = this.xBot + (int)((this.data[var48][var83] - this.xLow) / var36 * var18);
-                    int var74 = this.yBot - (int)((this.data[var48 + 1][var83] - this.yLow) / var38 * var20);
+                    int var73 = this.xBottom + (int)((this.data[var48][var83] - this.xLow) / var36 * var18);
+                    int var74 = this.yBottom - (int)((this.data[var48 + 1][var83] - this.yLow) / var38 * var20);
                     switch(this.pointOpt[var61]) {
                         case 1:
-                            var1.drawOval(var73 - var81, var74 - var81, var80, var80);
+                            graphics.drawOval(var73 - var81, var74 - var81, var80, var80);
                             break;
                         case 2:
-                            var1.drawRect(var73 - var81, var74 - var81, var80, var80);
+                            graphics.drawRect(var73 - var81, var74 - var81, var80, var80);
                             break;
                         case 3:
-                            var1.drawLine(var73 - var81, var74, var73, var74 + var81);
-                            var1.drawLine(var73, var74 + var81, var73 + var81, var74);
-                            var1.drawLine(var73 + var81, var74, var73, var74 - var81);
-                            var1.drawLine(var73, var74 - var81, var73 - var81, var74);
+                            graphics.drawLine(var73 - var81, var74, var73, var74 + var81);
+                            graphics.drawLine(var73, var74 + var81, var73 + var81, var74);
+                            graphics.drawLine(var73 + var81, var74, var73, var74 - var81);
+                            graphics.drawLine(var73, var74 - var81, var73 - var81, var74);
                             break;
                         case 4:
-                            var1.fillOval(var73 - var81, var74 - var81, var80, var80);
+                            graphics.fillOval(var73 - var81, var74 - var81, var80, var80);
                             break;
                         case 5:
-                            var1.fillRect(var73 - var81, var74 - var81, var80, var80);
+                            graphics.fillRect(var73 - var81, var74 - var81, var80, var80);
                             break;
                         case 6:
                             for(var65 = 0; var65 < var81; ++var65) {
-                                var1.drawLine(var73 - var65, var74 - var81 + var65, var73 + var65, var74 - var81 + var65);
+                                graphics.drawLine(var73 - var65, var74 - var81 + var65, var73 + var65, var74 - var81 + var65);
                             }
 
                             for(var65 = 0; var65 <= var81; ++var65) {
-                                var1.drawLine(var73 - var81 + var65, var74 + var65, var73 + var81 - var65, var74 + var65);
+                                graphics.drawLine(var73 - var81 + var65, var74 + var65, var73 + var81 - var65, var74 + var65);
                             }
                             break;
                         case 7:
-                            var1.drawLine(var73 - var81, var74 - var81, var73 + var81, var74 + var81);
-                            var1.drawLine(var73 - var81, var74 + var81, var73 + var81, var74 - var81);
+                            graphics.drawLine(var73 - var81, var74 - var81, var73 + var81, var74 + var81);
+                            graphics.drawLine(var73 - var81, var74 + var81, var73 + var81, var74 - var81);
                             break;
                         case 8:
-                            var1.drawLine(var73 - var81, var74, var73 + var81, var74);
-                            var1.drawLine(var73, var74 + var81, var73, var74 - var81);
+                            graphics.drawLine(var73 - var81, var74, var73 + var81, var74);
+                            graphics.drawLine(var73, var74 + var81, var73, var74 - var81);
                             break;
                         default:
-                            var1.drawLine(var73 - var81, var74 - var81, var73 + var81, var74 + var81);
-                            var1.drawLine(var73 - var81, var74 + var81, var73 + var81, var74 - var81);
+                            graphics.drawLine(var73 - var81, var74 - var81, var73 + var81, var74 + var81);
+                            graphics.drawLine(var73 - var81, var74 + var81, var73 + var81, var74 - var81);
                     }
 
                     if (this.errorBar[var61]) {
-                        int var75 = this.yBot - (int)((this.errors[var61][var83] - this.yLow) / var38 * var20);
-                        var1.drawLine(var73, var74, var73, var75);
-                        var1.drawLine(var73 - 4, var75, var73 + 4, var75);
+                        int var75 = this.yBottom - (int)((this.errors[var61][var83] - this.yLow) / var38 * var20);
+                        graphics.drawLine(var73, var74, var73, var75);
+                        graphics.drawLine(var73 - 4, var75, var73 + 4, var75);
                         var75 = 2 * var74 - var75;
-                        var1.drawLine(var73, var74, var73, var75);
-                        var1.drawLine(var73 - 4, var75, var73 + 4, var75);
+                        graphics.drawLine(var73, var74, var73, var75);
+                        graphics.drawLine(var73 - 4, var75, var73 + 4, var75);
                     }
                 }
             }

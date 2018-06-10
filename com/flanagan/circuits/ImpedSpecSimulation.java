@@ -650,7 +650,7 @@ public class ImpedSpecSimulation {
         var4.setGraphTitle2(var2);
         var4.setXaxisLegend("Log10[Frequency / Hz]");
         var4.setYaxisLegend("Impedance Magnitude");
-        var4.plot();
+        var4.setFrame();
     }
 
     private void impedanceMagnitudeVersusFrequencyPlot(String var1, String var2) {
@@ -669,7 +669,7 @@ public class ImpedSpecSimulation {
         var4.setXaxisLegend("Frequency");
         var4.setXaxisUnitsName("Hz");
         var4.setYaxisLegend("Impedance Magnitude");
-        var4.plot();
+        var4.setFrame();
     }
 
     public void plotImpedancePhases() {
@@ -708,7 +708,7 @@ public class ImpedSpecSimulation {
         var4.setXaxisLegend("Log10[Frequency / Hz]");
         var4.setYaxisLegend("Impedance Phase");
         var4.setYaxisUnitsName("degrees");
-        var4.plot();
+        var4.setFrame();
     }
 
     private void impedancePhaseVersusFrequencyPlot(String var1, String var2) {
@@ -728,7 +728,7 @@ public class ImpedSpecSimulation {
         var4.setXaxisUnitsName("Hz");
         var4.setYaxisLegend("Impedance Phase");
         var4.setYaxisUnitsName("degrees");
-        var4.plot();
+        var4.setFrame();
     }
 
     public void plotColeCole() {
@@ -757,7 +757,7 @@ public class ImpedSpecSimulation {
         var5.setGraphTitle2(var2);
         var5.setXaxisLegend("Real[Impedance / ohms]");
         var5.setYaxisLegend("-Imag[Impedance / ohms]");
-        var5.plot();
+        var5.setFrame();
     }
 
     public void plotVoltageMagnitudes() {
@@ -796,7 +796,7 @@ public class ImpedSpecSimulation {
         var4.setGraphTitle2(var2);
         var4.setXaxisLegend("Log10[Frequency / Hz]");
         var4.setYaxisLegend("Voltage Magnitude");
-        var4.plot();
+        var4.setFrame();
     }
 
     private void voltageMagnitudeVersusFrequencyPlot(String var1, String var2) {
@@ -815,7 +815,7 @@ public class ImpedSpecSimulation {
         var4.setXaxisLegend("Frequency");
         var4.setXaxisUnitsName("Hz");
         var4.setYaxisLegend("Voltage Magnitude");
-        var4.plot();
+        var4.setFrame();
     }
 
     public void plotVoltagePhases() {
@@ -855,7 +855,7 @@ public class ImpedSpecSimulation {
         var4.setXaxisLegend("Log10[Frequency / Hz]");
         var4.setYaxisLegend("Voltage Phase");
         var4.setYaxisUnitsName("degrees");
-        var4.plot();
+        var4.setFrame();
     }
 
     private void voltagePhaseVersusFrequencyPlot(String var1, String var2) {
@@ -875,7 +875,7 @@ public class ImpedSpecSimulation {
         var4.setXaxisUnitsName("Hz");
         var4.setYaxisLegend("Voltage Phase");
         var4.setYaxisUnitsName("degrees");
-        var4.plot();
+        var4.setFrame();
     }
 
     public String[] dateAndTime() {
@@ -958,7 +958,7 @@ public class ImpedSpecSimulation {
 
         var10.println();
         var3 = 14;
-        var10.println("Frequecy - Impedance fillData");
+        var10.println("Frequecy - Impedance data");
         var10.print("Frequency", var3);
         var10.print("Magnitude", var3);
         var10.print("Phase", var3);
@@ -994,7 +994,7 @@ public class ImpedSpecSimulation {
             var10.println("Reference impedance: " + this.referenceImpedance + " ohms");
             var10.println();
             var3 = 14;
-            var10.println("Frequecy - Voltage fillData");
+            var10.println("Frequecy - Voltage data");
             var10.print("Frequency", var3);
             var10.print("Magnitude", var3);
             var10.print("Phase", var3);
@@ -1103,7 +1103,7 @@ public class ImpedSpecSimulation {
 
         var10.println();
         var3 = 10;
-        var10.println("Frequecy - Impedance fillData");
+        var10.println("Frequecy - Impedance data");
         var10.printtab("Frequency", var3);
         var10.printtab("Magnitude", var3);
         var10.printtab("Phase", var3);
@@ -1139,7 +1139,7 @@ public class ImpedSpecSimulation {
             var10.println("Reference impedance: " + this.referenceImpedance + " ohms");
             var10.println();
             var3 = 14;
-            var10.println("Frequecy - Voltage fillData");
+            var10.println("Frequecy - Voltage data");
             var10.printtab("Frequency", var3);
             var10.printtab("Magnitude", var3);
             var10.printtab("Phase", var3);

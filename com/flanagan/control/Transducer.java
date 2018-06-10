@@ -186,7 +186,7 @@ public class Transducer extends BlackBox {
             var13.setYaxisLegend("Output");
             var13.setPoint(0);
             var13.setLine(3);
-            var13.plot();
+            var13.setFrame();
         } else {
             super.stepInput(var1, var3);
         }

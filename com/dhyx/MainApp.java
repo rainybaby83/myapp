@@ -135,7 +135,7 @@ public class MainApp extends JFrame{
     }
 
     private void setUIFont() {
-        Font f = Const.SONG_12;
+        Font f = Const.FONT_YAHEI_12;
         String names[] = {"Label", "CheckBox", "PopupMenu", "MenuItem", "CheckBoxMenuItem",
                 "JRadioButtonMenuItem", "ComboBox", "Button", "Tree", "ScrollPane",
                 "TabbedPane", "EditorPane", "TitledBorder", "Menu", "TextArea",

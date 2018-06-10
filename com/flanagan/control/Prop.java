@@ -90,7 +90,7 @@ public class Prop extends BlackBox {
         var13.setYaxisLegend("Output");
         var13.setPoint(0);
         var13.setLine(3);
-        var13.plot();
+        var13.setFrame();
     }
 
     public void stepInput(double var1) {
@@ -127,7 +127,7 @@ public class Prop extends BlackBox {
             var13.setXaxisUnitsName("s");
             var13.setYaxisLegend("Output");
             var13.setPoint(0);
-            var13.plot();
+            var13.setFrame();
         }
 
     }

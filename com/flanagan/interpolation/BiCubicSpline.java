@@ -110,7 +110,7 @@ public class BiCubicSpline {
 
             this.derivCalculated = true;
         } else {
-            throw new IllegalArgumentException("The fillData matrix must have a minimum size of 3 X 3");
+            throw new IllegalArgumentException("The data matrix must have a minimum size of 3 X 3");
         }
     }
 
@@ -136,7 +136,7 @@ public class BiCubicSpline {
             this.d2ydx2inner = new double[this.nPoints][this.mPoints];
             this.d2ydx2innerT = new double[this.nPointsT][this.mPointsT];
         } else {
-            throw new IllegalArgumentException("The fillData matrix must have a minimum size of 3 X 3");
+            throw new IllegalArgumentException("The data matrix must have a minimum size of 3 X 3");
         }
     }
 
@@ -228,7 +228,7 @@ public class BiCubicSpline {
             BiCubicSpline var2 = new BiCubicSpline(var0, var1);
             return var2;
         } else {
-            throw new IllegalArgumentException("A minimum of three x three fillData points is needed");
+            throw new IllegalArgumentException("A minimum of three x three data points is needed");
         }
     }
 
@@ -242,7 +242,7 @@ public class BiCubicSpline {
 
             return var3;
         } else {
-            throw new IllegalArgumentException("A minimum of three x three fillData points is needed");
+            throw new IllegalArgumentException("A minimum of three x three data points is needed");
         }
     }
 

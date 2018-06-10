@@ -519,20 +519,20 @@ public class Outliers {
             if (var11) {
                 var42.print("Outlier: ");
                 var42.println(Fmath.truncate(var8, this.trunc));
-                var42.print("Outlier index in the original inputted fillData [indices start at 0]: ");
+                var42.print("Outlier index in the original inputted data [indices start at 0]: ");
                 var42.println(var10);
                 var42.println();
             }
 
             var42.print(" ", this.field0);
-            var42.print("Original fillData ", this.field);
+            var42.print("Original data ", this.field);
             if (var11) {
                 var42.println("Data with outlier removed");
             } else {
                 var42.println();
             }
 
-            var42.print("Number of fillData points: ", this.field0);
+            var42.print("Number of data points: ", this.field0);
             var42.print(this.nPoints, this.field);
             if (var11) {
                 var42.println(this.nPoints - 1);
@@ -667,7 +667,7 @@ public class Outliers {
             }
 
             var42.println();
-            var42.println("Input fillData: ");
+            var42.println("Input data: ");
             int var38 = 0;
 
             for(int var39 = 0; var39 < this.nPoints; ++var39) {
@@ -886,7 +886,7 @@ public class Outliers {
                 }
 
                 var57.println();
-                var57.println("Outlier indices in the original inputted fillData [indices start at 0]: ");
+                var57.println("Outlier indices in the original inputted data [indices start at 0]: ");
 
                 for(var39 = 0; var39 < var1; ++var39) {
                     var57.print(var6[var39] + "  ");
@@ -896,14 +896,14 @@ public class Outliers {
             }
 
             var57.print(" ", this.field0);
-            var57.print("Original fillData ", this.field);
+            var57.print("Original data ", this.field);
             if (var21) {
                 var57.println("Data with outlier/s removed");
             } else {
                 var57.println();
             }
 
-            var57.print("Number of fillData points: ", this.field0);
+            var57.print("Number of data points: ", this.field0);
             var57.print(this.nPoints, this.field);
             if (var21) {
                 var57.println(this.nPoints - var1);
@@ -1038,7 +1038,7 @@ public class Outliers {
             }
 
             var57.println();
-            var57.println("Input fillData: ");
+            var57.println("Input data: ");
             int var48 = 0;
 
             for(int var49 = 0; var49 < this.nPoints; ++var49) {
@@ -1393,7 +1393,7 @@ public class Outliers {
             byte var28 = 4;
             var47.println("Potential   Test        Critical    R>lambda    Maximum");
             var47.println("number of   Statistic,  Value,                  deviate");
-            var47.println("outliers    R           lambda                  fillData value");
+            var47.println("outliers    R           lambda                  data value");
 
             int var29;
             for(var29 = 0; var29 < var1; ++var29) {
@@ -1414,7 +1414,7 @@ public class Outliers {
                 }
 
                 var47.println();
-                var47.println("Outlier indices in the original inputted fillData [indices start at 0]: ");
+                var47.println("Outlier indices in the original inputted data [indices start at 0]: ");
 
                 for(var29 = 0; var29 < var5; ++var29) {
                     var47.print(var41[var29] + "  ");
@@ -1425,14 +1425,14 @@ public class Outliers {
             }
 
             var47.print(" ", this.field0);
-            var47.print("Original fillData ", this.field);
+            var47.print("Original data ", this.field);
             if (var4) {
                 var47.println("Data with outlier/s removed");
             } else {
                 var47.println();
             }
 
-            var47.print("Number of fillData points: ", this.field0);
+            var47.print("Number of data points: ", this.field0);
             var47.print(this.nPoints, this.field);
             if (var4) {
                 var47.println(this.nPoints - var5);
@@ -1567,7 +1567,7 @@ public class Outliers {
             }
 
             var47.println();
-            var47.println("Input fillData: ");
+            var47.println("Input data: ");
             int var38 = 0;
 
             for(int var39 = 0; var39 < this.nPoints; ++var39) {
@@ -2142,20 +2142,20 @@ public class Outliers {
         if (var1) {
             var29.print("Outlier: ");
             var29.println(Fmath.truncate(var9, this.trunc));
-            var29.print("Outlier index in the original inputted fillData [indices start at 0]: ");
+            var29.print("Outlier index in the original inputted data [indices start at 0]: ");
             var29.println(var8);
             var29.println();
         }
 
         var29.print(" ", this.field0);
-        var29.print("Original fillData ", this.field);
+        var29.print("Original data ", this.field);
         if (var1) {
             var29.println("Data with outlier removed");
         } else {
             var29.println();
         }
 
-        var29.print("Number of fillData points: ", this.field0);
+        var29.print("Number of data points: ", this.field0);
         var29.print(this.nPoints, this.field);
         if (var1) {
             var29.println(this.nPoints - 1);
@@ -2290,7 +2290,7 @@ public class Outliers {
         }
 
         var29.println();
-        var29.println("Input fillData: ");
+        var29.println("Input data: ");
         int var40 = 0;
 
         for(int var41 = 0; var41 < this.nPoints; ++var41) {
@@ -2340,7 +2340,7 @@ public class Outliers {
     public ArrayList<Double> probabilityPlots(boolean var1, double[] var2, double[] var3) {
         ArrayList var4 = new ArrayList();
         ProbabilityPlot var5 = new ProbabilityPlot(var2);
-        var5.setStartOfGraphTitle("Original fillData: ");
+        var5.setStartOfGraphTitle("Original data: ");
         var5.resetSignificance(this.significance);
         var5.suppressFileOutput();
         var5.suppressErrorMessages();
@@ -2357,7 +2357,7 @@ public class Outliers {
         this.strippedOrderStatisticMedians = this.orderStatisticMedians;
         if (var1) {
             var5 = new ProbabilityPlot(var3);
-            var5.setStartOfGraphTitle("Stripped fillData: ");
+            var5.setStartOfGraphTitle("Stripped data: ");
             var5.resetSignificance(this.significance);
             var5.suppressFileOutput();
             var5.suppressErrorMessages();

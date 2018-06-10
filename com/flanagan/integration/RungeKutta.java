@@ -1759,7 +1759,7 @@ public class RungeKutta {
             var1.setXaxisLegend("x values");
             var1.setYaxisLegend("y values");
             var1.setGraphTitle(this.rkMethods[this.rkMethodNumber]);
-            var1.plot();
+            var1.setFrame();
         }
     }
 
@@ -1771,7 +1771,7 @@ public class RungeKutta {
             var1.setXaxisLegend("x step values");
             var1.setYaxisLegend("y values");
             var1.setGraphTitle("All steps plot: " + this.rkMethods[this.rkMethodNumber]);
-            var1.plot();
+            var1.setFrame();
         }
     }
 

@@ -16,14 +16,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Vector;
-
-import static java.lang.Double.NaN;
 
 
 public class PanelNewCurve extends JPanel {
@@ -39,6 +36,7 @@ public class PanelNewCurve extends JPanel {
     private MyList lstXLog, lstYLog;
     private JLabel[] lRight = new JLabel[7];
     private JLabel lblImage = new JLabel();
+    private JSpinner jSpinner = new JSpinner();
 
 
     public PanelNewCurve() {
@@ -111,9 +109,13 @@ public class PanelNewCurve extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    boolean status = click_btnDel();
-                    logger.trace("点击按钮：生成曲线-删除选中曲线。曲线ID=" + curveID + "，结果=" + status);
-                    click_btnQuery("点击删除按钮后调用");
+                    int answer = JOptionPane.showConfirmDialog(null, "确认要删除该曲线及其所有数据吗？", "删除确认", JOptionPane.YES_NO_OPTION);
+                    if (answer == JOptionPane.YES_OPTION) {
+                        boolean status = click_btnDel();
+                        logger.trace("点击按钮：生成曲线-删除选中曲线。曲线ID=" + curveID + "，结果=" + status);
+                        click_btnQuery("点击删除按钮后调用");
+                    }
+
                 }
             }
         });
@@ -139,19 +141,22 @@ public class PanelNewCurve extends JPanel {
     private void initLabel() {
         JLabel lblCurve = new JLabel("曲线列表");
         JLabel lblConcentration = new JLabel("所选曲线的浓度(已求平均)");
-        JLabel lblFitType = new JLabel("设置对数(仅限直线拟合)");
+        JLabel lblFitType = new JLabel("取对数(仅对直线拟合有效)");
         JLabel lblFitTitle = new JLabel("拟合结果");
-        JLabel lblXType = new JLabel("X");
-        JLabel lblYType = new JLabel("Y");
-
+        JLabel lblX = new JLabel("x");
+        JLabel lblY = new JLabel("y");
+        JLabel lbl100 = new JLabel("%");
+        JLabel lblBlank = new JLabel("扣Blank：");
 
         lblCurve.setBounds(0, 40, 385, 25);
         lblConcentration.setBounds(435, 40, 310, 25);
-        lblFitType.setBounds(800, 40, 200, 25);
-        lblFitTitle.setBounds(800, 265, 200, 25);
-        lblXType.setBounds(820, 100, 20, 25);
-        lblYType.setBounds(820, 185, 20, 25);
-        lblImage.setBounds(800, 525, 200, 70);
+        lblFitType.setBounds(800, 145, 200, 25);
+        lblFitTitle.setBounds(800, 305, 200, 25);
+        lblX.setBounds(830, 180, 20, 20);
+        lblY.setBounds(910, 180, 20, 20);
+        lblImage.setBounds(800, 535, 200, 70);
+        lbl100.setBounds(955, 83, 30, 20);
+        lblBlank.setBounds(830, 80, 70, 25);
 
         JLabel[] lLeft = new JLabel[7];
         String[] title = {"方法", "a =", "b =", "c =", "d =", "e =", "R2 ="};
@@ -160,13 +165,13 @@ public class PanelNewCurve extends JPanel {
             lLeft[i] = new JLabel();
             lLeft[i].setText(title[i]);
 
-            lLeft[i].setBounds(820, 310 + i * 30, 45, 25);
+            lLeft[i].setBounds(820, 350 + i * 25, 45, 25);
             lLeft[i].setHorizontalAlignment(JLabel.CENTER);
             this.add(lLeft[i]);
 
             lRight[i] = new JLabel();
             lRight[i].setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
-            lRight[i].setBounds(870, 310 + i * 30, 100, 25);
+            lRight[i].setBounds(870, 350 + i * 25, 100, 25);
             lRight[i].setHorizontalAlignment(JLabel.CENTER);
             this.add(lRight[i]);
         }
@@ -175,9 +180,11 @@ public class PanelNewCurve extends JPanel {
         this.add(lblConcentration);
         this.add(lblFitType);
         this.add(lblFitTitle);
-        this.add(lblXType);
-        this.add(lblYType);
+        this.add(lblX);
+        this.add(lblY);
+        this.add(lbl100);
         this.add(lblImage);
+        this.add(lblBlank);
     }
 
 
@@ -296,8 +303,8 @@ public class PanelNewCurve extends JPanel {
         lstYLog = new MyList();
         lstXLog.addString(value);
         lstYLog.addString(value);
-        lstXLog.setBounds(850, 85, 125, 58);
-        lstYLog.setBounds(850, 170, 125, 58);
+        lstXLog.setBounds(820, 210, 80, 59);
+        lstYLog.setBounds(900, 210, 80, 59);
         lstXLog.setBorder(BorderFactory.createEtchedBorder());
         lstYLog.setBorder(BorderFactory.createEtchedBorder());
         lstXLog.setSelectedIndex(1);
@@ -308,18 +315,27 @@ public class PanelNewCurve extends JPanel {
 
 
     private void initOther() {
-        //两个方框
-        JPanel jp1 = new JPanel();
-        JPanel jp2 = new JPanel();
-        jp1.setOpaque(false);
-        jp2.setOpaque(false);
-        jp1.setBounds(800, 65, 200, 185);
-        jp2.setBounds(800, 290, 200, 325);
-        jp1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
-        jp2.setBorder(jp1.getBorder());
-        this.add(jp1);
-        this.add(jp2);
+        //三个方框
+        JPanel[] jp = new JPanel[3];
+        Rectangle[] rectangle = new Rectangle[3];
+        rectangle[0] = new Rectangle(800, 65, 200, 55);
+        rectangle[1] = new Rectangle(800, 170, 200, 115);
+        rectangle[2] = new Rectangle(800, 330, 200, 285);
+        for (int i = 0; i < 3; i++) {
+            jp[i] = new JPanel();
+            jp[i].setOpaque(false);
+            jp[i].setBounds(rectangle[i]);
+            jp[i].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
+            this.add(jp[i]);
+        }
 
+
+
+
+
+        jSpinner.setModel(new SpinnerNumberModel(100,1,100,10));
+        jSpinner.setBounds(900,80,50,25);
+        this.add(jSpinner);
 
     }
 
@@ -429,27 +445,43 @@ public class PanelNewCurve extends JPanel {
             DefaultTableModel dm = (DefaultTableModel) tblConcentration.getModel();
             int index1 = dm.findColumn("浓度值");
             int index2 = dm.findColumn("反应值");
-            double[] concentrations = new double[nowRows.length];
-            double[] values = new double[nowRows.length];
+
+            MyFitData data = new MyFitData(nowRows.length);
             int count0 = 0;
             for (int i = 0; i < nowRows.length; i++) {
-                concentrations[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index1).toString());
-                if (concentrations[i] == 0) {
+                data.c[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index1).toString());
+                if (data.c[i] == 0) {
                     count0++;
                 }
-                values[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index2).toString());
+                data.v[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index2).toString());
             }
-
+            int xLog = lstXLog.getSelectedIndex();
+            int yLog = lstYLog.getSelectedIndex();
             // 校验浓度为0的个数，最多只有1个
             if (count0 > 1) {
                 JOptionPane.showMessageDialog(null, "浓度值为0的数据最多只能有1个，当前有"
                         + count0 + "个，请检查。", "数据错误", JOptionPane.ERROR_MESSAGE);
-            } else {
-                int xLog = lstXLog.getSelectedIndex();
-                int yLog = lstYLog.getSelectedIndex();
-                //弹出窗口
-                PanelViewFit panelViewFit = new PanelViewFit(this, concentrations, values, xLog, yLog);
-                panelViewFit.setVisible(true);
+            } else if (count0 == 1 || count0 == 0) {
+
+                //----------------for test data
+                double[] xArray = {0, 0.5, 1, 2, 4, 20, 100, 250, 500, 750, 1000};
+                double[] yArray = {0.0679, 0.12955, 0.2518, 0.315, 0.4562, 1.2585, 5.996, 8.7685, 21.61, 24.23, 42.165};
+
+                data.length = xArray.length;
+                data.c = xArray;
+                data.v = yArray;
+                //------------------------------
+
+                //选中 扣Blank
+                double scale = NumberUtils.toFloat(String.valueOf(jSpinner.getValue())) / 100;
+
+                //处理blank数据
+                if (data.removeBlank(scale)) {
+                    PanelViewFit panelViewFit = new PanelViewFit(this, data, xLog, yLog);
+                    panelViewFit.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null,"浓度为0的反应值不是最小值");
+                }
             }
         }
     }
@@ -465,6 +497,8 @@ public class PanelNewCurve extends JPanel {
             }
         }
     }
+
+
 
 
     //点击曲线列表时的操作
@@ -501,19 +535,7 @@ public class PanelNewCurve extends JPanel {
                 tblConcentration.setValueAt(false, i, 0);
             }
         }
-//        tblConcentration.getCellRenderer(1, 2).getTableCellRendererComponent
-//                (tblConcentration, "", true, true, 1, 3)
-//                .addFocusListener(new FocusAdapter() {
-//                    @Override
-//                    public void focusLost(FocusEvent e) {
-//                        JOptionPane.showMessageDialog(null,1);
-//                    }
-//                });
-
     }   // END : private void click_tblConcentration()
-
-
-
 
 
     //浓度表某个单元格的退出编辑状态时，将符合条件的浓度写入数据库，不符合的给出提示，不保存
@@ -534,7 +556,17 @@ public class PanelNewCurve extends JPanel {
         for (int i = 0; i < lRight.length; i++) {
             lRight[i].setText(String.valueOf(para.get(i + 1)));
         }
+        updateDB_return();
     }
+
+
+    //查看拟合窗口关闭后，若有结果返回，则将参数写入数据库
+    private void updateDB_return() {
+
+    }
+
+
+
 
 
     /**

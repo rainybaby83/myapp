@@ -1759,7 +1759,7 @@ public class ImpedSpecRegression extends Regression {
         var8.setGraphTitle2(var3);
         var8.setXaxisLegend("Real[Impedance / ohms]");
         var8.setYaxisLegend("-Imag[Impedance / ohms]");
-        var8.plot();
+        var8.setFrame();
         return this.results;
     }
 
@@ -1829,7 +1829,7 @@ public class ImpedSpecRegression extends Regression {
         }
 
         var9.setYaxisLegend("Impedance Magnitude");
-        var9.plot();
+        var9.setFrame();
         return this.results;
     }
 
@@ -1899,7 +1899,7 @@ public class ImpedSpecRegression extends Regression {
         }
 
         var9.setYaxisLegend("Impedance Phase / degrees");
-        var9.plot();
+        var9.setFrame();
         return this.results;
     }
 
@@ -1975,7 +1975,7 @@ public class ImpedSpecRegression extends Regression {
             }
 
             var10.setYaxisLegend("Voltage Magnitude");
-            var10.plot();
+            var10.setFrame();
         } else {
             System.out.println("The voltage magnitudes cannot be plotted as no reference impedance or applied voltage has been entered");
         }
@@ -2055,7 +2055,7 @@ public class ImpedSpecRegression extends Regression {
             }
 
             var10.setYaxisLegend("Voltage Phases / degrees");
-            var10.plot();
+            var10.setFrame();
         } else {
             System.out.println("The voltage magnitudes cannot be plotted as no reference impedance or applied voltage has been entered");
         }
@@ -2162,8 +2162,8 @@ public class ImpedSpecRegression extends Regression {
 
         var5.println();
         var2 = 14;
-        var5.println("Fitted and entered fillData [frequencies, calculated impedances, fillData as entered]");
-        var5.print("Entered fillData type:  ");
+        var5.println("Fitted and entered data [frequencies, calculated impedances, data as entered]");
+        var5.print("Entered data type:  ");
         var5.println(this.dataEnteredType[this.dataEnteredTypePointer]);
         var5.println();
         var5.print("Frequency", var2);
@@ -2380,8 +2380,8 @@ public class ImpedSpecRegression extends Regression {
         var5.println("Maximum number of iterations allowed in each regression: " + this.maximumIterations);
         var5.println();
         var2 = 14;
-        var5.println("Fitted and entered fillData [frequencies, calculated impedances, fillData as entered]");
-        var5.print("Entered fillData type:  ");
+        var5.println("Fitted and entered data [frequencies, calculated impedances, data as entered]");
+        var5.print("Entered data type:  ");
         var5.println(this.dataEnteredType[this.dataEnteredTypePointer]);
         var5.println();
         var5.printtab("Frequency", var2);

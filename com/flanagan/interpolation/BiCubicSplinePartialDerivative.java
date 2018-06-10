@@ -71,7 +71,7 @@ public class BiCubicSplinePartialDerivative {
 
             this.derivCalculated = true;
         } else {
-            throw new IllegalArgumentException("The fillData matrix must have a minimum size of 3 X 3");
+            throw new IllegalArgumentException("The data matrix must have a minimum size of 3 X 3");
         }
     }
 

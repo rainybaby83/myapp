@@ -1164,7 +1164,7 @@ public class ArrayMaths {
                         }
                     }
                 default:
-                    throw new IllegalArgumentException("Dominant array fillData type not identified by this method");
+                    throw new IllegalArgumentException("Dominant array data type not identified by this method");
             }
 
             switch(this.type) {
@@ -1783,7 +1783,7 @@ public class ArrayMaths {
                         }
                     }
                 default:
-                    throw new IllegalArgumentException("Dominant array fillData type not identified by this method");
+                    throw new IllegalArgumentException("Dominant array data type not identified by this method");
             }
 
             switch(this.type) {
@@ -22315,7 +22315,7 @@ public class ArrayMaths {
 
         int var3 = -1;
         if (this.type != 0 && this.type != 1) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare double or Double with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare double or Double with " + this.typeName[this.type]);
         } else {
             double[] var4 = this.getArray_as_double();
             boolean var5 = true;
@@ -22350,7 +22350,7 @@ public class ArrayMaths {
 
         int var2 = -1;
         if (this.type != 2 && this.type != 3) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare float or Float with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare float or Float with " + this.typeName[this.type]);
         } else {
             float[] var3 = this.getArray_as_float();
             boolean var4 = true;
@@ -22385,7 +22385,7 @@ public class ArrayMaths {
 
         int var3 = -1;
         if (this.type != 4 && this.type != 5) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare long or Long with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare long or Long with " + this.typeName[this.type]);
         } else {
             long[] var4 = this.getArray_as_long();
             boolean var5 = true;
@@ -22420,7 +22420,7 @@ public class ArrayMaths {
 
         int var2 = -1;
         if (this.type != 6 && this.type != 7) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare int or Integer with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare int or Integer with " + this.typeName[this.type]);
         } else {
             int[] var3 = this.getArray_as_int();
             boolean var4 = true;
@@ -22455,7 +22455,7 @@ public class ArrayMaths {
 
         int var2 = -1;
         if (this.type != 8 && this.type != 9) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare short or Short with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare short or Short with " + this.typeName[this.type]);
         } else {
             short[] var3 = this.getArray_as_short();
             boolean var4 = true;
@@ -22490,7 +22490,7 @@ public class ArrayMaths {
 
         int var2 = -1;
         if (this.type != 10 && this.type != 11) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare byte or Byte with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare byte or Byte with " + this.typeName[this.type]);
         } else {
             byte[] var3 = this.getArray_as_byte();
             boolean var4 = true;
@@ -22525,7 +22525,7 @@ public class ArrayMaths {
 
         int var2 = -1;
         if (this.type != 16 && this.type != 17) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare char or Character with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare char or Character with " + this.typeName[this.type]);
         } else {
             char[] var3 = this.getArray_as_char();
             boolean var4 = true;
@@ -22579,7 +22579,7 @@ public class ArrayMaths {
             Conv.restoreMessages();
             return var2;
         } else {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare String with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare String with " + this.typeName[this.type]);
         }
     }
 
@@ -22609,7 +22609,7 @@ public class ArrayMaths {
             Conv.restoreMessages();
             return var2;
         } else {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare Complex with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare Complex with " + this.typeName[this.type]);
         }
     }
 
@@ -22639,7 +22639,7 @@ public class ArrayMaths {
             Conv.restoreMessages();
             return var2;
         } else {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare Phasor with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare Phasor with " + this.typeName[this.type]);
         }
     }
 
@@ -22669,7 +22669,7 @@ public class ArrayMaths {
             Conv.restoreMessages();
             return var2;
         } else {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare BigDecimal with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare BigDecimal with " + this.typeName[this.type]);
         }
     }
 
@@ -22699,7 +22699,7 @@ public class ArrayMaths {
             Conv.restoreMessages();
             return var2;
         } else {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare BigInteger with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare BigInteger with " + this.typeName[this.type]);
         }
     }
 
@@ -22711,7 +22711,7 @@ public class ArrayMaths {
         int[] var3 = null;
         int var4 = 0;
         if (this.type != 0 && this.type != 1) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare double or Double with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare double or Double with " + this.typeName[this.type]);
         } else {
             double[] var5 = this.getArray_as_double();
             ArrayList var6 = new ArrayList();
@@ -22750,7 +22750,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 2 && this.type != 3) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare float or Float with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare float or Float with " + this.typeName[this.type]);
         } else {
             float[] var4 = this.getArray_as_float();
             ArrayList var5 = new ArrayList();
@@ -22789,7 +22789,7 @@ public class ArrayMaths {
         int[] var3 = null;
         int var4 = 0;
         if (this.type != 4 && this.type != 5) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare long or Long with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare long or Long with " + this.typeName[this.type]);
         } else {
             long[] var5 = this.getArray_as_long();
             ArrayList var6 = new ArrayList();
@@ -22828,7 +22828,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 6 && this.type != 7) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare int or Integer with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare int or Integer with " + this.typeName[this.type]);
         } else {
             int[] var4 = this.getArray_as_int();
             ArrayList var5 = new ArrayList();
@@ -22867,7 +22867,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 8 && this.type != 9) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare short or Short with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare short or Short with " + this.typeName[this.type]);
         } else {
             short[] var4 = this.getArray_as_short();
             ArrayList var5 = new ArrayList();
@@ -22906,7 +22906,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 10 && this.type != 11) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare byte or Byte with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare byte or Byte with " + this.typeName[this.type]);
         } else {
             byte[] var4 = this.getArray_as_byte();
             ArrayList var5 = new ArrayList();
@@ -22945,7 +22945,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 16 && this.type != 17) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare char or Character with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare char or Character with " + this.typeName[this.type]);
         } else {
             char[] var4 = this.getArray_as_char();
             ArrayList var5 = new ArrayList();
@@ -22984,7 +22984,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 18) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare String with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare String with " + this.typeName[this.type]);
         } else {
             String[] var4 = this.getArray_as_String();
             ArrayList var5 = new ArrayList();
@@ -23018,7 +23018,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 14) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare Complex with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare Complex with " + this.typeName[this.type]);
         } else {
             Complex[] var4 = this.getArray_as_Complex();
             ArrayList var5 = new ArrayList();
@@ -23052,7 +23052,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 15) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare Phasor with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare Phasor with " + this.typeName[this.type]);
         } else {
             Phasor[] var4 = this.getArray_as_Phasor();
             ArrayList var5 = new ArrayList();
@@ -23086,7 +23086,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 12) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare BigDecimal with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare BigDecimal with " + this.typeName[this.type]);
         } else {
             BigDecimal[] var4 = this.getArray_as_BigDecimal();
             ArrayList var5 = new ArrayList();
@@ -23120,7 +23120,7 @@ public class ArrayMaths {
         int[] var2 = null;
         int var3 = 0;
         if (this.type != 13) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare BigInteger with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare BigInteger with " + this.typeName[this.type]);
         } else {
             BigInteger[] var4 = this.getArray_as_BigInteger();
             ArrayList var5 = new ArrayList();
@@ -23153,7 +23153,7 @@ public class ArrayMaths {
 
         int var3 = 0;
         if (this.type != 0 && this.type != 1) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare double or Double with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare double or Double with " + this.typeName[this.type]);
         } else {
             double[] var4 = this.getArray_as_double();
             double var5 = Math.abs(var4[0] - var1);
@@ -23183,7 +23183,7 @@ public class ArrayMaths {
 
         int var2 = 0;
         if (this.type != 2 && this.type != 3) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare float or Float with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare float or Float with " + this.typeName[this.type]);
         } else {
             float[] var3 = this.getArray_as_float();
             float var4 = Math.abs(var3[0] - var1);
@@ -23213,7 +23213,7 @@ public class ArrayMaths {
 
         int var3 = 0;
         if (this.type != 4 && this.type != 5) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare long or Long with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare long or Long with " + this.typeName[this.type]);
         } else {
             long[] var4 = this.getArray_as_long();
             long var5 = Math.abs(var4[0] - var1);
@@ -23243,7 +23243,7 @@ public class ArrayMaths {
 
         int var2 = 0;
         if (this.type != 6 && this.type != 7) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare int or Integer with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare int or Integer with " + this.typeName[this.type]);
         } else {
             int[] var3 = this.getArray_as_int();
             int var4 = Math.abs(var3[0] - var1);
@@ -23273,7 +23273,7 @@ public class ArrayMaths {
 
         int var2 = 0;
         if (this.type != 8 && this.type != 9) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare short or Short with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare short or Short with " + this.typeName[this.type]);
         } else {
             short[] var3 = this.getArray_as_short();
             short var4 = (short)Math.abs(var3[0] - var1);
@@ -23303,7 +23303,7 @@ public class ArrayMaths {
 
         int var2 = 0;
         if (this.type != 10 && this.type != 11) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare byte or Byte with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare byte or Byte with " + this.typeName[this.type]);
         } else {
             byte[] var3 = this.getArray_as_byte();
             byte var4 = (byte)Math.abs(var3[0] - var1);
@@ -23333,7 +23333,7 @@ public class ArrayMaths {
 
         int var2 = 0;
         if (this.type != 16 && this.type != 17) {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare char or Character with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare char or Character with " + this.typeName[this.type]);
         } else {
             int[] var3 = this.getArray_as_int();
             int var4 = Math.abs(var3[0] - var1);
@@ -23380,7 +23380,7 @@ public class ArrayMaths {
             Conv.restoreMessages();
             return var2;
         } else {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare BigDecimal with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare BigDecimal with " + this.typeName[this.type]);
         }
     }
 
@@ -23408,7 +23408,7 @@ public class ArrayMaths {
             Conv.restoreMessages();
             return var2;
         } else {
-            throw new IllegalArgumentException("Only comparisons between the same fillData types are supported - you are attempting to compare BigInteger with " + this.typeName[this.type]);
+            throw new IllegalArgumentException("Only comparisons between the same data types are supported - you are attempting to compare BigInteger with " + this.typeName[this.type]);
         }
     }
 
@@ -24171,7 +24171,7 @@ public class ArrayMaths {
                     throw new IllegalArgumentException("Should not be possible to get here!!!");
             }
 
-            var4.plot();
+            var4.setFrame();
         }
     }
 

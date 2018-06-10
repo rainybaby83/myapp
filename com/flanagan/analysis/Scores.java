@@ -699,7 +699,7 @@ public class Scores {
 
     public void resetDichotomousMissingValues() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No fillData has been entered");
+            throw new IllegalArgumentException("No data has been entered");
         } else {
             if (!this.noResponseHandlingSet) {
                 this.noResponseHandling();
@@ -900,7 +900,7 @@ public class Scores {
                 String var6;
                 String var7;
                 if (this.personDeletionPercentage != 0.0D && !this.itemDeletionPercentageSet) {
-                    var1 = "There are missing responses in this fillData set";
+                    var1 = "There are missing responses in this data set";
                     var2 = "\nYou have not set the percentage of no responses at which you will delete an item";
                     var3 = "\n(0% = item deleted if a single 'no response' present in the item)";
                     var4 = "\n(100% = item never deleted)";
@@ -912,7 +912,7 @@ public class Scores {
 
                 this.itemDeletionPercentageSet = true;
                 if (this.itemDeletionPercentage != 0.0D && !this.personDeletionPercentageSet) {
-                    var1 = "There are missing responses in this fillData set";
+                    var1 = "There are missing responses in this data set";
                     var2 = "\nYou have not set the percentage of no responses at which you will delete a person";
                     var3 = "\n(0% = person deleted if gives a single 'no response')";
                     var4 = "\n(100% = person never deleted)";
@@ -924,7 +924,7 @@ public class Scores {
 
                 this.personDeletionPercentageSet = true;
                 if (this.itemDeletionPercentage != 0.0D && this.personDeletionPercentage != 0.0D && !this.replacementOptionSet) {
-                    var1 = "There are missing responses in this fillData set";
+                    var1 = "There are missing responses in this data set";
                     var2 = "\nYou have not set the option flag for replacing a missing score";
                     var3 = "\n  option = 1 - score replaced by zero or lower dichotomous pair";
                     var4 = "\n  option = 2 - score replaced by person's mean or rounded mean";
@@ -1929,7 +1929,7 @@ public class Scores {
     public void preprocessData() {
         if (!this.dataPreprocessed) {
             if (!this.dataEntered) {
-                throw new IllegalArgumentException("No fillData has been entered");
+                throw new IllegalArgumentException("No data has been entered");
             }
 
             this.scores0 = new double[this.nItems][this.nPersons];
@@ -2057,7 +2057,7 @@ public class Scores {
                     var13 = this.dataToString(var3);
                     break;
                 default:
-                    throw new IllegalArgumentException("Original fillData type, " + this.originalDataType + ", not recognised");
+                    throw new IllegalArgumentException("Original data type, " + this.originalDataType + ", not recognised");
             }
 
             int var16;
@@ -2318,7 +2318,7 @@ public class Scores {
 
     public Object originalScores() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("No fillData has been entered");
+            throw new IllegalArgumentException("No data has been entered");
         } else {
             return this.originalData;
         }
@@ -2474,7 +2474,7 @@ public class Scores {
 
     public String[] personNames() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no fillData has been entered");
+            throw new IllegalArgumentException("no data has been entered");
         } else {
             String[] var1 = new String[this.nPersons];
 
@@ -2488,7 +2488,7 @@ public class Scores {
 
     public String[] originalPersonNames() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no fillData has been entered");
+            throw new IllegalArgumentException("no data has been entered");
         } else {
             String[] var1 = new String[this.originalNpersons];
 
@@ -2502,7 +2502,7 @@ public class Scores {
 
     public String[] itemNames() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no fillData has been entered");
+            throw new IllegalArgumentException("no data has been entered");
         } else {
             String[] var1 = new String[this.nItems];
 
@@ -2516,7 +2516,7 @@ public class Scores {
 
     public String[] originalItemNames() {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no fillData has been entered");
+            throw new IllegalArgumentException("no data has been entered");
         } else {
             String[] var1 = new String[this.originalNitems];
 
@@ -2530,7 +2530,7 @@ public class Scores {
 
     public int itemIndex(String var1) {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no fillData has been entered");
+            throw new IllegalArgumentException("no data has been entered");
         } else {
             int var2 = -1;
             int var3 = 0;
@@ -2554,7 +2554,7 @@ public class Scores {
 
     public String itemName(int var1) {
         if (!this.dataEntered) {
-            throw new IllegalArgumentException("no fillData has been entered");
+            throw new IllegalArgumentException("no data has been entered");
         } else {
             return this.itemNames[var1 - 1];
         }
@@ -5467,7 +5467,7 @@ public class Scores {
         var3.setYaxisLegend("Responses to the item, " + this.itemNames[var2]);
         var3.setLine(0);
         var3.setPoint(4);
-        var3.plot();
+        var3.setFrame();
     }
 
     public void rawItemMeansPlot(String var1) {
@@ -5484,7 +5484,7 @@ public class Scores {
         var2.setYaxisLegend("Responses to the item, " + this.itemNames[var1]);
         var2.setLine(0);
         var2.setPoint(4);
-        var2.plot();
+        var2.setFrame();
     }
 
     public void standardizedItemItemPlot(String var1, String var2) {
@@ -5507,7 +5507,7 @@ public class Scores {
         var3.setYaxisLegend("Responses to the item, " + this.itemNames[var2]);
         var3.setLine(0);
         var3.setPoint(4);
-        var3.plot();
+        var3.setFrame();
     }
 
     public void standardisedItemItemPlot(int var1, int var2) {
@@ -5532,7 +5532,7 @@ public class Scores {
         var2.setYaxisLegend("Responses to the item, " + this.itemNames[var1]);
         var2.setLine(0);
         var2.setPoint(4);
-        var2.plot();
+        var2.setFrame();
     }
 
     public void standardisedItemMeansPlot(int var1) {

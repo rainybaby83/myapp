@@ -645,7 +645,7 @@ public class PlotPoleZero {
                     var60.setYaxisLegend("Imaginary part of z");
             }
 
-            var60.plot();
+            var60.setFrame();
             Complex[] var37 = null;
             Complex[] var59 = null;
             FileOutput var39 = new FileOutput("PoleZeroOutput.txt");
