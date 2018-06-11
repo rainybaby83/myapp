@@ -1,8 +1,9 @@
 package com.dhyx.panel;
 
 
-import com.dhyx.dbclass.MyDatabase;
-import com.dhyx.dbclass.ProjectClass;
+import com.dhyx.myclass.MyDatabase;
+import com.dhyx.myclass.ProjectClass;
+import com.dhyx.myclass.TC;
 import com.dhyx.myclass.*;
 import com.dhyx.MainApp;
 
@@ -400,9 +401,9 @@ public class PanelTest extends JPanel {
                 String sqlDeleteTest = "UPDATE test SET isDeleted = 'Y', modifyDate = ? WHERE isDeleted = 'N' AND testID = ?;";
                 String sqlDeleteTestOriginal = "UPDATE test_original SET isDeleted = 'Y' , modifyDate = ? WHERE isDeleted = 'N' AND testID = ?;";
                 modifyDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
-                String[] param = {modifyDate, testIDdel};
-                db.pstmtUpdateNotCommit(false, sqlDeleteTest, param);
-                db.pstmtUpdateNotCommit(false, sqlDeleteTestOriginal, param);
+                String[] params = {modifyDate, testIDdel};
+                db.pstmtUpdateNotCommit(false, sqlDeleteTest, params);
+                db.pstmtUpdateNotCommit(false, sqlDeleteTestOriginal, params);
 
                 // 5 重新计算concentration。如果该浓度ID还有对应的testID数据，则计算平均值，否则逻辑删除该浓度ID数据并设置为0
                 updateDB_Concentration(concentrationID, "删除调用");
@@ -450,21 +451,24 @@ public class PanelTest extends JPanel {
         if (listCurveOrder.getSelectedValue() == null || listConcentrationOrder.getSelectedValue() == null) {
             JOptionPane.showMessageDialog(null, "请选择曲线序号和浓度序号。");
         } else {
+            float x1Value=0,x2Value=0;
             try {
                 // 1 从设备获取采集的数据
+                /// -------------for test----------------------
                 int i = RandomUtils.nextInt(0, Const.testData.length);
-                TestDataClass testData = Const.testData[i];
+                TestData testData = Const.testData[i];
                 testData.setProject(pro);
+                // ------------------------------------------------
 
                 // 2 根据实验ID，获得 取峰算法ID、TC公式ID、峰的左右边界及取数
                 // 此环节已在click_tblExperiment()完成，写入实例pro
 
-                // 2.1 计算X1\X2的峰值
-                float x1Value = testData.getX1Value();
-                float x2Value = testData.getX2Value();
+                // 2.1 计算X1\X2的峰值，此处当value小于0时，抛出ArithmeticException异常
+                x1Value = testData.getX1Value();
+                x2Value = testData.getX2Value();
 
                 // 2.2 计算TC值
-                float tcValue = testData.getTCValue();
+                float tcValue = TC.getTCValue(testData.p.tcTypeID, x1Value, x2Value);
 
                 // 3 获取列表框的曲线序号+浓度序号
                 String curveOrder = listCurveOrder.getSelectedValue();
@@ -483,8 +487,8 @@ public class PanelTest extends JPanel {
                     createDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
                     String sqlInsertCurve = "INSERT INTO `curve` (isDeleted , createDate , modifyDate,isLocked , experimentID , curveOrder , tcTypeID ) " +
                             " VALUES ( 'N',?,?,'N',?,?,?);";
-                    String[] paramCurve = {createDate,createDate, experimentID, curveOrder, pro.tcTypeID};
-                    newCurveID = db.pstmtUpdateNotCommit(true, sqlInsertCurve, paramCurve);
+                    String[] paramsCurve = {createDate, createDate, experimentID, curveOrder, pro.tcTypeID};
+                    newCurveID = db.pstmtUpdateNotCommit(true, sqlInsertCurve, paramsCurve);
                     newIsLocked = "N";
                 } else {
                     newCurveID = rs.getString(1);
@@ -507,9 +511,9 @@ public class PanelTest extends JPanel {
                         String sqlInsertConcentration =
                                 "INSERT INTO concentration (isDeleted , createDate , modifyDate , curveID , concentrationOrder , tcAverValue ) " +
                                         " VALUES ( 'N',?,?,?,?,0);";
-                        String[] paramConcentration = {createDate,createDate, newCurveID, concentrationOrder};
+                        String[] paramsConcentration = {createDate, createDate, newCurveID, concentrationOrder};
 
-                        newConcentrationID = db.pstmtUpdateNotCommit(true, sqlInsertConcentration, paramConcentration);
+                        newConcentrationID = db.pstmtUpdateNotCommit(true, sqlInsertConcentration, paramsConcentration);
                     } else {
                         // 5.2 如果有concentrationID，往下进行第6步
                         newConcentrationID = rs.getString(1);
@@ -521,10 +525,10 @@ public class PanelTest extends JPanel {
                     String sqlInsertTest = "INSERT INTO `test`" +
                             "(isDeleted , createDate , modifyDate , concentrationID , X1Value , X2Value , tcValue )" +
                             " VALUES ( 'N',?,?,?,?,?,?);";
-                    String[] paramTest = {createDate, createDate, newConcentrationID,
+                    String[] paramsTest = {createDate, createDate, newConcentrationID,
                             String.valueOf(x1Value), String.valueOf(x2Value), String.valueOf(tcValue)};
 
-                    newTestID = db.pstmtUpdateNotCommit(true, sqlInsertTest, paramTest);
+                    newTestID = db.pstmtUpdateNotCommit(true, sqlInsertTest, paramsTest);
 
                     // 7 【更新】浓度表，计算TC值的平均值，写入浓度表，调用 updateDB_Concentration()
                     updateDB_Concentration(newConcentrationID, "开始测试调用");
@@ -543,6 +547,9 @@ public class PanelTest extends JPanel {
 
                     click_tblCurve("单击：测试按钮，结束时调用");
                 }
+            } catch (ArithmeticException ae) {
+                JOptionPane.showMessageDialog(null,
+                        ae.getMessage() + String.valueOf(x1Value)+ String.valueOf(x2Value));
             } catch (Exception e) {
                 try {
                     conn.rollback();
@@ -701,7 +708,7 @@ public class PanelTest extends JPanel {
      */
     private void updateDB_Concentration(String concentrationID, String msg) throws SQLException {
         String sqlUpdateConcentration;
-        String[] paramConcentration;
+        String[] paramsConcentration;
 
         String sqlSelectCount = "SELECT count(concentrationID) FROM test WHERE isDeleted = 'N' AND concentrationID = ?";
         Boolean isExist = db.isExistByCount(sqlSelectCount, concentrationID);
@@ -717,23 +724,23 @@ public class PanelTest extends JPanel {
                 averTC = rs.getString(1);
             }
             sqlUpdateConcentration = "UPDATE concentration SET tcAverValue = ? ,modifyDate = ? WHERE isDeleted = 'N' AND concentrationID = ?";
-            paramConcentration = new String[]{averTC, modifyDate, concentrationID};
+            paramsConcentration = new String[]{averTC, modifyDate, concentrationID};
         } else {
             //否则逻辑删除该数据并设置为0
             sqlUpdateConcentration = "UPDATE concentration SET tcAverValue = 0,isDeleted = 'Y',modifyDate = ?  WHERE concentrationID = ?";
-            paramConcentration = new String[]{modifyDate, concentrationID};
+            paramsConcentration = new String[]{modifyDate, concentrationID};
         }
-        db.pstmtUpdateNotCommit(false, sqlUpdateConcentration, paramConcentration);
+        db.pstmtUpdateNotCommit(false, sqlUpdateConcentration, paramsConcentration);
     }
 
 
-    private void updateDB_TestOriginal(String testID, TestDataClass td) throws SQLException {
+    private void updateDB_TestOriginal(String testID, TestData td) throws SQLException {
         createDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
         String sqlInsert = "INSERT INTO test_original (isDeleted , createDate , modifyDate ,testID,x,y ) " +
                 " VALUES ( 'N',?,?,?,?,?);";
         for (int i = 0; i < td.length; i++) {
-            String[] param = {createDate, createDate, testID, String.valueOf(td.x[i]), String.valueOf(td.y[i])};
-            db.pstmtUpdateNotCommit(false, sqlInsert, param);
+            String[] params = {createDate, createDate, testID, String.valueOf(td.x[i]), String.valueOf(td.y[i])};
+            db.pstmtUpdateNotCommit(false, sqlInsert, params);
         }
     }
 
@@ -754,12 +761,12 @@ public class PanelTest extends JPanel {
                 ResultSet rs2 = conn.createStatement().executeQuery(selectCurveID);
                 if (rs2.next()) {
                     String lock = rs2.getString(1);
-                    if (lock.equals("N")) {
+                    if ("N".equals(lock)) {
                         btnStartTest.setEnabled(true);
                     }
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
 
     }

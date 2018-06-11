@@ -1,7 +1,7 @@
 package com.dhyx.panel;
 
-import com.dhyx.dbclass.MyDatabase;
-import com.dhyx.dbclass.ProjectClass;
+import com.dhyx.myclass.MyDatabase;
+import com.dhyx.myclass.ProjectClass;
 import com.dhyx.myclass.*;
 import com.dhyx.MainApp;
 import org.apache.commons.lang3.ArrayUtils;
@@ -53,8 +53,8 @@ public class PanelProject extends JPanel {
         initButton();
         initTable();
         initSubPanel();
-        click_btnQuery();
-        click_tblProject();
+        clickBtnQuery();
+        clickTblProject();
     }
 
 
@@ -78,7 +78,7 @@ public class PanelProject extends JPanel {
                 //按回车键执行相应操作;
                 if(e.getKeyChar()==KeyEvent.VK_ENTER )
                 {
-                    click_btnQuery();
+                    clickBtnQuery();
                 }
             }
         });
@@ -123,7 +123,7 @@ public class PanelProject extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    click_tblProject();
+                    clickTblProject();
                 }
             }
         });
@@ -139,7 +139,7 @@ public class PanelProject extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnQuery.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：项目管理-查询" + panelQuery.txtQuery.getText());
-                    click_btnQuery();
+                    clickBtnQuery();
                 }
             }
         });
@@ -154,7 +154,7 @@ public class PanelProject extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnNew.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：项目管理-新建");
-                    click_btnNew();
+                    clickBtnNew();
                 }
             }
         });
@@ -169,7 +169,7 @@ public class PanelProject extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if ((btnEdit.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：项目管理-编辑");
-                    click_btnEdit();
+                    clickBtnEdit();
                 }
             }
         });
@@ -185,12 +185,12 @@ public class PanelProject extends JPanel {
                     logger.trace("点击按钮：项目管理-保存");
 
                     //更新或插入成功，则执行收尾工作
-                    if (click_btnSave()) {
+                    if (clickBtnSave()) {
                         btnNew.setEnabled(true);
                         btnEdit.setEnabled(true);
                         btnSave.setEnabled(false);
                         resetSubPanel(true, false);
-                        click_btnQuery();
+                        clickBtnQuery();
                         tblProject.setLastRow();
                     }   // END 5 : if (isSuccess)
                 }
@@ -206,7 +206,7 @@ public class PanelProject extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    boolean status = click_btnDel();
+                    boolean status = clickBtnDel();
                     logger.trace("点击按钮：项目管理-删除。项目ID=" + p.projectID + "，结果=" + status);
                 }
             }
@@ -382,7 +382,7 @@ public class PanelProject extends JPanel {
 
 
     //查询按钮
-    private void click_btnQuery() {
+    private void clickBtnQuery() {
         btnQuery.setEnabled(false);
         PanelProject.this.resetSubPanel(true, false);
 
@@ -402,11 +402,11 @@ public class PanelProject extends JPanel {
         btnSave.setEnabled(false);
         btnDel.setEnabled(false);
         btnQuery.setEnabled(true);
-    }   // END : private void click_btnQuery()
+    }   // END : private void clickBtnQuery()
 
 
     //新建按钮
-    private void click_btnNew() {
+    private void clickBtnNew() {
         //清空子面板的组件，并启用。
         resetSubPanel(true, true);
         text[0].setText("无需填写");
@@ -415,11 +415,11 @@ public class PanelProject extends JPanel {
         btnEdit.setEnabled(false);
         btnSave.setEnabled(true);
         saveState = Const.SAVE_STATE_NEW;
-    }   // END : private void click_btnNew()
+    }   // END : private void clickBtnNew()
 
 
     //编辑按钮
-    private void click_btnEdit() {
+    private void clickBtnEdit() {
         //锁住表格组件
         tblProject.setEnabled(false);
 
@@ -442,7 +442,7 @@ public class PanelProject extends JPanel {
         }
         //释放表格组件
         tblProject.setEnabled(true);
-    }    // END : private  void click_btnEdit()
+    }    // END : private  void clickBtnEdit()
 
 
 
@@ -452,7 +452,7 @@ public class PanelProject extends JPanel {
      * 3.校验数字的逻辑关系
      * 4.满足逻辑关系时，判断是新建，还是编辑
      */
-    private boolean click_btnSave() {
+    private boolean clickBtnSave() {
         boolean result = false;
         //1.验证所有必选项是否已填写
         if (checkEmptyForClickSave()) {
@@ -490,32 +490,32 @@ public class PanelProject extends JPanel {
                     String sqlInsertProject = "INSERT INTO `project`(isDeleted , createDate , modifyDate , projectName , prepareDuration , " +
                             "peakTypeID , tcTypeID , subUnit , subMin , subMax ,X1Left , X1Right , X1N , X2Left , X2Right , X2N ) " +
                             " VALUES ( 'N', ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-                    String[] paraProject = {p.createDate, p.modifyDate, p.projectName, p.prepareDuration, p.peakTypeID, p.tcTypeID,
+                    String[] paramsProject = {p.createDate, p.modifyDate, p.projectName, p.prepareDuration, p.peakTypeID, p.tcTypeID,
                             p.subUnit, p.subMin, p.subMax,
                             String.valueOf(p.x1Left), String.valueOf(p.x1Right), String.valueOf(p.x1N),
                             String.valueOf(p.x2Left), String.valueOf(p.x2Right), String.valueOf(p.x2N)};
-                    result = db.pstmtUpdateAndCommit(sqlInsertProject, paraProject);
+                    result = db.pstmtUpdateAndCommit(sqlInsertProject, paramsProject);
                 } else if (saveState == Const.SAVE_STATE_EDIT) {
                     //如果是编辑，按照项目ID更新数据库
                     String sqlUpdateProject = "UPDATE project SET modifyDate = ? , projectName= ? , prepareDuration = ? , " +
                             " peakTypeID = ? , tcTypeID = ? , subUnit = ? , subMin = ? , subMax = ? , " +
                             " X1Left = ? , X1Right = ? , X1N = ? , X2Left = ? , X2Right = ? , X2N = ? " +
                             " WHERE projectID =? AND isDeleted = 'N';";
-                    String[] paraProject = {p.modifyDate, p.projectName, p.prepareDuration, p.peakTypeID, p.tcTypeID, p.subUnit, p.subMin, p.subMax,
+                    String[] paramsProject = {p.modifyDate, p.projectName, p.prepareDuration, p.peakTypeID, p.tcTypeID, p.subUnit, p.subMin, p.subMax,
                             String.valueOf(p.x1Left), String.valueOf(p.x1Right), String.valueOf(p.x1N),
                             String.valueOf(p.x2Left), String.valueOf(p.x2Right), String.valueOf(p.x2N),
                             p.projectID};
-                    result = db.pstmtUpdateAndCommit(sqlUpdateProject, paraProject);
+                    result = db.pstmtUpdateAndCommit(sqlUpdateProject, paramsProject);
                 }
             }   // END 4 : if (isAllowedSave)
         }   // END 1 : if (checkComponetReady()==false) else
 
         return result;
-    }   // END : private void click_btnSave()
+    }   // END : private void clickBtnSave()
 
 
     //删除按钮
-    private boolean click_btnDel() {
+    private boolean clickBtnDel() {
         boolean status = false;
         //判断是否允许删除
         String sql = "SELECT COUNT(*) FROM view_project_exp_curve WHERE 项目ID = ?";
@@ -535,11 +535,11 @@ public class PanelProject extends JPanel {
              }
         }
         return status;
-    }   // END : private void click_btnDel()
+    }   // END : private void clickBtnDel()
 
 
     // JTable的监听器，用于单击某行后，显示在下方
-    private void click_tblProject() {
+    private void clickTblProject() {
         resetSubPanel(true, false);
         int nowRow = tblProject.getSelectedRow();
         if (nowRow != -1) {
@@ -587,7 +587,7 @@ public class PanelProject extends JPanel {
             btnEdit.setEnabled(false);
             btnDel.setEnabled(false);
         }   // END :if (nowRow != -1)
-    }   // END : private void click_tblProject()
+    }   // END : private void clickTblProject()
 
 
     /* 重置子面板 */

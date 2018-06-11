@@ -1,4 +1,4 @@
-package com.dhyx.dbclass;
+package com.dhyx.myclass;
 
 import com.dhyx.MainApp;
 import org.apache.commons.lang3.math.NumberUtils;

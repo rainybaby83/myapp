@@ -1,11 +1,8 @@
 package com.dhyx.myclass;
 
 import com.dhyx.MainApp;
-import jdk.nashorn.internal.scripts.JO;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -22,7 +19,7 @@ import java.io.*;
  * @author R
  */
 public class Const {
-    public static TestDataClass[] testData = getArrayFromFile();
+    public static TestData[] testData = getArrayFromFile();
 
     /**
      * 软件名称,版本
@@ -173,7 +170,7 @@ public class Const {
 
 
     //调用excel文件里的数据，模拟从设备端采集数据
-    private static TestDataClass[] getArrayFromFile() {
+    private static TestData[] getArrayFromFile() {
         try {
 
             XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("src/Data.xlsx")));
@@ -183,10 +180,10 @@ public class Const {
             //excel表格中一列为一组数据，每组有超过255个数据，所以只能用列
             int columnCount = row.getLastCellNum();
             int rowCount = sheet.getLastRowNum() + 1;
-            TestDataClass[] testdata = new TestDataClass[columnCount];
+            TestData[] testdata = new TestData[columnCount];
 
             for (int i = 0; i < columnCount; i++) {
-                testdata[i] = new TestDataClass(rowCount);
+                testdata[i] = new TestData(rowCount);
                 for (int j = 0; j < rowCount; j++) {
                     testdata[i].x[j] = j + 1;
                     testdata[i].y[j] = (float) sheet.getRow(j).getCell(i).getNumericCellValue();
@@ -197,7 +194,7 @@ public class Const {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new TestDataClass[0];
+        return new TestData[0];
     }
 
 

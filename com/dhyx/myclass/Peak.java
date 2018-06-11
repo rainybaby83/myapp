@@ -1,30 +1,32 @@
-package com.dhyx.dbclass;
+package com.dhyx.myclass;
 
-import com.dhyx.myclass.TestDataClass;
+public class Peak {
 
-import javax.swing.*;
-
-public class PeakClass {
-    public static float getPeak(TestDataClass testData, String peakTypeID, int left, int right, int N) {
-
+    /**
+     * 传入峰的参数，计算峰面积
+     * @param testData 传入的数据数组，自定义类TestData
+     * @param peakTypeID 传入的取峰算法ID
+     * @param left  峰的左边界
+     * @param right 峰的右边界
+     * @param N     峰的取数，并非所有取峰算法都需要
+     * @return  返回峰面积，默认为0，调用方会抛出异常，捕获峰面积<=0的情况
+     */
+    public static float getPeak(TestData testData, String peakTypeID, int left, int right, int N) {
         float result;
         switch (peakTypeID) {
             case "1":
-                result = method_TPA(testData, left, right, N);
+                result = methodTPA(testData, left, right, N);
                 break;
             case "2":
-                result = method_Covell(testData, left, right, N);
+                result = methodCovell(testData, left, right, N);
                 break;
             case "3":
-                result = method_Waston(testData, left, right, N);
+                result = methodWaston(testData, left, right, N);
                 break;
             default:
-                result = 0.00001f;
+                result = 0;
         }
 
-        if (result <= 0) {
-            JOptionPane.showMessageDialog(null,"峰面积小于0，请选其它算法，或调整左右边界及取数N。");
-        }
         return result;
 
     }
@@ -38,8 +40,10 @@ public class PeakClass {
      * @param n 边界外扩展的用于求本底均值的N
      * @return 返回计算值
      */
-    private static float method_TPA(TestDataClass td, int left, int right,int n) {
+    private static float methodTPA(TestData td, int left, int right, int n) {
+
         // 1 计算总面积
+
         // 下标从0，序号从1开始，所以下标要减1。left<= 序号 <= right，左右边界都包含
         float areaS = 0;
         for (int i = left - 1; i <= right - 1; i++) {
@@ -47,6 +51,7 @@ public class PeakClass {
         }
 
         // 2 计算底面积
+
         // 2.1 计算左侧本底，包含左边界，不含右边界
         float areaBL = 0, areaBR = 0, areaB = 0;
         int start1 = left - n > 1 ? left - n : 1;
@@ -66,8 +71,7 @@ public class PeakClass {
 
         // 3 净峰面积
         return areaS - areaB;
-    }   // END : private static float method_TPA()
-
+    }   // END : private static float methodTPA()
 
 
     /**
@@ -78,7 +82,7 @@ public class PeakClass {
      * @param n 边界外扩展的用于求本底均值的N，不能小于0
      * @return 返回计算值
      */
-    private static float method_Covell(TestDataClass td, int left, int right,int n) {
+    private static float methodCovell(TestData td, int left, int right, int n) {
         // 1 计算区间最高值的X位置
         int m = td.getMaxX(left,right);
         int mLeft = m - n > left ? m - n : left;
@@ -97,7 +101,7 @@ public class PeakClass {
 
         // 4 净峰面积
         return areaS - areaB;
-    }   // END : private static float method_Covell()
+    }   // END : private static float methodCovell()
 
 
     /**
@@ -108,7 +112,7 @@ public class PeakClass {
      * @param n 边界外扩展的用于求本底均值的N，不能小于0
      * @return 返回计算值
      */
-    private static float method_Waston(TestDataClass td, int left, int right,int n) {
+    private static float methodWaston(TestData td, int left, int right, int n) {
         // 1 计算区间最高值的X位置
         int m = td.getMaxX(left,right);
         int mLeft = m - n > left ? m - n : left;
@@ -129,6 +133,6 @@ public class PeakClass {
 
         // 4 净峰面积
         return areaS - areaB;
-    }
+    }   // END : private static float methodWaston()
 
 }

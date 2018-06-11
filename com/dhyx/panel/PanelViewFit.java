@@ -2,7 +2,6 @@ package com.dhyx.panel;
 
 import com.dhyx.myclass.Const;
 import com.dhyx.myclass.MyFitData;
-import com.dhyx.myclass.MyIconButton;
 import com.dhyx.myclass.MyTable;
 import com.flanagan.analysis.Regression;
 import com.flanagan.physchem.ImmunoAssay;
@@ -41,7 +40,7 @@ public class PanelViewFit extends JDialog {
         this.setIconImage(Const.ICON_APP.getImage());
         this.setLayout(null);
         this.setBounds(0, 0, 1050, HEIGHT_SHORT);
-        this.moveCenter();
+        this.frameMoveCenter();
         this.setBackground(Color.white);
         this.getContentPane().setBackground(Color.white);
         this.setResizable(false);
@@ -264,14 +263,14 @@ public class PanelViewFit extends JDialog {
     private void returnParent(String msg) {
 
         //顺序：拟合方法,公式图片，a,b,c,d,e,R2
-        Vector<Object> para = new Vector<>();
+        Vector<Object> fitResults = new Vector<>();
         int nowRow = tblFit.getSelectedRow();
         DefaultTableModel dm = (DefaultTableModel) tblFit.getModel();
-        String[] columnName = {"公式", "拟合方法", "a", "b", "c", "d", "e", "R2"};
+        String[] columnName = {"序号","公式", "拟合方法", "a", "b", "c", "d", "e", "R2"};
         for (int i = 0; i < columnName.length; i++) {
-            para.addElement(tblFit.getValueAt(nowRow, dm.findColumn(columnName[i])));
+            fitResults.addElement(tblFit.getValueAt(nowRow, dm.findColumn(columnName[i])));
         }
-        parent.receiveFitData(para);
+        parent.receiveFitData(fitResults);
     }
 
 
@@ -293,18 +292,18 @@ public class PanelViewFit extends JDialog {
     }
 
 
-    private void hideGraph() {
+    private void frameHideGraph() {
         setSize(getWidth(), HEIGHT_SHORT);
         panelGragh.setVisible(false);
     }
 
-    private void displayGraph() {
+    private void frameDisplayGraph() {
         setSize(getWidth(), HEIGHT_TALL);
         panelGragh.setVisible(true);
     }
 
 
-    private void moveCenter() {
+    private void frameMoveCenter() {
         Toolkit tk = Toolkit.getDefaultToolkit();
         this.setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
                 (tk.getScreenSize().height - this.getHeight()) / 2);
@@ -344,13 +343,13 @@ public class PanelViewFit extends JDialog {
                     int index = ((DefaultTableModel) tblFit.getModel()).findColumn("查看图形");
                     int clickedIndex = tblFit.getTableHeader().columnAtPoint(e.getPoint());
                     if (clickedIndex == index) {
-                        displayGraph();
+                        frameDisplayGraph();
                         viewGragh("单击“查看图形”");
-                        moveCenter();
+                        frameMoveCenter();
                         logger.trace("点击按钮：查看拟合图形，" + tblFit.getValueAt(nowRow, 1));
                     } else {
-                        hideGraph();
-                        moveCenter();
+                        frameHideGraph();
+                        frameMoveCenter();
                         panelGragh.removeAll();
 
 

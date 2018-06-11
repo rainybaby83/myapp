@@ -1,4 +1,4 @@
-package com.dhyx.dbclass;
+package com.dhyx.myclass;
 
 import com.ibatis.RuntimeSqlException;
 import com.ibatis.ScriptRunner;
@@ -77,6 +77,9 @@ public class MyDatabase {
     }   // END:  private void dbStart()
 
 
+    /**
+     * 从sql文件中创建数据库结构
+     */
     private void dbCreateBySqlFile(){
         JFileChooser jFileChooser = new JFileChooser();
         jFileChooser.changeToParentDirectory();
@@ -138,18 +141,19 @@ public class MyDatabase {
     }  // END: private void dbClose()
 
 
-    /**查找是否存在给定条件的记录，返回true或false
-     * @param SQL 要执行的sql
-     * @param param sql中的字段实际值
+    /**
+     * 查找是否存在给定条件的记录，返回true或false
+     * @param sql 要执行的sql
+     * @param params sql中的字段实际值
      * @return 是或否
      */
-    public boolean isExistByCount(String SQL, String... param) {
+    public boolean isExistByCount(String sql, String... params) {
         boolean isExist;
         int count = 1;
         try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            for (int i = 0; i < param.length; i++) {
-                pstmt.setString(i + 1, param[i]);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            for (int i = 0; i < params.length; i++) {
+                pstmt.setString(i + 1, params[i]);
             }
             ResultSet rs = pstmt.executeQuery();
             rs.next();
@@ -158,26 +162,26 @@ public class MyDatabase {
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
         }
 
-        if (count == 0) {
-            isExist = false;
-        } else {
-            isExist = true;
-        }
+        isExist = count != 0;
         return isExist;
     }   // END : private boolean isExistByCount()
 
 
-
-    public boolean pstmtUpdateAndCommit(String sql, String... param) {
+    /**
+     * 执行sql语句，并提交到数据库，返回执行结果。
+     * @param sql 要执行的sql语句
+     * @param params 填充到sql语句“?”的字段值，不定长数组，方便处理只有1个字段的情况。
+     * @return 返回执行结果，true或false
+     */
+    public boolean pstmtUpdateAndCommit(String sql, String... params) {
         try {
             conn.setAutoCommit(false);
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            for (int i = 0; i < param.length; i++) {
-                pstmt.setString(i + 1, param[i]);
+            for (int i = 0; i < params.length; i++) {
+                pstmt.setString(i + 1, params[i]);
             }
             pstmt.executeUpdate();
             // 更新完毕
-//            JOptionPane.showMessageDialog(null, "操作成功!");
             conn.commit();
             return true;
         } catch (Exception e) {
@@ -189,35 +193,35 @@ public class MyDatabase {
             }
 
             logger.error(e.getClass().getSimpleName() + "，" + e.getMessage());
-            JOptionPane.showMessageDialog(null, "操作失败，未能更新。请查看日志。\n" + e.getMessage());
+            JOptionPane.showMessageDialog(null, "操作失败，未能更新数据库。请查看日志。\n" + e.getMessage());
             return false;
         } // END : try
     }   // END : private boolean dbUpdate()
 
 
-    /**不提交，并获得插入后的键
-     * @param sql 要执行的SQL，
-     * @param param sql中字段的实际值
-     * @return 自动生成的键
-     * @throws SQLException
+    /**
+     * 执行sql语句，不提交数据库，并获得插入后的键。如果出错，则上级调用方处理SQLException，进行回滚
+     * @param isInsert 是插入还是更新。如果是true，则是insert，需要返回生成的键；如果是false，则是update，返回值设置为空字符串
+     * @param sql 要执行的sql语句
+     * @param params 填充到sql语句“?”的字段值，不定长数组，方便处理只有1个字段的情况。
+     * @return String类型，自动生成的键，或者空字符串。
+     * @throws SQLException，抛出数据库异常
      */
-    public String pstmtUpdateNotCommit(boolean isInsert, String sql, String... param) throws SQLException {
+    public String pstmtUpdateNotCommit(boolean isInsert, String sql, String... params) throws SQLException {
         conn.setAutoCommit(false);
         PreparedStatement pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-        for (int i = 0; i < param.length; i++) {
-            pstmt.setString(i+1, param[i]);
+        for (int i = 0; i < params.length; i++) {
+            pstmt.setString(i+1, params[i]);
         }
-        int a = pstmt.executeUpdate();
+        pstmt.executeUpdate();
         if (isInsert) {
             ResultSet rs = pstmt.getGeneratedKeys();
             rs.next();
             return rs.getString(1);
+        } else {
+            return "";
         }
-        return "";
-        // 更新完毕
-
     }   // END : private void pstmtUpdateNotCommit()
-
 
 
 }   // END: public class MyDatabase

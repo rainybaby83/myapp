@@ -28,8 +28,13 @@ import static javax.swing.JFileChooser.FILES_ONLY;
 public class MyTable extends JTable{
     public JScrollPane j;
     private Logger logger = LogManager.getLogger();
-    public JPopupMenu jPopupMenu = new JPopupMenu();
+    private JPopupMenu jPopupMenu = new JPopupMenu();
 
+
+    /**
+     * 构造方法
+     * @param dm 传入的TableModel
+     */
     public MyTable(DefaultTableModel dm) {
         super(dm);
         this.setRowSorter(new TableRowSorter<>(dm));
@@ -46,17 +51,24 @@ public class MyTable extends JTable{
                 }
             }
         });
-    }
+    }   // END : public MyTable(dm)
 
 
-    //默认所有单元格不可编辑
+    /**
+     * 覆写，默认所有单元格不可编辑
+     * @param row  单元格的行
+     * @param column 单元格的列
+     * @return 逻辑值，true=可以编辑，false=不可编辑
+     */
     @Override
     public boolean isCellEditable(int row, int column) {
         return false;
-    }
+    }   // END : public boolean isCellEditable()
 
 
-    //初始化表格
+    /**
+     * 初始化表格
+     */
     private void initTable(){
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.setSelectionBackground(Const.GREEN_ACTIVE);
@@ -69,7 +81,7 @@ public class MyTable extends JTable{
         DefaultTableCellRenderer dlrc = new DefaultTableCellRenderer();
         dlrc.setHorizontalAlignment(JLabel.CENTER);
         this.setDefaultRenderer(Object.class, dlrc);
-    }
+    }   // END : private initTable()
 
 
     /**
@@ -81,7 +93,7 @@ public class MyTable extends JTable{
         header.setBackground(new Color(200, 200, 200));
         header.setOpaque(true);
         header.setReorderingAllowed(false);
-    }
+    }   // END : private initTableHead()
 
 
     private void initOther() {
@@ -96,7 +108,7 @@ public class MyTable extends JTable{
 
         jPopupMenu.add(btnExcel);
         jPopupMenu.setBorder(BorderFactory.createEtchedBorder());
-    }
+    }   // END : private initOther()
 
 
     /**
@@ -109,7 +121,7 @@ public class MyTable extends JTable{
             this.getColumnModel().getColumn(i).setPreferredWidth(width[i]);
             this.getColumnModel().getColumn(i).setMinWidth(width[i]);
         }
-    }
+    }   // END : public setWidth()
 
 
 

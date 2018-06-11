@@ -3,8 +3,6 @@ package com.dhyx.myclass;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedHashMap;
 import java.util.Vector;
 
 public class MyList extends JList<String> {
@@ -20,11 +18,13 @@ public class MyList extends JList<String> {
         DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
         dlcr.setHorizontalAlignment(JLabel.CENTER);
         this.setCellRenderer(dlcr);
-
-        model = this.getModel();
     }
 
 
+    /**
+     * 给定字符串数组，添加到列表中
+     * @param str 字符串数组
+     */
     public void addString(String[] str) {
         this.removeAll();
         Vector<String> vector = new Vector<>();
@@ -32,6 +32,7 @@ public class MyList extends JList<String> {
             vector.addElement(str[i]);
         }
         this.setListData(vector);
+        model = this.getModel();
     }
 
 
@@ -43,25 +44,31 @@ public class MyList extends JList<String> {
             vector.addElement(String.valueOf(i));
         }
         this.setListData(vector);
-
+        model = this.getModel();
     }
 
 
     //根据传入的序号，遍历下拉框，选中跟传入参数一样的那一行数据
     public void setSelectedByValue(int number) {
-        int i = 0;
-        for (i=0; i < model.getSize(); i++) {
-            if (number==(NumberUtils.toInt(model.getElementAt(i)))) {
-                break;
+        if (model.getSize() == 0) {
+            System.out.println("model没有赋值，size=0.");
+
+        } else {
+            int i = 0;
+            for (i = 0; i < model.getSize(); i++) {
+                if (number == (NumberUtils.toInt(model.getElementAt(i)))) {
+                    break;
+                }
+            }
+
+            if (i != model.getSize()) {
+                setSelectedIndex(i);
+                ensureIndexIsVisible(i);
+            } else {
+                clearSelection();
             }
         }
 
-        if (i != model.getSize()) {
-            setSelectedIndex(i);
-            ensureIndexIsVisible(i);
-        } else {
-            clearSelection();
-        }
     }
 
 

@@ -1,6 +1,6 @@
 package com.dhyx.panel;
 
-import com.dhyx.dbclass.MyDatabase;
+import com.dhyx.myclass.MyDatabase;
 import com.dhyx.myclass.*;
 import com.dhyx.MainApp;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +40,7 @@ public class PanelExperiment extends JPanel {
         initLabel();
         initButton();
         initTable();
-        click_btnQuery();
+        clickBtnQuery();
     }
 
 
@@ -64,7 +64,7 @@ public class PanelExperiment extends JPanel {
                 //按回车键执行相应操作;
                 if(e.getKeyChar()==KeyEvent.VK_ENTER )
                 {
-                    click_btnQuery();
+                    clickBtnQuery();
                 }
             }
         });
@@ -97,7 +97,7 @@ public class PanelExperiment extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnQuery.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：实验管理-查询。" + panelQuery.txtQuery.getText());
-                    click_btnQuery();
+                    clickBtnQuery();
                 }
             }
         });
@@ -112,8 +112,8 @@ public class PanelExperiment extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnNew.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：实验管理-新建实验");
-                    click_btnNew();
-                    click_btnQuery();
+                    clickBtnNew();
+                    clickBtnQuery();
                 }
             }
         });
@@ -127,9 +127,9 @@ public class PanelExperiment extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    boolean status = click_btnDel();
+                    boolean status = clickBtnDel();
                     logger.trace("点击按钮：实验管理-删除。实验ID=" + experimentID + "，结果=" + status);
-                    click_tblProject();
+                    clickTblProject();
                 }
             }
         });
@@ -182,7 +182,7 @@ public class PanelExperiment extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    click_tblProject();
+                    clickTblProject();
                 }
             }
         });
@@ -191,7 +191,7 @@ public class PanelExperiment extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    click_tblExperiment();
+                    clickTblExperiment();
                 }
             }
         });
@@ -201,7 +201,7 @@ public class PanelExperiment extends JPanel {
 
 
     //查询按钮
-    private void click_btnQuery() {
+    private void clickBtnQuery() {
         btnQuery.setEnabled(false);
         //处理SQL，避免注入。例如   C%' or 1=1 or 项目ID like '%C
         String sql,sql2;
@@ -216,14 +216,14 @@ public class PanelExperiment extends JPanel {
 
         //后续处理
         tblProject.setLastRow();
-        click_tblProject();
+        clickTblProject();
         panelQuery.txtQuery.requestFocus();
         btnQuery.setEnabled(true);
-    }   // END : private void click_btnQuery()
+    }   // END : private void clickBtnQuery()
 
 
     //新建实验按钮
-    private void click_btnNew() {
+    private void clickBtnNew() {
         String createDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
         String defautlName = DateFormatUtils.format(new Date(), "yyyyMMdd");
         experimentName = JOptionPane.showInputDialog(null, "当前项目为" + projectID + "." + projectName + "\n请输入新的实验名称：", defautlName);
@@ -233,16 +233,16 @@ public class PanelExperiment extends JPanel {
         if (StringUtils.isNotEmpty(experimentName)) {
             String insertExperiment = "INSERT INTO `experiment` (`isDeleted`,`createDate`,`modifyDate`,`projectID`,`experimentName`) " +
                     "VALUES ( 'N' , ? , ? , ? , ?);";
-            String[] paramExperiment = {createDate,createDate,projectID,experimentName};
-            db.pstmtUpdateAndCommit(insertExperiment, paramExperiment);
+            String[] paramsExperiment = {createDate,createDate,projectID,experimentName};
+            db.pstmtUpdateAndCommit(insertExperiment, paramsExperiment);
         } else {
             JOptionPane.showMessageDialog(null, "未输入实验名称，停止创建。");
         }
-    }   // END : private void click_btnNew()
+    }   // END : private void clickBtnNew()
 
 
     //删除按钮
-    private boolean click_btnDel() {
+    private boolean clickBtnDel() {
         boolean status = false;
         String sql = "SELECT COUNT(*) FROM `view_project_exp_curve` WHERE `实验ID` = ?";
         if (db.isExistByCount(sql, experimentID)) {
@@ -261,11 +261,11 @@ public class PanelExperiment extends JPanel {
             }   // END : if (answer == JOptionPane.OK_OPTION)
         }
         return status;
-    }   // END : private void click_btnDel()
+    }   // END : private void clickBtnDel()
 
 
     //点击左侧项目列表，自动查找右侧的实验数据。
-    private void click_tblProject() {
+    private void clickTblProject() {
         if (tblProject.getRowCount() > 0) {
             int nowRow = tblProject.getSelectedRow();
             String sql;
@@ -285,12 +285,12 @@ public class PanelExperiment extends JPanel {
             dmExperiment = TableMethod.getTableModel(sqlSelectExp + " WHERE 0=1");
             tblExperiment.setModel(dmExperiment);
         }
-        click_tblExperiment();
-    }   // END : private void click_tblProject()
+        clickTblExperiment();
+    }   // END : private void clickTblProject()
 
 
     //点击实验列表，设置删除键是否可用
-    private void click_tblExperiment() {
+    private void clickTblExperiment() {
         if (tblExperiment.getRowCount() > 0) {
             int nowRow = tblExperiment.getSelectedRow();
             DefaultTableModel currentDM = (DefaultTableModel) tblExperiment.getModel();
@@ -300,7 +300,7 @@ public class PanelExperiment extends JPanel {
         } else {
             btnDel.setEnabled(false);
         }
-    }   // END : private  void click_tblExperiment()
+    }   // END : private  void clickTblExperiment()
 
 
 }

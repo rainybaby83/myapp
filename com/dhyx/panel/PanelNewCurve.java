@@ -1,7 +1,7 @@
 package com.dhyx.panel;
 
 import com.dhyx.MainApp;
-import com.dhyx.dbclass.MyDatabase;
+import com.dhyx.myclass.MyDatabase;
 import com.dhyx.myclass.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +37,9 @@ public class PanelNewCurve extends JPanel {
     private JLabel[] lRight = new JLabel[7];
     private JLabel lblImage = new JLabel();
     private JSpinner jSpinner = new JSpinner();
+    private int xLog, yLog;
+    private double blank;
+    private String msg;
 
 
     public PanelNewCurve() {
@@ -50,20 +53,24 @@ public class PanelNewCurve extends JPanel {
         initTableAddListener();
         initList();
         initOther();
-        click_btnQuery("启动窗体调用，PanelNewCurve() ");
-        click_tblCurve("启动窗体调用，PanelNewCurve() ");
+        clickBtnQuery("启动窗体调用，PanelNewCurve() ");
+        clickTblCurve("启动窗体调用，PanelNewCurve() ");
     }
 
 
-    //初始化面板基本属性
+    /**
+     * 初始化面板基本属性
+     */
     private void initSelf() {
         this.setLayout(null);
         this.setBackground(Color.white);
         this.setBounds(Const.LEFT_MARGIN, Const.TITLE_HEIGHT, Const.PANEL_WIDHT, Const.PANEL_HEIGHT);
-    }
+    }   // END : private void initSelf()
 
 
-    //初始化查询面板
+    /**
+     * 初始化查询面板
+     */
     private void initQueryPanel() {
         panelQuery = new PanelQuery();
         panelQuery.lblQuery.setText("实验关键字");
@@ -74,8 +81,8 @@ public class PanelNewCurve extends JPanel {
             public void keyPressed(KeyEvent e) {
                 //按回车键执行相应操作;
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-                    click_btnQuery("文本框回车调用，initQueryPanel() ");
-                    click_tblCurve("文本框回车调用，initQueryPanel() ");
+                    clickBtnQuery("文本框回车调用，initQueryPanel() ");
+                    clickTblCurve("文本框回车调用，initQueryPanel() ");
                 }
             }
         });
@@ -83,10 +90,12 @@ public class PanelNewCurve extends JPanel {
         btnQuery = panelQuery.btnQuery;
         btnQuery.setBounds(435, 0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT);
         this.add(panelQuery);
-    }   // END :  private void initQueryPanel()
+    }   // END : private void initQueryPanel()
 
 
-    //初始化按钮
+    /**
+     * 初始化按钮
+     */
     private void initButton() {
         //查询按钮
         btnQuery.addMouseListener(new MouseAdapter() {
@@ -95,8 +104,8 @@ public class PanelNewCurve extends JPanel {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnQuery.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：生成曲线-查询" + panelQuery.txtQuery.getText());
-                    click_btnQuery("监听：鼠标单击查询按钮。mouseClicked() ");
-                    click_tblCurve("监听：鼠标单击查询按钮。mouseClicked() ");
+                    clickBtnQuery("监听：鼠标单击查询按钮。mouseClicked() ");
+                    clickTblCurve("监听：鼠标单击查询按钮。mouseClicked() ");
                 }
             }
         });
@@ -111,9 +120,9 @@ public class PanelNewCurve extends JPanel {
                 if ((btnDel.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     int answer = JOptionPane.showConfirmDialog(null, "确认要删除该曲线及其所有数据吗？", "删除确认", JOptionPane.YES_NO_OPTION);
                     if (answer == JOptionPane.YES_OPTION) {
-                        boolean status = click_btnDel();
+                        boolean status = clickBtnDel();
                         logger.trace("点击按钮：生成曲线-删除选中曲线。曲线ID=" + curveID + "，结果=" + status);
-                        click_btnQuery("点击删除按钮后调用");
+                        clickBtnQuery("点击删除按钮后调用");
                     }
 
                 }
@@ -129,7 +138,7 @@ public class PanelNewCurve extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if ((btnFit.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     logger.trace("点击按钮：生成曲线-查看所有拟合");
-                    click_btnFit();
+                    clickBtnFit();
                 }
             }
         });
@@ -137,7 +146,9 @@ public class PanelNewCurve extends JPanel {
     }   // END : private void initButton()
 
 
-    //初始化标签
+    /**
+     * 初始化标签
+     */
     private void initLabel() {
         JLabel lblCurve = new JLabel("曲线列表");
         JLabel lblConcentration = new JLabel("所选曲线的浓度(已求平均)");
@@ -185,17 +196,21 @@ public class PanelNewCurve extends JPanel {
         this.add(lbl100);
         this.add(lblImage);
         this.add(lblBlank);
-    }
+    }   // END : private void initLabel()
 
 
-    // 1. 创建TableModel
+    /**
+     * 1. 创建TableModel
+     */
     private void initTableGetModel() {
         dmCurve = TableMethod.getTableModel(sqlSelectCurve + " WHERE 0=1");
         dmConcentration = TableMethod.getDMwithCheck(sqlSelectConcentration + " WHERE 0=1");
-    }
+    }   // END : private void initTableGetModel()
 
 
-    // 2.创建表格并设置属性
+    /**
+     * 2.创建表格并设置属性
+     */
     private void initTableCreate() {
         // 2.1 创建表格
         tblCurve = new MyTable(dmCurve);
@@ -241,10 +256,12 @@ public class PanelNewCurve extends JPanel {
         // 2.7 添加表格到面板
         this.add(tblCurve.j);
         this.add(tblConcentration.j);
-    }
+    }   // END : private void initTableCreate()
 
 
-    // 3.添加表格的监听
+    /**
+     * 3.添加表格的监听
+     */
     private void initTableAddListener() {
 
         // 曲线列表的单击事件
@@ -252,7 +269,7 @@ public class PanelNewCurve extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    click_tblCurve("监听：鼠标单击曲线列表");
+                    clickTblCurve("监听：鼠标单击曲线列表");
                 }
             }
         });
@@ -262,7 +279,7 @@ public class PanelNewCurve extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    click_tblConcentration("监听：鼠标单击浓度列表");
+                    clickTblConcentration("监听：鼠标单击浓度列表");
                 }
             }
         });
@@ -273,7 +290,7 @@ public class PanelNewCurve extends JPanel {
             @Override
             public void editingStopped(ChangeEvent e) {
                 //此处退出编辑状态，如果数据符合要求，则写入数据库
-                updateDB_StopEdit("监听：editingStopped");
+                updateDbStopEdit("监听：editingStopped");
             }
 
             @Override
@@ -295,7 +312,9 @@ public class PanelNewCurve extends JPanel {
     }   // END : private void initTableAddListener()
 
 
-    // 初始化列表框
+    /**
+     * 初始化列表框
+     */
     private void initList() {
         String[] value = {"不取对数", "log 10", "log e"};
 
@@ -311,9 +330,12 @@ public class PanelNewCurve extends JPanel {
         lstYLog.setSelectedIndex(1);
         this.add(lstXLog);
         this.add(lstYLog);
-    }
+    }   // END : private void initList()
 
 
+    /**
+     * 初始化其它组件
+     */
     private void initOther() {
         //三个方框
         JPanel[] jp = new JPanel[3];
@@ -337,11 +359,14 @@ public class PanelNewCurve extends JPanel {
         jSpinner.setBounds(900,80,50,25);
         this.add(jSpinner);
 
-    }
+    }   // END : private void initOther()
 
 
-    //查询按钮
-    private void click_btnQuery(String msg) {
+    /**
+     * 查询按钮
+     * @param msg 记录上一级的调用方
+     */
+    private void clickBtnQuery(String msg) {
         btnQuery.setEnabled(false);
         //处理SQL，避免注入。例如   C%' or 1=1 or 项目ID like '%C
         String sql, strQueryKey;
@@ -356,7 +381,7 @@ public class PanelNewCurve extends JPanel {
         //后续处理
         panelQuery.txtQuery.requestFocus();
         btnQuery.setEnabled(true);
-    }
+    }   // END : private void clickBtnQuery()
 
 
     /**
@@ -372,7 +397,7 @@ public class PanelNewCurve extends JPanel {
      * 结束循环1
      * 提交
      */
-    private boolean click_btnDel() {
+    private boolean clickBtnDel() {
         boolean status = false;
         String modifyDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
@@ -429,11 +454,13 @@ public class PanelNewCurve extends JPanel {
             JOptionPane.showMessageDialog(null, "删除失败，数据库未作任何修改。请查看日志。");
         }
         return status;
-    }
+    }   // END : private void clickBtnDel()
 
 
-    //点击查看拟合按钮
-    private void click_btnFit() {
+    /**
+     * 点击查看拟合按钮
+     */
+    private void clickBtnFit() {
         //获取被选中的行数，校验是否满足拟合数量要求
         int[] nowRows = tblConcentration.getSelectedRows();
         int minCount = 6;
@@ -455,8 +482,9 @@ public class PanelNewCurve extends JPanel {
                 }
                 data.v[i] = NumberUtils.toDouble(tblConcentration.getValueAt(nowRows[i], index2).toString());
             }
-            int xLog = lstXLog.getSelectedIndex();
-            int yLog = lstYLog.getSelectedIndex();
+            //从0开始
+            xLog = lstXLog.getSelectedIndex();
+            yLog = lstYLog.getSelectedIndex();
             // 校验浓度为0的个数，最多只有1个
             if (count0 > 1) {
                 JOptionPane.showMessageDialog(null, "浓度值为0的数据最多只能有1个，当前有"
@@ -473,21 +501,26 @@ public class PanelNewCurve extends JPanel {
                 //------------------------------
 
                 //选中 扣Blank
-                double scale = NumberUtils.toFloat(String.valueOf(jSpinner.getValue())) / 100;
+                double ratio = NumberUtils.toDouble(String.valueOf(jSpinner.getValue())) / 100;
 
                 //处理blank数据
-                if (data.removeBlank(scale)) {
+                if (data.removeBlank(ratio)) {
+                    blank = data.blank;
                     PanelViewFit panelViewFit = new PanelViewFit(this, data, xLog, yLog);
                     panelViewFit.setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(null,"浓度为0的反应值不是最小值");
+                    blank = 0;
+                    JOptionPane.showMessageDialog(null,"浓度为0的反应值不是最小值，请重新选择参与拟合的数据。");
                 }
             }
         }
-    }
+    }   // END : private void clickBtnFit()
 
 
-    //表格全选，并打钩
+    /**
+     * 表格全选，并打钩
+     * @param myTable 要设置此功能的表格实例
+     */
     private void selectAll(MyTable myTable) {
         int rowCount = myTable.getRowCount();
         if (rowCount > 0) {
@@ -496,13 +529,14 @@ public class PanelNewCurve extends JPanel {
                 myTable.setValueAt(true, i, 0);
             }
         }
-    }
+    }   // END : private void selectAll()
 
 
-
-
-    //点击曲线列表时的操作
-    private void click_tblCurve(String msg) {
+    /**
+     * 点击曲线表格时的操作
+     * @param msg 记录上一级的调用方
+     */
+    private void clickTblCurve(String msg) {
         //设置DM默认值，如果符合if条件，则设置为正确的
         dmConcentration = TableMethod.getTableModel(sqlSelectConcentration + " WHERE 0=1");
         btnDel.setEnabled(false);
@@ -520,10 +554,14 @@ public class PanelNewCurve extends JPanel {
             }
         }
         tblConcentration.setModel(dmConcentration);
-    }   // END : private void click_tblCurve()
+    }   // END : private void clickTblCurve()
 
 
-    private void click_tblConcentration(String msg) {
+    /**
+     * 点击浓度表格时的操作
+     * @param msg 记录上一级的调用方
+     */
+    private void clickTblConcentration(String msg) {
         //获取所有被选中的行
         int[] nowRows = tblConcentration.getSelectedRows();
 
@@ -535,38 +573,77 @@ public class PanelNewCurve extends JPanel {
                 tblConcentration.setValueAt(false, i, 0);
             }
         }
-    }   // END : private void click_tblConcentration()
+    }   // END : private void clickTblConcentration()
 
 
-    //浓度表某个单元格的退出编辑状态时，将符合条件的浓度写入数据库，不符合的给出提示，不保存
-    private void updateDB_StopEdit(String msg) {
+    /**
+     * 浓度表某个单元格的退出编辑状态时，将符合条件的浓度写入数据库，不符合的给出提示，不保存
+     * @param msg  记录上一级的调用方
+     */
+    private void updateDbStopEdit(String msg) {
+        this.msg = msg;
         int nowRow = tblConcentration.getSelectedRow();
         DefaultTableModel currentDM = (DefaultTableModel) tblConcentration.getModel();
         String concentrationID = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度ID")).toString();
         String concentrationValue = tblConcentration.getValueAt(nowRow, currentDM.findColumn("浓度值")).toString();
         String sqlUpdate = "UPDATE concentration SET concentrationValue = ? WHERE concentrationID = ? ";
-        String[] param = {concentrationValue, concentrationID};
-        db.pstmtUpdateAndCommit(sqlUpdate, param);
-    }
+        String[] params = {concentrationValue, concentrationID};
+        db.pstmtUpdateAndCommit(sqlUpdate, params);
+    }   // END : private void updateDbStopEdit()
 
 
-    // 用户查看所有拟合后，选定一个拟合，然后新面板调用本面板的receiveFitData()，接收数据。
-    public void receiveFitData(Vector para) {
-        lblImage.setIcon((Icon) para.get(0));
-        for (int i = 0; i < lRight.length; i++) {
-            lRight[i].setText(String.valueOf(para.get(i + 1)));
+    /**
+     * 用户查看所有拟合后，选定一个拟合，然后新面板调用本面板的receiveFitData()，接收数据。
+     * @param fitResults 接收到的拟合结果
+     */
+    public void receiveFitData(Vector fitResults) {
+        boolean status;
+        //"序号","公式", "拟合方法", "a", "b", "c", "d", "e", "R2"
+        if (fitResults != null) {
+
+            //1 接收数据
+            String fitMethod;
+            String a, b, c, d, e, R2;
+
+            fitMethod = String.valueOf(fitResults.get(0));
+            lblImage.setIcon((Icon) fitResults.get(1));
+            a = String.valueOf(fitResults.get(3));
+            b = String.valueOf(fitResults.get(4));
+            c = String.valueOf(fitResults.get(5));
+            d = String.valueOf(fitResults.get(6));
+            e = String.valueOf(fitResults.get(7));
+            R2 = String.valueOf(fitResults.get(8));
+
+            for (int i = 0; i < lRight.length; i++) {
+                lRight[i].setText(String.valueOf(fitResults.get(i+2)));
+            }
+
+            //2 准备其他字段
+            String strXLog, strYlog, strBlank;
+            strXLog = String.valueOf(xLog);
+            strYlog = String.valueOf(yLog);
+            strBlank = String.valueOf(blank);
+            String modifyDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+            if ("1".equals(fitMethod)) {
+                // 直线拟合，不需要cde
+                c = null;
+                d = null;
+                e = null;
+            } else if ("2".equals(fitMethod)) {
+                // 四参数拟合，不需要e
+                e = null;
+            }
+
+            //3 更新数据库
+            String sqlUpdateCurve = "UPDATE curve SET modifyDate = ?, fitMethod = ?,xLog =? , yLog = ?, " +
+                    "a= ?, b = ? , c = ? , d = ? , e = ? , R2 = ? , blank = ? WHERE curveID = ?;";
+            String[] params = {modifyDate, fitMethod, strXLog, strYlog, a, b, c, d, e, R2, strBlank,curveID};
+            status = db.pstmtUpdateAndCommit(sqlUpdateCurve, params);
+        } else {
+            status = false;
         }
-        updateDB_return();
-    }
-
-
-    //查看拟合窗口关闭后，若有结果返回，则将参数写入数据库
-    private void updateDB_return() {
-
-    }
-
-
-
+        logger.trace("选中拟合方式，返回后写数据库，curveID = " + curveID + "，结果=" + status);
+    }   // END : private void receiveFitData()
 
 
     /**
@@ -589,7 +666,7 @@ public class PanelNewCurve extends JPanel {
             DecimalFormat df = new DecimalFormat(pattern);
             return df.format(tmp);
         }
-    }
+    }   // END : class FloatCellEditor extends DefaultCellEditor
 
 }
 
