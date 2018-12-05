@@ -105,16 +105,60 @@ public class MainApp extends JFrame{
             panelMain.updateUI();
         });
 
-
         //菜单：生成曲线
-        panelMenu.btnMenuNewCurve.addActionListener(e -> {
+        panelMenu.btnMenuCurveNew.addActionListener(e -> {
             logger.trace("点击菜单：生成曲线");
             panelMain.removeAll();
             lblTitle.setText("    生成曲线");
             panelMain.add(lblTitle);
-            panelMain.add(new PanelNewCurve());
+            panelMain.add(new PanelCurveNew());
             panelMain.updateUI();
         });
+
+
+        //菜单：评估曲线
+        panelMenu.btnMenuCurveEstimate.addActionListener(e -> {
+            logger.trace("点击菜单：评估曲线");
+            panelMain.removeAll();
+            lblTitle.setText("    评估曲线");
+            panelMain.add(lblTitle);
+            panelMain.add(new PanelCurveEstimate());
+            panelMain.updateUI();
+        });
+
+
+        //菜单：历史曲线
+        panelMenu.btnMenuCurveHistory.addActionListener(e -> {
+            logger.trace("点击菜单：历史曲线");
+            panelMain.removeAll();
+            lblTitle.setText("    历史曲线");
+            panelMain.add(lblTitle);
+            panelMain.add(new PanelCurveHistory());
+            panelMain.updateUI();
+        });
+
+
+        //菜单：新建批号
+        panelMenu.btnMenuBatchNew.addActionListener(e -> {
+            logger.trace("点击菜单：新建批号");
+            panelMain.removeAll();
+            lblTitle.setText("    新建批号");
+            panelMain.add(lblTitle);
+            panelMain.add(new PanelBatchNew());
+            panelMain.updateUI();
+        });
+
+
+        //菜单：追溯批号
+        panelMenu.btnMenuBatchQuery.addActionListener(e -> {
+            logger.trace("点击菜单：追溯批号");
+            panelMain.removeAll();
+            lblTitle.setText("    追溯批号");
+            panelMain.add(lblTitle);
+            panelMain.add(new PanelBatchQuery());
+            panelMain.updateUI();
+        });
+
 
         //右上角退出
         this.addWindowListener(new WindowAdapter() {

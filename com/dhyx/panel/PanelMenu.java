@@ -7,7 +7,7 @@ import javax.swing.*;
 public class PanelMenu extends JPanel
 {
     public MyIconButton btnMenuProject,btnMenuExperiment,btnMenuTest;
-    public MyIconButton btnMenuNewCurve, btnMenuEstimateCurve, btnMenuLockedCurve;
+    public MyIconButton btnMenuCurveNew, btnMenuCurveEstimate, btnMenuCurveHistory;
     public MyIconButton btnMenuBatchNew, btnMenuBatchQuery;
     public MyIconButton btnMenuOption,btnMenuExit;
 
@@ -35,13 +35,13 @@ public class PanelMenu extends JPanel
         btnMenuTest = new MyIconButton(Const.MENU_TEST, Const.MENU_TEST_CHECKED, Const.MENU_TEST);
 
         //生成曲线、评估曲线、历史曲线
-        btnMenuNewCurve = new MyIconButton(Const.MENU_NEW_CURVE, Const.MENU_NEW_CURVE_CHECKED, Const.MENU_NEW_CURVE);
-        btnMenuEstimateCurve = new MyIconButton(Const.MENU_ESTIMATE_CURVE, Const.MENU_ESTIMATE_CURVE_CHECKED, Const.MENU_ESTIMATE_CURVE);
-        btnMenuLockedCurve = new MyIconButton(Const.MENU_LOCKED_CURVE, Const.MENU_LOCKED_CURVE_CHECKED, Const.MENU_LOCKED_CURVE);
+        btnMenuCurveNew = new MyIconButton(Const.MENU_CURVE_NEW, Const.MENU_CURVE_NEW_CHECKED, Const.MENU_CURVE_NEW);
+        btnMenuCurveEstimate = new MyIconButton(Const.MENU_CURVE_ESTIMATE, Const.MENU_CURVE_ESTIMATE_CHECKED, Const.MENU_CURVE_ESTIMATE);
+        btnMenuCurveHistory = new MyIconButton(Const.MENU_CURVE_HISTORY, Const.MENU_CURVE_HISTORY_CHECKED, Const.MENU_CURVE_HISTORY);
 
         //新建批号、追溯批号
-        btnMenuBatchNew = new MyIconButton(Const.MENU_NEW_BATCH, Const.MENU_NEW_BATCH_CHECKED, Const.MENU_NEW_BATCH);
-        btnMenuBatchQuery = new MyIconButton(Const.MENU_QUERY_BATCH, Const.MENU_QUERY_BATCH_CHECKED, Const.MENU_QUERY_BATCH);
+        btnMenuBatchNew = new MyIconButton(Const.MENU_BATCH_NEW, Const.MENU_BATCH_NEW_CHECKED, Const.MENU_BATCH_NEW);
+        btnMenuBatchQuery = new MyIconButton(Const.MENU_BATCH_QUERY, Const.MENU_BATCH_QUERY_CHECKED, Const.MENU_BATCH_QUERY);
 
         //设置、退出
         btnMenuOption = new MyIconButton(Const.MENU_OPTION, Const.MENU_OPTION_CHECKED, Const.MENU_OPTION);
@@ -52,9 +52,9 @@ public class PanelMenu extends JPanel
         this.add(btnMenuExperiment);
         this.add(btnMenuTest);
         this.add(lblCurve);
-        this.add(btnMenuNewCurve);
-        this.add(btnMenuEstimateCurve);
-        this.add(btnMenuLockedCurve);
+        this.add(btnMenuCurveNew);
+        this.add(btnMenuCurveEstimate);
+        this.add(btnMenuCurveHistory);
         this.add(lblBatch);
         this.add(btnMenuBatchNew);
         this.add(btnMenuBatchQuery);

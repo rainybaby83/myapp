@@ -24,15 +24,15 @@ public class PanelViewFit extends JDialog {
     private MyTable tblFit;
     private int selectMethod;
     private DecimalFormat df = new DecimalFormat("0.0000");
-    private PanelNewCurve parent;
+    private PanelCurveNew parent;
     private boolean checkLinear = true, check4PL = true, check5PL = true;
     private boolean checkLinearR2 = true, check4PLR2 = true, check5PLR2 = true;
     private JPanel panelGragh = new JPanel();
-    private static int HEIGHT_SHORT = 320, HEIGHT_TALL = 700;
+    private static final int HEIGHT_SHORT = 320, HEIGHT_TALL = 700;
 
 
 
-    PanelViewFit(PanelNewCurve parent, MyFitData data, int xLog, int yLog) {
+    PanelViewFit(PanelCurveNew parent, MyFitData data, int xLog, int yLog) {
 
         //设置窗口弹出的相应属性
         super((Frame) null, "选择一种拟合方法，双击返回结果", true);
@@ -45,6 +45,7 @@ public class PanelViewFit extends JDialog {
         this.getContentPane().setBackground(Color.white);
         this.setResizable(false);
 
+        //图形面板
         panelGragh.setLayout(null);
         panelGragh.setOpaque(false);
         panelGragh.setBounds(250, 300, 600, 400);
@@ -92,7 +93,9 @@ public class PanelViewFit extends JDialog {
     }
 
 
-    //创建表格，设置基本属性
+    /**
+     * 创建表格，设置基本属性
+     */
     private void createTable() {
         tblFit = new MyTable(createTableModel()) {
         };
@@ -101,7 +104,7 @@ public class PanelViewFit extends JDialog {
 
         tblFit.setBounds(40, 20, 950, 233);
         tblFit.setRowHeight(70);
-        tblFit.setWidth(40, 200, 80, 80, 80, 80, 80, 80, 80, 150);
+        tblFit.setWidth(40, 200, 80, 80, 80, 80, 80, 80, 80, 140);
         tblFit.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.lightGray));
 
         //第3列图片，使用自定义的渲染器，以便显示图片
@@ -143,7 +146,7 @@ public class PanelViewFit extends JDialog {
     private Vector<String> getTableHeader() {
         //初始化表头
         Vector<String> vecHeader = new Vector<>();
-        String[] titles = {"序号", "公式", "拟合方法", "a", "b", "c", "d", "e", "R2", "查看图形"};
+        String[] titles = {"序号", "公式", "拟合方法", "a", "b", "c", "d", "e", "R²", "查看图形"};
         for (String title : titles) {
             vecHeader.addElement(title);
         }
@@ -171,7 +174,7 @@ public class PanelViewFit extends JDialog {
         data.addElement("无");
         data.addElement("无");
 
-        //获得拟合优度R2
+        //获得拟合优度R²
         double r2 = assayLinear.getCoefficientOfDetermination();
         if (r2 < 0.6 || Double.isNaN(r2)) {
             checkLinearR2 = false;
@@ -266,7 +269,7 @@ public class PanelViewFit extends JDialog {
         Vector<Object> fitResults = new Vector<>();
         int nowRow = tblFit.getSelectedRow();
         DefaultTableModel dm = (DefaultTableModel) tblFit.getModel();
-        String[] columnName = {"序号","公式", "拟合方法", "a", "b", "c", "d", "e", "R2"};
+        String[] columnName = {"序号","公式", "拟合方法", "a", "b", "c", "d", "e", "R²"};
         for (int i = 0; i < columnName.length; i++) {
             fitResults.addElement(tblFit.getValueAt(nowRow, dm.findColumn(columnName[i])));
         }
@@ -296,6 +299,7 @@ public class PanelViewFit extends JDialog {
         setSize(getWidth(), HEIGHT_SHORT);
         panelGragh.setVisible(false);
     }
+
 
     private void frameDisplayGraph() {
         setSize(getWidth(), HEIGHT_TALL);
@@ -363,7 +367,7 @@ public class PanelViewFit extends JDialog {
                             if (!checkLinear) {
                                 JOptionPane.showMessageDialog(null, "拟合参数的绝对值小于0.0001，请尝试其它拟合方法。。");
                             } else if (!checkLinearR2) {
-                                JOptionPane.showMessageDialog(null, "相关系数R2过低，请尝试其它拟合方法。");
+                                JOptionPane.showMessageDialog(null, "相关系数R²过低，请尝试其它拟合方法。");
                             } else {
                                 returnParent("双击单元格某行");
                                 PanelViewFit.super.dispose();
@@ -373,7 +377,7 @@ public class PanelViewFit extends JDialog {
                             if (!check4PL) {
                                 JOptionPane.showMessageDialog(null, "拟合参数的绝对值小于0.0001，请尝试其它拟合方法。。");
                             } else if (!check4PLR2) {
-                                JOptionPane.showMessageDialog(null, "相关系数R2过低，请尝试其它拟合方法。");
+                                JOptionPane.showMessageDialog(null, "相关系数R²过低，请尝试其它拟合方法。");
                             } else {
                                 returnParent("双击单元格某行");
                                 PanelViewFit.super.dispose();
@@ -383,7 +387,7 @@ public class PanelViewFit extends JDialog {
                             if (!check5PL) {
                                 JOptionPane.showMessageDialog(null, "拟合参数的绝对值小于0.0001，请尝试其它拟合方法。。");
                             } else if (!check5PLR2) {
-                                JOptionPane.showMessageDialog(null, "相关系数R2过低，请尝试其它拟合方法。");
+                                JOptionPane.showMessageDialog(null, "相关系数R²过低，请尝试其它拟合方法。");
                             } else {
                                 returnParent("双击单元格某行");
                                 PanelViewFit.super.dispose();

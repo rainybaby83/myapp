@@ -83,20 +83,20 @@ public class Const {
     public final static ImageIcon MENU_TEST = new ImageIcon(MainApp.class.getResource("/icon/测试管理.png"));
     public final static ImageIcon MENU_TEST_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/测试管理-激活.png"));
     //生成曲线
-    public final static ImageIcon MENU_NEW_CURVE = new ImageIcon(MainApp.class.getResource("/icon/生成曲线.png"));
-    public final static ImageIcon MENU_NEW_CURVE_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/生成曲线-激活.png"));
+    public final static ImageIcon MENU_CURVE_NEW = new ImageIcon(MainApp.class.getResource("/icon/生成曲线.png"));
+    public final static ImageIcon MENU_CURVE_NEW_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/生成曲线-激活.png"));
     //评估曲线
-    public final static ImageIcon MENU_ESTIMATE_CURVE = new ImageIcon(MainApp.class.getResource("/icon/评估曲线.png"));
-    public final static ImageIcon MENU_ESTIMATE_CURVE_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/评估曲线-激活.png"));
+    public final static ImageIcon MENU_CURVE_ESTIMATE = new ImageIcon(MainApp.class.getResource("/icon/评估曲线.png"));
+    public final static ImageIcon MENU_CURVE_ESTIMATE_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/评估曲线-激活.png"));
     //历史曲线
-    public final static ImageIcon MENU_LOCKED_CURVE = new ImageIcon(MainApp.class.getResource("/icon/历史曲线.png"));
-    public final static ImageIcon MENU_LOCKED_CURVE_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/历史曲线-激活.png"));
+    public final static ImageIcon MENU_CURVE_HISTORY = new ImageIcon(MainApp.class.getResource("/icon/历史曲线.png"));
+    public final static ImageIcon MENU_CURVE_HISTORY_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/历史曲线-激活.png"));
     //新建批号
-    public final static ImageIcon MENU_NEW_BATCH = new ImageIcon(MainApp.class.getResource("/icon/新建批号.png"));
-    public final static ImageIcon MENU_NEW_BATCH_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/新建批号-激活.png"));
+    public final static ImageIcon MENU_BATCH_NEW = new ImageIcon(MainApp.class.getResource("/icon/新建批号.png"));
+    public final static ImageIcon MENU_BATCH_NEW_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/新建批号-激活.png"));
     //追溯批号
-    public final static ImageIcon MENU_QUERY_BATCH = new ImageIcon(MainApp.class.getResource("/icon/追溯批号.png"));
-    public final static ImageIcon MENU_QUERY_BATCH_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/追溯批号-激活.png"));
+    public final static ImageIcon MENU_BATCH_QUERY = new ImageIcon(MainApp.class.getResource("/icon/追溯批号.png"));
+    public final static ImageIcon MENU_BATCH_QUERY_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/追溯批号-激活.png"));
     //设置
     public final static ImageIcon MENU_OPTION = new ImageIcon(MainApp.class.getResource("/icon/设置.png"));
     public final static ImageIcon MENU_OPTION_CHECKED = new ImageIcon(MainApp.class.getResource("/icon/设置-激活.png"));
@@ -161,12 +161,24 @@ public class Const {
     public final static ImageIcon ICON_FIT_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/查看所有拟合-激活.png"));
     public final static ImageIcon ICON_FIT_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/查看所有拟合-禁用.png"));
 
+    // 评估按钮
+    public final static ImageIcon ICON_CURVE_ESTIMATE = new ImageIcon(MainApp.class.getResource("/icon/评估.png"));
+    public final static ImageIcon ICON_CURVE_ESTIMATE_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/评估-激活.png"));
+    public final static ImageIcon ICON_CURVE_ESTIMATE_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/评估-禁用.png"));
+
+
+    // 锁定曲线 按钮
+    public final static ImageIcon ICON_CURVE_LOCK = new ImageIcon(MainApp.class.getResource("/icon/锁定曲线.png"));
+    public final static ImageIcon ICON_CURVE_LOCK_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/锁定曲线-激活.png"));
+    public final static ImageIcon ICON_CURVE_LOCK_DISABLED = new ImageIcon(MainApp.class.getResource("/icon/锁定曲线-禁用.png"));
+
+    //公式图片
     public final static ImageIcon ICON_4PL = new ImageIcon(MainApp.class.getResource("/icon/公式四参数.png"));
     public final static ImageIcon ICON_5PL = new ImageIcon(MainApp.class.getResource("/icon/公式五参数.png"));
     public final static ImageIcon ICON_LINEAR = new ImageIcon(MainApp.class.getResource("/icon/公式直线.png"));
+    public final static ImageIcon ICON_FX = new ImageIcon(MainApp.class.getResource("/icon/公式样例.png"));
 
     public final static ImageIcon ICON_VIEW_IMAGE = new ImageIcon(MainApp.class.getResource("/icon/查看图形.png"));
-    public final static ImageIcon ICON_VIEW_IMAGE_ENABLED = new ImageIcon(MainApp.class.getResource("/icon/查看图形-选中.png"));
 
 
     //调用excel文件里的数据，模拟从设备端采集数据

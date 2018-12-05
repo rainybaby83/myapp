@@ -23,13 +23,13 @@ import java.util.Date;
 import java.util.Vector;
 
 
-public class PanelNewCurve extends JPanel {
+public class PanelCurveNew extends JPanel {
     private Logger logger = LogManager.getLogger();
     private MyDatabase db = MainApp.myDB;
     private PanelQuery panelQuery;
     private MyIconButton btnQuery, btnDel, btnFit;
     private DefaultTableModel dmCurve, dmConcentration;
-    private String sqlSelectCurve = "SELECT DISTINCT 项目名称,实验名称,曲线序号,曲线日期,曲线ID,实验ID,项目ID FROM view_project_exp_curve";
+    private String sqlSelectCurve = "SELECT DISTINCT 项目名称,实验名称,曲线序号,创建日期,曲线ID,实验ID,项目ID FROM view_project_exp_curve";
     private String sqlSelectConcentration = "SELECT DISTINCT 浓度序号,浓度值,反应值,浓度ID FROM view_curve_concentration";
     private String curveID;
     private MyTable tblCurve, tblConcentration;
@@ -42,7 +42,7 @@ public class PanelNewCurve extends JPanel {
     private String msg;
 
 
-    public PanelNewCurve() {
+    public PanelCurveNew() {
 
         initSelf();
         initQueryPanel();
@@ -53,8 +53,8 @@ public class PanelNewCurve extends JPanel {
         initTableAddListener();
         initList();
         initOther();
-        clickBtnQuery("启动窗体调用，PanelNewCurve() ");
-        clickTblCurve("启动窗体调用，PanelNewCurve() ");
+        clickBtnQuery("启动窗体调用，PanelCurveNew() ");
+        clickTblCurve("启动窗体调用，PanelCurveNew() ");
     }
 
 
@@ -73,9 +73,8 @@ public class PanelNewCurve extends JPanel {
      */
     private void initQueryPanel() {
         panelQuery = new PanelQuery();
-        panelQuery.lblQuery.setText("实验关键字");
         panelQuery.txtQuery.setSize(250, Const.BUTTON_HEIGHT);
-        panelQuery.txtQuery.setToolTipText("请输入实验名称.");
+        panelQuery.txtQuery.setToolTipText("请输入实验名称。");
         panelQuery.txtQuery.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -154,8 +153,8 @@ public class PanelNewCurve extends JPanel {
         JLabel lblConcentration = new JLabel("所选曲线的浓度(已求平均)");
         JLabel lblFitType = new JLabel("取对数(仅对直线拟合有效)");
         JLabel lblFitTitle = new JLabel("拟合结果");
-        JLabel lblX = new JLabel("x");
-        JLabel lblY = new JLabel("y");
+        JLabel lblX = new JLabel("X对数：");
+        JLabel lblY = new JLabel("X对数：");
         JLabel lbl100 = new JLabel("%");
         JLabel lblBlank = new JLabel("扣Blank：");
 
@@ -163,14 +162,15 @@ public class PanelNewCurve extends JPanel {
         lblConcentration.setBounds(435, 40, 310, 25);
         lblFitType.setBounds(800, 145, 200, 25);
         lblFitTitle.setBounds(800, 305, 200, 25);
-        lblX.setBounds(830, 180, 20, 20);
-        lblY.setBounds(910, 180, 20, 20);
+        lblX.setBounds(830, 180, 55, 20);
+        lblY.setBounds(910, 180, 55, 20);
         lblImage.setBounds(800, 535, 200, 70);
+        lblImage.setIcon(Const.ICON_FX);
         lbl100.setBounds(955, 83, 30, 20);
         lblBlank.setBounds(830, 80, 70, 25);
 
         JLabel[] lLeft = new JLabel[7];
-        String[] title = {"方法", "a =", "b =", "c =", "d =", "e =", "R2 ="};
+        String[] title = {"方法", "a =", "b =", "c =", "d =", "e =", "R² ="};
 
         for (int i = 0; i < lLeft.length; i++) {
             lLeft[i] = new JLabel();
@@ -238,7 +238,9 @@ public class PanelNewCurve extends JPanel {
         tblConcentration.setBounds(435, 65, 315, 550);
 
         // 2.3 表格列宽
+        //项目名称,实验名称,曲线序号,创建日期,曲线ID,实验ID,项目ID
         tblCurve.setWidth(70, 125, 60, 80, 50, 50, 50);
+        //浓度序号,浓度值,反应值,浓度ID
         tblConcentration.setWidth(30, 75, 105, 105);
 
         // 2.4 设置滚动面板
@@ -350,10 +352,6 @@ public class PanelNewCurve extends JPanel {
             jp[i].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
             this.add(jp[i]);
         }
-
-
-
-
 
         jSpinner.setModel(new SpinnerNumberModel(100,1,100,10));
         jSpinner.setBounds(900,80,50,25);
@@ -598,7 +596,7 @@ public class PanelNewCurve extends JPanel {
      */
     public void receiveFitData(Vector fitResults) {
         boolean status;
-        //"序号","公式", "拟合方法", "a", "b", "c", "d", "e", "R2"
+        //"序号","公式", "拟合方法", "a", "b", "c", "d", "e", "R²"
         if (fitResults != null) {
 
             //1 接收数据

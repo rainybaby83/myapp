@@ -55,9 +55,8 @@ public class PanelExperiment extends JPanel {
     //初始化查询面板
     private void initQueryPanel() {
         panelQuery = new PanelQuery();
-        panelQuery.lblQuery.setText("项目关键字");
         panelQuery.txtQuery.setSize(275, Const.BUTTON_HEIGHT);
-        panelQuery.txtQuery.setToolTipText("请输入项目名称。支持模糊查询，不区分大小写");
+        panelQuery.txtQuery.setToolTipText("请输入项目名称");
         panelQuery.txtQuery.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
