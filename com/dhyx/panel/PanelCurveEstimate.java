@@ -1,13 +1,12 @@
 package com.dhyx.panel;
 
 import com.dhyx.MainApp;
-import com.dhyx.myclass.Const;
-import com.dhyx.myclass.MyDatabase;
-import com.dhyx.myclass.MyIconButton;
+import com.dhyx.myclass.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -21,6 +20,10 @@ public class PanelCurveEstimate extends JPanel {
     private MyIconButton btnQuery, btnEstimate, btnLock;
     private JLabel lblImage = new JLabel();
     private JLabel[] lRight = new JLabel[7];
+    private MyTable tblCurve, tblConcentration;
+    private DefaultTableModel dmCurve, dmConcentration;
+    private String sqlSelectCurve = "SELECT DISTINCT  曲线ID,拟合日期,项目名称,实验名称,拟合方法 FROM view_lock_curve";
+    private String sqlSelectConcentration = "SELECT DISTINCT 浓度序号,浓度值,反应值,浓度ID FROM view_curve_concentration";
 
 
     public PanelCurveEstimate() {
@@ -36,7 +39,6 @@ public class PanelCurveEstimate extends JPanel {
         clickBtnQuery("启动窗体调用，PanelCurveEstimate() ");
         clickTblCurve("启动窗体调用，PanelCurveEstimate() ");
     }
-
 
 
 
@@ -175,11 +177,68 @@ public class PanelCurveEstimate extends JPanel {
 
 
 
+    /**
+     * 1. 创建TableModel
+     */
     private void initTableGetModel() {
-    }
+        dmCurve = TableMethod.getTableModel(sqlSelectCurve );
+        dmConcentration = TableMethod.getDMwithCheck(sqlSelectConcentration + " WHERE 0=1");
+    }   // END : private void initTableGetModel()
 
+
+    /**
+     * 2.创建表格并设置属性
+     */
     private void initTableCreate() {
-    }
+        // 2.1 创建表格
+        tblCurve = new MyTable(dmCurve);
+        tblConcentration = new MyTable(null) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 2;
+            }
+
+            @Override   // 表格带有单选框
+            public Class getColumnClass(int c) {
+                Object value = getValueAt(0, c);
+                if (value != null) {
+                    return value.getClass();
+                } else {
+                    return super.getClass();
+                }
+            }
+        };
+        tblConcentration.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        tblConcentration.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        // 2.2 设置尺寸
+        tblCurve.setBounds(0, 65, 480   , 300);
+        tblConcentration.setBounds(535, 65, 465, 550);
+
+        // 2.3 表格列宽
+        //项目名称,实验名称,曲线序号,创建日期,曲线ID,实验ID,项目ID
+        tblCurve.setWidth(87, 81, 87, 113, 112);
+        //浓度序号,浓度值,反应值,浓度ID
+        tblConcentration.setWidth(30, 75, 105, 105);
+
+        // 2.4 设置滚动面板
+        tblCurve.j.setBounds(tblCurve.getBounds());
+        tblConcentration.j.setBounds(tblConcentration.getBounds());
+        tblConcentration.j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        //2.5 取得“浓度值”的index，然后对该列设置CellEditor，使其只能输入小数
+        int index = dmConcentration.findColumn("浓度值");
+//        tblConcentration.getColumnModel().getColumn(index).setCellEditor(new PanelCurveNew.FloatCellEditor());
+
+        //2.6 添加弹出菜单
+//        tblCurve.jPopupMenu.add(btnDel);
+
+        // 2.7 添加表格到面板
+        this.add(tblCurve.j);
+        this.add(tblConcentration.j);
+    }   // END : private void initTableCreate()
+
+
 
     private void initTableAddListener() {
     }

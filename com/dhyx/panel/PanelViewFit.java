@@ -269,6 +269,7 @@ public class PanelViewFit extends JDialog {
         Vector<Object> fitResults = new Vector<>();
         int nowRow = tblFit.getSelectedRow();
         DefaultTableModel dm = (DefaultTableModel) tblFit.getModel();
+        //列名如果不对应匹配，会报数组下标错误
         String[] columnName = {"序号","公式", "拟合方法", "a", "b", "c", "d", "e", "R²"};
         for (int i = 0; i < columnName.length; i++) {
             fitResults.addElement(tblFit.getValueAt(nowRow, dm.findColumn(columnName[i])));

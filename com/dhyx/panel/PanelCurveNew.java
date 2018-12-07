@@ -28,11 +28,11 @@ public class PanelCurveNew extends JPanel {
     private MyDatabase db = MainApp.myDB;
     private PanelQuery panelQuery;
     private MyIconButton btnQuery, btnDel, btnFit;
+    private MyTable tblCurve, tblConcentration;
     private DefaultTableModel dmCurve, dmConcentration;
     private String sqlSelectCurve = "SELECT DISTINCT 项目名称,实验名称,曲线序号,创建日期,曲线ID,实验ID,项目ID FROM view_project_exp_curve";
     private String sqlSelectConcentration = "SELECT DISTINCT 浓度序号,浓度值,反应值,浓度ID FROM view_curve_concentration";
     private String curveID;
-    private MyTable tblCurve, tblConcentration;
     private MyList lstXLog, lstYLog;
     private JLabel[] lRight = new JLabel[7];
     private JLabel lblImage = new JLabel();
